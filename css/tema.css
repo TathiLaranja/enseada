@@ -1,0 +1,64 @@
+/* Pouso - tema
+   Tres cores por tema: fundo, texto e destaque. Mais nada.
+   --linha e --sombra sao a cor do texto com transparencia, nao cores novas.
+   Nenhum vermelho em lugar nenhum. Nem preto puro, nem branco puro. */
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fontes/AtkinsonHyperlegible-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fontes/AtkinsonHyperlegible-Bold.woff2") format("woff2");
+}
+
+/* Padrao: tema claro. Paleta Mare. */
+:root {
+  --fundo: #F2F0EB;
+  --texto: #272C33;
+  --destaque: #3F5C6B;
+  --texto-no-destaque: #F2F0EB;
+  --linha: rgba(39, 44, 51, 0.30);
+  --fraco: rgba(39, 44, 51, 0.72);
+  color-scheme: light;
+
+  --escala: 1;
+  --fonte: "Atkinson Hyperlegible", "Trebuchet MS", system-ui, sans-serif;
+  --raio: 10px;
+  --largura: 34rem;
+}
+
+/* Quem nao escolheu nada segue o aparelho. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    --fundo: #1C2127;
+    --texto: #D9DEE3;
+    --destaque: #8FA8B4;
+    --texto-no-destaque: #1C2127;
+    --linha: rgba(217, 222, 227, 0.30);
+    --fraco: rgba(217, 222, 227, 0.75);
+    color-scheme: dark;
+  }
+}
+
+/* Quem escolheu na tela de Ajuda manda em cima do aparelho. */
+:root[data-tema="escuro"] {
+  --fundo: #1C2127;
+  --texto: #D9DEE3;
+  --destaque: #8FA8B4;
+  --texto-no-destaque: #1C2127;
+  --linha: rgba(217, 222, 227, 0.30);
+  --fraco: rgba(217, 222, 227, 0.75);
+  color-scheme: dark;
+}
+
+/* Tamanho da fonte, escolhido na tela de Ajuda. */
+:root[data-fonte="grande"] { --escala: 1.15; }
+:root[data-fonte="maior"] { --escala: 1.35; }

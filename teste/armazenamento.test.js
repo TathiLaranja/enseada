@@ -1,0 +1,135 @@
+/* Teste do armazenamento. Node puro: node teste/armazenamento.test.js
+   O depósito falso imita o localStorage do navegador. */
+
+const assert = require("node:assert");
+const g = require("../js/armazenamento.js");
+
+let passaram = 0;
+const falhas = [];
+
+function teste(nome, corpo) {
+  try {
+    corpo();
+    passaram++;
+  } catch (erro) {
+    falhas.push(nome + "\n   " + erro.message);
+  }
+}
+
+function depositoFalso(conteudoInicial) {
+  const caixa = Object.assign({}, conteudoInicial || {});
+  return {
+    getItem: function (chave) {
+      return Object.prototype.hasOwnProperty.call(caixa, chave) ? caixa[chave] : null;
+    },
+    setItem: function (chave, valor) { caixa[chave] = String(valor); },
+    removeItem: function (chave) { delete caixa[chave]; },
+    espiar: function () { return caixa; }
+  };
+}
+
+function depositoCheio() {
+  return {
+    getItem: function () { return null; },
+    setItem: function () { throw new Error("cheio"); },
+    removeItem: function () { throw new Error("cheio"); }
+  };
+}
+
+teste("aparelho novo começa sem âncora nenhuma", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  assert.deepStrictEqual(armazem.ler().ancoras, []);
+});
+
+teste("aparelho novo começa seguindo o celular, letra normal", function () {
+  const ajustes = g.criarArmazenamento(depositoFalso()).ler().ajustes;
+  assert.strictEqual(ajustes.tema, "sistema");
+  assert.strictEqual(ajustes.fonte, "normal");
+});
+
+teste("grava e lê de volta igual", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  armazem.mudar(function (d) {
+    d.ancoras = [{ id: "x", oQueE: "Nadar", oQueFaz: "no meu ritmo", link: "", peso: "pesada", estado: "ativa" }];
+    return d;
+  });
+  const lido = armazem.ler().ancoras[0];
+  assert.strictEqual(lido.oQueE, "Nadar");
+  assert.strictEqual(lido.peso, "pesada");
+});
+
+teste("conteúdo estragado não derruba o app", function () {
+  const armazem = g.criarArmazenamento(depositoFalso({ "pouso.v1": "{isto não é json" }));
+  assert.deepStrictEqual(armazem.ler().ancoras, []);
+});
+
+teste("âncora sem o campo o que é não entra", function () {
+  const bruto = JSON.stringify({ ancoras: [{ id: "x", oQueE: "   " }, { id: "y", oQueE: "Nadar" }] });
+  const armazem = g.criarArmazenamento(depositoFalso({ "pouso.v1": bruto }));
+  const lista = armazem.ler().ancoras;
+  assert.strictEqual(lista.length, 1);
+  assert.strictEqual(lista[0].id, "y");
+});
+
+teste("estado desconhecido vira ativa, peso desconhecido vira leve", function () {
+  const bruto = JSON.stringify({ ancoras: [{ id: "x", oQueE: "Nadar", peso: "enorme", estado: "sumida" }] });
+  const lido = g.criarArmazenamento(depositoFalso({ "pouso.v1": bruto })).ler().ancoras[0];
+  assert.strictEqual(lido.peso, "leve");
+  assert.strictEqual(lido.estado, "ativa");
+});
+
+teste("tema inventado volta para seguir o celular", function () {
+  const bruto = JSON.stringify({ ajustes: { tema: "roxo", fonte: "gigante" } });
+  const ajustes = g.criarArmazenamento(depositoFalso({ "pouso.v1": bruto })).ler().ajustes;
+  assert.strictEqual(ajustes.tema, "sistema");
+  assert.strictEqual(ajustes.fonte, "normal");
+});
+
+teste("o roteiro parado no meio volta de onde parou", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  armazem.mudar(function (d) {
+    d.roteiro = { etapa: "mecanismo", indice: 4, abertura1: "Natação", abertura2: "", memoria: "", itens: ["Natação"], itemEscolhido: "Natação", mecanismo: ["sim"] };
+    return d;
+  });
+  const voltou = armazem.ler().roteiro;
+  assert.strictEqual(voltou.etapa, "mecanismo");
+  assert.strictEqual(voltou.indice, 4);
+  assert.strictEqual(voltou.mecanismo[0], "sim");
+});
+
+teste("apagar tudo não deixa nada no aparelho", function () {
+  const deposito = depositoFalso();
+  const armazem = g.criarArmazenamento(deposito);
+  armazem.mudar(function (d) {
+    d.ancoras = [{ id: "x", oQueE: "Nadar", oQueFaz: "", link: "", peso: "leve", estado: "ativa" }];
+    return d;
+  });
+  armazem.apagarTudo();
+  assert.deepStrictEqual(Object.keys(deposito.espiar()), []);
+  assert.deepStrictEqual(armazem.ler().ancoras, []);
+});
+
+teste("baixar meus dados devolve tudo em texto", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  armazem.mudar(function (d) {
+    d.ancoras = [{ id: "x", oQueE: "Nadar", oQueFaz: "no meu ritmo", link: "", peso: "leve", estado: "ativa" }];
+    return d;
+  });
+  const texto = armazem.exportar();
+  assert.ok(texto.indexOf("Nadar") !== -1);
+  assert.ok(texto.indexOf("no meu ritmo") !== -1);
+});
+
+teste("aparelho sem espaço não quebra o app", function () {
+  const armazem = g.criarArmazenamento(depositoCheio());
+  assert.strictEqual(armazem.gravar({ ancoras: [] }), false);
+  assert.deepStrictEqual(armazem.ler().ancoras, []);
+});
+
+if (falhas.length > 0) {
+  console.log("FALHOU " + falhas.length + " de " + (passaram + falhas.length));
+  falhas.forEach(function (f) { console.log(" - " + f); });
+} else {
+  console.log("Passaram " + passaram + " testes de armazenamento.");
+}
+process.exit(falhas.length > 0 ? 1 : 0);

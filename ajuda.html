@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ajuda — Pouso</title>
+<meta name="theme-color" content="#1C2127">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icones/icone-192.png">
+<link rel="apple-touch-icon" href="icones/icone-192.png">
+<link rel="stylesheet" href="css/tema.css">
+<link rel="stylesheet" href="css/base.css">
+<script src="js/ancoras.js"></script>
+<script src="js/armazenamento.js"></script>
+<script src="js/ajustes.js"></script>
+</head>
+<body>
+<main class="pagina">
+
+  <div class="topo">
+    <h1>Ajuda</h1>
+    <a class="saida" href="index.html">Agora</a>
+  </div>
+
+  <div class="aviso">
+    <p><strong>O Pouso não é serviço de saúde.</strong></p>
+    <p>É uma ferramenta de organização. Ele guarda o que você escreveu, pergunta e devolve as suas palavras. Ele não interpreta, não mede e não promete resultado nenhum.</p>
+  </div>
+
+  <h2>Se você precisar falar com alguém agora</h2>
+  <p>CVV, atendimento a qualquer hora, de graça, por telefone:</p>
+  <p><strong>188</strong></p>
+  <p><a href="https://www.cvv.org.br">www.cvv.org.br</a> — também atende por chat e e-mail.</p>
+
+  <h2>Cor da tela</h2>
+  <p class="explica">Escolha sua, a qualquer hora. Nenhuma é mais calma que a outra.</p>
+  <div class="botao-fileira">
+    <button type="button" class="botao-simples" data-tema-escolha="sistema">Seguir o celular</button>
+    <button type="button" class="botao-simples" data-tema-escolha="claro">Claro</button>
+    <button type="button" class="botao-simples" data-tema-escolha="escuro">Escuro</button>
+  </div>
+  <p class="explica" id="tema-atual"></p>
+
+  <h2>Tamanho da letra</h2>
+  <div class="botao-fileira">
+    <button type="button" class="botao-simples" data-fonte-escolha="normal">Normal</button>
+    <button type="button" class="botao-simples" data-fonte-escolha="grande">Grande</button>
+    <button type="button" class="botao-simples" data-fonte-escolha="maior">Maior</button>
+  </div>
+  <p class="explica" id="fonte-atual"></p>
+
+  <h2>Seus dados</h2>
+  <p class="explica">Tudo que você escreveu está guardado só neste aparelho. Nada sai daqui, e o Pouso não tem servidor para onde mandar.</p>
+  <button type="button" class="botao-simples" id="botao-baixar">Baixar tudo que escrevi</button>
+  <button type="button" class="botao-simples" id="botao-apagar">Apagar tudo</button>
+  <p class="explica" id="recado-dados"></p>
+
+  <h2>Sobre o aplicativo</h2>
+  <p>Funciona sem internet. Não tem conta, não tem login e não manda nada para lugar nenhum.</p>
+  <p>A letra é a Atkinson Hyperlegible, do Braille Institute, que vem dentro do aplicativo.</p>
+
+  <div class="rodape-navegacao">
+    <a href="index.html">Agora</a>
+    <a href="ancoras.html">Minhas âncoras</a>
+    <a href="achar.html">Me ajuda a achar</a>
+  </div>
+
+</main>
+<script src="js/tela-ajuda.js"></script>
+<script src="js/registra-sw.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Minhas âncoras — Pouso</title>
+<meta name="theme-color" content="#1C2127">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icones/icone-192.png">
+<link rel="apple-touch-icon" href="icones/icone-192.png">
+<link rel="stylesheet" href="css/tema.css">
+<link rel="stylesheet" href="css/base.css">
+<script src="js/ancoras.js"></script>
+<script src="js/armazenamento.js"></script>
+<script src="js/ajustes.js"></script>
+</head>
+<body>
+<main class="pagina">
+
+  <div class="topo">
+    <h1>Minhas âncoras</h1>
+    <a class="saida" href="index.html">Agora</a>
+  </div>
+
+  <div id="avisos"></div>
+
+  <section id="formulario" hidden>
+    <h2 id="titulo-formulario">Guardar uma âncora</h2>
+
+    <div class="campo">
+      <label for="campo-o-que-e">O que é</label>
+      <span class="ajuda-campo">Suas palavras. Pode ser qualquer coisa.</span>
+      <input type="text" id="campo-o-que-e" autocomplete="off">
+    </div>
+
+    <div class="campo">
+      <label for="campo-o-que-faz">O que isso faz em você</label>
+      <span class="ajuda-campo">Opcional. É o campo que faz a âncora servir depois.</span>
+      <textarea id="campo-o-que-faz"></textarea>
+    </div>
+
+    <div class="campo">
+      <label for="campo-link">Link</label>
+      <span class="ajuda-campo">Opcional. Playlist, filme, álbum. Precisa começar com http:// ou https://.</span>
+      <input type="url" id="campo-link" autocomplete="off" inputmode="url">
+    </div>
+
+    <div class="campo">
+      <label for="peso-leve">Peso</label>
+      <span class="ajuda-campo">Leve serve para dia ruim comum. Pesada serve para quando a coisa é grande.</span>
+      <div class="escolha">
+        <label for="peso-leve"><input type="radio" name="peso" id="peso-leve" value="leve">Leve</label>
+        <label for="peso-pesada"><input type="radio" name="peso" id="peso-pesada" value="pesada">Pesada</label>
+      </div>
+    </div>
+
+    <button type="button" class="botao" id="botao-guardar">Guardar</button>
+    <button type="button" class="botao-simples" id="botao-cancelar">Cancelar</button>
+  </section>
+
+  <section id="painel">
+    <button type="button" class="botao" id="botao-nova">Guardar uma âncora</button>
+
+    <h2>Na lista</h2>
+    <div id="lista-ativas"></div>
+
+    <h2>Dormentes</h2>
+    <p class="explica">Saem da lista e voltam quando você quiser.</p>
+    <div id="lista-dormentes"></div>
+  </section>
+
+  <div class="rodape-navegacao">
+    <a href="index.html">Agora</a>
+    <a href="achar.html">Me ajuda a achar</a>
+    <a href="ajuda.html">Ajuda</a>
+  </div>
+
+</main>
+<script src="js/tela-ancoras.js"></script>
+<script src="js/registra-sw.js"></script>
+</body>
+</html>

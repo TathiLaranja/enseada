@@ -1,0 +1,273 @@
+/* Pouso - base
+   Uma coisa por tela. Botao grande, muito espaco em volta, nada que cubra.
+   Sem animacao de nenhum tipo, em nenhum estado. */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+body {
+  font-family: var(--fonte);
+  font-size: calc(17px * var(--escala));
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+
+.pagina {
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding-inline: 20px;
+  padding-block: calc(18px + env(safe-area-inset-top, 0px)) calc(40px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Cabecalho: so o nome da tela e a saida. Nada mais. */
+.topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+h1 {
+  font-size: calc(1.3em);
+  font-weight: 700;
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.05em;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+p { margin: 0 0 14px; }
+
+.explica {
+  color: var(--fraco);
+  margin-bottom: 20px;
+}
+
+/* Botao grande: o botao de ancora da tela Agora e os botoes de acao. */
+.botao {
+  display: block;
+  width: 100%;
+  font-family: inherit;
+  font-size: 1.05em;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: left;
+  text-decoration: none;
+  padding: 18px 16px;
+  margin-bottom: 14px;
+  border: 0;
+  border-radius: var(--raio);
+  background: var(--destaque);
+  color: var(--texto-no-destaque);
+  min-height: 64px;
+  cursor: pointer;
+}
+
+.botao .mecanismo,
+.botao-simples .mecanismo {
+  display: block;
+  font-weight: 400;
+  font-size: 0.86em;
+  margin-top: 3px;
+}
+
+/* Botao de segunda ordem: mesma cor do texto, so contorno. */
+.botao-simples {
+  display: inline-block;
+  width: 100%;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border: 2px solid var(--linha);
+  border-radius: var(--raio);
+  background: transparent;
+  color: var(--texto);
+  min-height: 52px;
+  cursor: pointer;
+}
+
+.botao-fileira {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.botao-fileira .botao-simples {
+  width: auto;
+  flex: 1 1 7rem;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+a { color: var(--texto); }
+
+.saida {
+  font-size: 0.92em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rodape-navegacao {
+  margin-top: 30px;
+  padding-top: 18px;
+  border-top: 1px solid var(--linha);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 0.92em;
+}
+
+/* Formulario */
+.campo { margin-bottom: 20px; }
+
+label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.ajuda-campo {
+  display: block;
+  font-weight: 400;
+  color: var(--fraco);
+  font-size: 0.9em;
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1em;
+  color: var(--texto);
+  background: transparent;
+  border: 2px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 12px 14px;
+  min-height: 52px;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+/* Escolha de peso: duas opcoes, nenhuma marcada por padrao. */
+.escolha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.escolha label {
+  flex: 1 1 10rem;
+  font-weight: 700;
+  border: 2px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 12px 14px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.escolha input { margin-right: 8px; }
+
+.escolha label:has(input:checked) {
+  border-color: var(--destaque);
+  border-width: 4px;
+  padding: 10px 12px;
+}
+
+/* Aviso de campo: palavra, nunca cor sozinha, e nunca vermelho. */
+.aviso {
+  border: 2px solid var(--linha);
+  border-left-width: 6px;
+  border-radius: var(--raio);
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+.aviso p:last-child { margin-bottom: 0; }
+
+/* Lista de ancoras */
+.lista { list-style: none; margin: 0 0 8px; padding: 0; }
+
+.item {
+  border: 2px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.item h3 {
+  font-size: 1.02em;
+  margin: 0 0 4px;
+}
+
+.item .mecanismo { color: var(--fraco); }
+
+.item .marcas {
+  font-size: 0.86em;
+  color: var(--fraco);
+  margin-top: 6px;
+}
+
+.vazio {
+  border: 2px dashed var(--linha);
+  border-radius: var(--raio);
+  padding: 18px 16px;
+  margin-bottom: 20px;
+  color: var(--fraco);
+}
+
+/* Roteiro */
+.pergunta {
+  font-size: 1.25em;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-wrap: balance;
+}
+
+.passo {
+  font-size: 0.9em;
+  color: var(--fraco);
+  margin-bottom: 8px;
+}
+
+.resposta-anotada {
+  border-left: 4px solid var(--linha);
+  padding-left: 14px;
+  margin-bottom: 14px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--texto);
+  outline-offset: 2px;
+}
+
+/* Sem animacao por padrao. Esta regra existe para o caso de alguem acrescentar
+   alguma coisa no futuro sem perceber. */
+*, *::before, *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+[hidden] { display: none !important; }
