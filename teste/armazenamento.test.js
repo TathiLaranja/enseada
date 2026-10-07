@@ -59,13 +59,13 @@ teste("grava e lê de volta igual", function () {
 });
 
 teste("conteúdo estragado não derruba o app", function () {
-  const armazem = g.criarArmazenamento(depositoFalso({ "pouso.v1": "{isto não é json" }));
+  const armazem = g.criarArmazenamento(depositoFalso({ "enseada.v1": "{isto não é json" }));
   assert.deepStrictEqual(armazem.ler().ancoras, []);
 });
 
 teste("âncora sem o campo o que é não entra", function () {
   const bruto = JSON.stringify({ ancoras: [{ id: "x", oQueE: "   " }, { id: "y", oQueE: "Nadar" }] });
-  const armazem = g.criarArmazenamento(depositoFalso({ "pouso.v1": bruto }));
+  const armazem = g.criarArmazenamento(depositoFalso({ "enseada.v1": bruto }));
   const lista = armazem.ler().ancoras;
   assert.strictEqual(lista.length, 1);
   assert.strictEqual(lista[0].id, "y");
@@ -73,14 +73,14 @@ teste("âncora sem o campo o que é não entra", function () {
 
 teste("estado desconhecido vira ativa, peso desconhecido vira leve", function () {
   const bruto = JSON.stringify({ ancoras: [{ id: "x", oQueE: "Nadar", peso: "enorme", estado: "sumida" }] });
-  const lido = g.criarArmazenamento(depositoFalso({ "pouso.v1": bruto })).ler().ancoras[0];
+  const lido = g.criarArmazenamento(depositoFalso({ "enseada.v1": bruto })).ler().ancoras[0];
   assert.strictEqual(lido.peso, "leve");
   assert.strictEqual(lido.estado, "ativa");
 });
 
 teste("tema inventado volta para seguir o celular", function () {
   const bruto = JSON.stringify({ ajustes: { tema: "roxo", fonte: "gigante" } });
-  const ajustes = g.criarArmazenamento(depositoFalso({ "pouso.v1": bruto })).ler().ajustes;
+  const ajustes = g.criarArmazenamento(depositoFalso({ "enseada.v1": bruto })).ler().ajustes;
   assert.strictEqual(ajustes.tema, "sistema");
   assert.strictEqual(ajustes.fonte, "normal");
 });
@@ -95,6 +95,33 @@ teste("o roteiro parado no meio volta de onde parou", function () {
   assert.strictEqual(voltou.etapa, "mecanismo");
   assert.strictEqual(voltou.indice, 4);
   assert.strictEqual(voltou.mecanismo[0], "sim");
+});
+
+teste("o que foi escrito no tempo do nome Pouso não se perde", function () {
+  const antigo = JSON.stringify({ ancoras: [{ id: "x", oQueE: "Nadar", oQueFaz: "no meu ritmo", link: "", peso: "pesada", estado: "ativa" }] });
+  const deposito = depositoFalso({ "pouso.v1": antigo });
+  const armazem = g.criarArmazenamento(deposito);
+  const lista = armazem.ler().ancoras;
+  assert.strictEqual(lista.length, 1);
+  assert.strictEqual(lista[0].oQueE, "Nadar");
+  assert.strictEqual(lista[0].peso, "pesada");
+});
+
+teste("depois de trazer, a chave antiga some e não volta a ser usada", function () {
+  const antigo = JSON.stringify({ ancoras: [{ id: "x", oQueE: "Nadar" }] });
+  const deposito = depositoFalso({ "pouso.v1": antigo });
+  const armazem = g.criarArmazenamento(deposito);
+  armazem.ler();
+  assert.deepStrictEqual(Object.keys(deposito.espiar()), ["enseada.v1"]);
+});
+
+teste("o que já está no nome novo manda, e o antigo não atropela", function () {
+  const antigo = JSON.stringify({ ancoras: [{ id: "x", oQueE: "Antiga" }] });
+  const novo = JSON.stringify({ ancoras: [{ id: "y", oQueE: "Nova" }] });
+  const armazem = g.criarArmazenamento(depositoFalso({ "pouso.v1": antigo, "enseada.v1": novo }));
+  const lista = armazem.ler().ancoras;
+  assert.strictEqual(lista.length, 1);
+  assert.strictEqual(lista[0].oQueE, "Nova");
 });
 
 teste("apagar tudo não deixa nada no aparelho", function () {

@@ -1,4 +1,4 @@
-/* Pouso - regras de ancora.
+/* Enseada - regras de ancora.
    Funcoes puras: recebem a lista, devolvem uma lista nova. Nao gravam nada.
    Nao existe data, nao existe contador e nao existe historico: por decisao,
    nao por esquecimento. Sem isso, nao da para o app dizer "voce nao faz isso

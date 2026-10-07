@@ -1,11 +1,13 @@
-# Pouso
+# Enseada
 
 Um lugar onde a pessoa guarda o que já sabe que a ajuda, e alcança com um toque
 na hora em que não consegue pensar. Para quem ainda não sabe, tem um roteiro de
 perguntas que ajuda a descobrir.
 
-**Pouso é o nome de agora, não o definitivo.** Falta conferir domínio livre,
-nome livre na Play Store e busca de marca no INPI.
+O nome é **Enseada**. O pedido de registro da marca foi depositado no INPI.
+Depósito não é concessão: o registro ainda pode ser indeferido ou receber
+oposição, e isso leva meses. Falta conferir domínio livre e nome livre na
+Play Store.
 
 ## O que ele é, e o que ele não é
 

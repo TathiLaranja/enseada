@@ -1,4 +1,4 @@
-/* Pouso - liga o service worker, que é o que faz o app funcionar sem internet.
+/* Enseada - liga o service worker, que é o que faz o app funcionar sem internet.
    Se o navegador não tiver, o app continua funcionando com internet. */
 
 if ("serviceWorker" in navigator) {

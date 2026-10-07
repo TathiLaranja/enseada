@@ -1,4 +1,4 @@
-/* Pouso - o texto das perguntas do roteiro.
+/* Enseada - o texto das perguntas do roteiro.
    Separado da logica de proposito: mudar uma palavra aqui nao mexe em codigo.
    As perguntas sao as do documento, sem acrescimo.
    Nenhuma delas sugere resposta nem oferece exemplo de ancora. */

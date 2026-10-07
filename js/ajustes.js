@@ -1,4 +1,4 @@
-/* Pouso - ajustes de aparencia.
+/* Enseada - ajustes de aparencia.
    Roda no cabecalho de toda tela, antes de desenhar, para nao piscar.
    Tema e tamanho de fonte ficam no aparelho, como todo o resto. */
 

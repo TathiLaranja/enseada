@@ -1,10 +1,14 @@
-/* Pouso - a unica porta dos dados.
+/* Enseada - a unica porta dos dados.
    Tudo fica no aparelho, em localStorage. Nenhuma outra parte do app
    conversa com o deposito direto.
    Recebe o deposito por parametro para o teste poder rodar em Node sem
    navegador. */
 
-var CHAVE = "pouso.v1";
+var CHAVE = "enseada.v1";
+
+/* O app ja se chamou Pouso. Esta chave antiga so e LIDA, uma unica vez, para
+   trazer o que a pessoa escreveu antes da troca de nome. Nunca e gravada. */
+var CHAVE_ANTIGA = "pouso.v1";
 
 function depositoVazio() {
   return {
@@ -81,8 +85,17 @@ function criarArmazenamento(deposito) {
   function ler() {
     try {
       var bruto = deposito.getItem(CHAVE);
-      if (!bruto) { return depositoVazio(); }
-      return normalizar(JSON.parse(bruto));
+      if (bruto) { return normalizar(JSON.parse(bruto)); }
+
+      var antigo = deposito.getItem(CHAVE_ANTIGA);
+      if (antigo) {
+        var trazido = normalizar(JSON.parse(antigo));
+        gravar(trazido);
+        deposito.removeItem(CHAVE_ANTIGA);
+        return trazido;
+      }
+
+      return depositoVazio();
     } catch (erro) {
       return depositoVazio();
     }
@@ -107,6 +120,7 @@ function criarArmazenamento(deposito) {
   function apagarTudo() {
     try {
       deposito.removeItem(CHAVE);
+      deposito.removeItem(CHAVE_ANTIGA);
       return true;
     } catch (erro) {
       return false;
@@ -130,6 +144,7 @@ function criarArmazenamento(deposito) {
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     CHAVE: CHAVE,
+    CHAVE_ANTIGA: CHAVE_ANTIGA,
     depositoVazio: depositoVazio,
     normalizar: normalizar,
     criarArmazenamento: criarArmazenamento

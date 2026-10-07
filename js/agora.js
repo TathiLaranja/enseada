@@ -1,4 +1,4 @@
-/* Pouso - a tela Agora.
+/* Enseada - a tela Agora.
    Mostra as âncoras ativas em botões grandes. Nada mais.
    A âncora com link vira um botão que abre o link. A âncora sem link fica
    como lembrete escrito, sem nada para apertar. */

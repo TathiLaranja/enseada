@@ -1,14 +1,14 @@
-/* Pouso - service worker.
+/* Enseada - service worker.
    Cache PRIMEIRO: a rede só é procurada para arquivo que não está no cache.
    O app não tem servidor, então procurar a rede a cada toque seria gasto à toa
    e deixaria o app lento justo no momento ruim.
 
    Não existe bloco de push nem de notificação aqui: web push depende de
-   servidor com chave, e o Pouso não tem servidor.
+   servidor com chave, e o Enseada não tem servidor.
 
    Trocar VERSAO a cada publicação faz o aparelho buscar os arquivos novos. */
 
-var VERSAO = "pouso-v1";
+var VERSAO = "enseada-v1";
 
 var ARQUIVOS = [
   "./",

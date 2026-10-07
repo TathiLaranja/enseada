@@ -1,7 +1,9 @@
-# Pouso — contexto para o Claude Code
+# Enseada — contexto para o Claude Code
 
 PWA local de âncoras pessoais. Tudo no aparelho, sem conta e sem servidor.
-Nome provisório: Pouso. Falta conferir domínio, Play Store e INPI.
+Nome: Enseada. Pedido de marca depositado no INPI — depósito não é concessão,
+então nada de anunciar marca registrada enquanto o registro não sair.
+Falta conferir domínio e Play Store.
 
 ## Posicionamento (decide tudo)
 

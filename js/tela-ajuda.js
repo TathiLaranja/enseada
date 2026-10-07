@@ -1,4 +1,4 @@
-/* Pouso - a tela de Ajuda: aviso, CVV, aparência e dados.
+/* Enseada - a tela de Ajuda: aviso, CVV, aparência e dados.
    O estado de cada ajuste é dito em palavra, nunca só em cor. */
 
 (function () {
@@ -42,7 +42,7 @@
     var endereco = URL.createObjectURL(arquivo);
     var link = document.createElement("a");
     link.href = endereco;
-    link.download = "pouso-meus-dados.json";
+    link.download = "enseada-meus-dados.json";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

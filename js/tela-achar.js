@@ -1,4 +1,4 @@
-/* Pouso - a tela do roteiro.
+/* Enseada - a tela do roteiro.
    Uma pergunta por vez, botão de pular sempre disponível, pode parar no meio
    e voltar depois. Sem número de pergunta, sem barra de progresso e sem nota.
 

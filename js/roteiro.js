@@ -1,4 +1,4 @@
-/* Pouso - a logica do roteiro "Me ajuda a achar".
+/* Enseada - a logica do roteiro "Me ajuda a achar".
    Funcoes puras: recebem o estado, devolvem um estado novo. Nao gravam nada
    e nao tocam em tela.
 

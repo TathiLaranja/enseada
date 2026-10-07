@@ -1,4 +1,4 @@
-/* Pouso - a tela Minhas âncoras.
+/* Enseada - a tela Minhas âncoras.
    Lista, guarda, edita, deixa dormente, traz de volta e apaga.
    Nenhum campo vem preenchido pelo app, e nenhum peso vem marcado:
    quem escreve é a pessoa. A única exceção é o rascunho que vem do roteiro,
