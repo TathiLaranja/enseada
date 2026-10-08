@@ -1,74 +1,64 @@
-/* Enseada - a tela Jogos calmos: jogo da memoria.
-   Regras em js/memoria.js. Aqui so desenha as cartas e escuta o toque.
-   Estado de carta e dito em palavra, nunca so em cor. */
+document.addEventListener('DOMContentLoaded', () => {
+    const abas = document.querySelectorAll('.abas-jogos button[role="tab"]');
+    const paineis = document.querySelectorAll('.container-painel-jogos .painel-jogo');
 
-(function () {
-  var jogo = novoJogo(Math.random);
-  var area = document.getElementById("cartas");
-  var recado = document.getElementById("recado-jogo");
+    abas.forEach(aba => {
+        aba.addEventListener('click', () => {
+            const alvoId = aba.getAttribute('aria-controlspanel') || aba.id.replace('aba-', 'painel-');
 
-  function desenhar() {
-    area.textContent = "";
-    jogo.cartas.forEach(function (palavra, i) {
-      var achada = jogo.achadas.indexOf(i) !== -1;
-      var aberta = jogo.viradas.indexOf(i) !== -1;
-      var botao = document.createElement("button");
-      botao.type = "button";
-      botao.className = "carta";
+            abas.forEach(a => {
+                a.classList.remove('ativa');
+                a.setAttribute('aria-selected', 'false');
+            });
+            aba.classList.add('ativa');
+            aba.setAttribute('aria-selected', 'true');
 
-      if (achada) {
-        botao.setAttribute("data-estado", "achada");
-        botao.textContent = palavra + " (par)";
-        botao.setAttribute("aria-label", palavra + ", par achado");
-        botao.disabled = true;
-      } else if (aberta) {
-        botao.setAttribute("data-estado", "aberta");
-        botao.textContent = palavra;
-        botao.setAttribute("aria-label", palavra + ", carta virada");
-      } else {
-        botao.textContent = "Virar";
-        botao.setAttribute("aria-label", "Carta fechada, tocar para virar");
-      }
-
-      botao.addEventListener("click", function () {
-        jogo = tocar(jogo, i);
-        desenhar();
-        var proxima = area.children[i];
-        if (proxima && !proxima.disabled) { proxima.focus(); }
-      });
-      area.appendChild(botao);
+            paineis.forEach(painel => {
+                if (painel.id === alvoId) {
+                    painel.classList.remove('oculto');
+                    painel.classList.add('ativo');
+                } else {
+                    painel.classList.remove('ativo');
+                    painel.classList.add('oculto');
+                }
+            });
+        });
     });
 
-    if (terminou(jogo)) {
-      recado.textContent = "Todos os pares foram achados.";
-    } else if (jogo.viradas.length === 2) {
-      recado.textContent = "Não são iguais. Toque em outra carta quando quiser.";
-    } else {
-      recado.textContent = "";
+    const btnIniciarTetris = document.getElementById('iniciar-tetris');
+    const canvasTetris = document.getElementById('canvas-tetris');
+    if (btnIniciarTetris && canvasTetris) {
+        const ctxT = canvasTetris.getContext('2d');
+        btnIniciarTetris.addEventListener('click', () => {
+            ctxT.fillStyle = '#EDF2F7';
+            ctxT.fillRect(0, 0, canvasTetris.width, canvasTetris.height);
+            ctxT.fillStyle = '#319795';
+            ctxT.fillRect(80, 50, 40, 40);
+            ctxT.fillRect(80, 90, 40, 40);
+            btnIniciarTetris.textContent = 'Modo Calmo Ativo';
+        });
     }
-  }
 
-  document.getElementById("botao-embaralhar").addEventListener("click", function () {
-    jogo = novoJogo(Math.random);
-    desenhar();
-  });
-
-  /* Um jogo por vez na tela: o estado fica dito em palavra e em aria-pressed. */
-  var botaoMemoria = document.getElementById("escolha-memoria");
-  var botaoSudoku = document.getElementById("escolha-sudoku");
-
-  function mostrar(sudoku) {
-    document.getElementById("jogo-memoria").hidden = sudoku;
-    document.getElementById("jogo-sudoku").hidden = !sudoku;
-    botaoMemoria.setAttribute("aria-pressed", sudoku ? "false" : "true");
-    botaoSudoku.setAttribute("aria-pressed", sudoku ? "true" : "false");
-    document.getElementById("jogo-atual").textContent =
-      "Agora está: " + (sudoku ? "sudoku." : "memória.");
-  }
-
-  botaoMemoria.addEventListener("click", function () { mostrar(false); });
-  botaoSudoku.addEventListener("click", function () { mostrar(true); });
-
-  mostrar(false);
-  desenhar();
-}());
+    const containerCruzadas = document.getElementById('container-cruzadas');
+    if (containerCruzadas) {
+        containerCruzadas.innerHTML = `
+            <div class="dica-cruzada">
+                <p><strong>Dica 1:</strong> Estado de espírito tranquilo e pacífico.</p>
+                <div class="palavra-inputs">
+                    <input type="text" maxlength="1" class="letra-input" value="P" readonly>
+                    <input type="text" maxlength="1" class="letra-input" value="A" readonly>
+                    <input type="text" maxlength="1" class="letra-input" value="Z" readonly>
+                </div>
+            </div>
+            <div class="dica-cruzada">
+                <p><strong>Dica 2:</strong> Elemento essencial para a vida, fluido e cristalino.</p>
+                <div class="palavra-inputs">
+                    <input type="text" maxlength="1" class="letra-input">
+                    <input type="text" maxlength="1" class="letra-input">
+                    <input type="text" maxlength="1" class="letra-input">
+                    <input type="text" maxlength="1" class="letra-input">
+                </div>
+            </div>
+        `;
+    }
+});
