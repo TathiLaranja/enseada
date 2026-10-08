@@ -1,40 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Desenhar — Enseada</title>
-<meta name="theme-color" content="#F8F9FA">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icones/icone-192.png">
-<link rel="apple-touch-icon" href="icones/icone-192.png">
-<link rel="stylesheet" href="css/tema.css">
-<link rel="stylesheet" href="css/base.css">
-<script src="js/ancoras.js"></script>
-<script src="js/armazenamento.js"></script>
-<script src="js/ajustes.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enseada - Desenhar</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/tema.css">
 </head>
 <body>
-<main class="pagina">
+    <header class="topo-pagina">
+        <h1>Espaço de Desenho</h1>
+        <a href="index.html" class="link-voltar" aria-label="Voltar ao menu principal">← Voltar</a>
+    </header>
 
-  <div class="topo">
-    <h1>Desenhar</h1>
-  </div>
+    <main class="conteudo-principal">
+        <section class="secao-desenho">
+            <p class="instrucao-suave">Um espaço livre e calmo para expressar traços sem pressa.</p>
+            
+            <div class="painel-ferramentas">
+                <div class="grupo-paleta" role="group" aria-label="Paleta de cores suaves">
+                    <button type="button" class="botao-cor ativa" data-cor="#4A5568" aria-pressed="true" style="background-color: #4A5568;" title="Cinza Suave"></button>
+                    <button type="button" class="botao-cor" data-cor="#718096" aria-pressed="false" style="background-color: #718096;" title="Cinza Médio"></button>
+                    <button type="button" class="botao-cor" data-cor="#319795" aria-pressed="false" style="background-color: #319795;" title="Verde Água Calmo"></button>
+                    <button type="button" class="botao-cor" data-cor="#3182CE" aria-pressed="false" style="background-color: #3182CE;" title="Azul Serena"></button>
+                    <button type="button" class="botao-cor" data-cor="#D69E2E" aria-pressed="false" style="background-color: #D69E2E;" title="Ocre Suave"></button>
+                    <button type="button" class="botao-cor" data-cor="#E53E3E" aria-pressed="false" style="background-color: #E53E3E;" title="Terracota Suave"></button>
+                </div>
+                
+                <div class="grupo-acoes">
+                    <button id="btn-limpar" class="botao-secundario">Limpar Tela</button>
+                    <button id="btn-salvar" class="botao-primario">Salvar Traço</button>
+                </div>
+            </div>
 
-  <canvas id="tela-desenho" class="tela-desenho" aria-label="Área de desenho. Use o dedo ou o mouse."></canvas>
+            <div class="canvas-container">
+                <canvas id="canvas-desenho" aria-label="Área de desenho livre"></canvas>
+            </div>
+        </section>
+    </main>
 
-  <div class="botao-fileira">
-    <button type="button" class="botao-simples" id="ferramenta-traco" aria-pressed="true">Traço</button>
-    <button type="button" class="botao-simples" id="ferramenta-apagar" aria-pressed="false">Apagar</button>
-  </div>
-  <p class="explica" id="ferramenta-atual" role="status"></p>
-
-  <button type="button" class="botao-simples" id="botao-limpar">Limpar o desenho</button>
-  <p class="explica" id="recado-desenho" role="status"></p>
-
-</main>
-<script src="js/tela-desenhar.js"></script>
-<script src="js/menu.js"></script>
-<script src="js/registra-sw.js"></script>
+    <script src="js/armazenamento.js"></script>
+    <script src="js/tela-desenhar.js"></script>
 </body>
 </html>
