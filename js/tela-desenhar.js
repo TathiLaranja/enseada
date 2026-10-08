@@ -1,141 +1,104 @@
-/* Enseada - a tela Desenhar: traco e borracha num canvas.
-   O desenho e guardado como tracos (pontos de 0 a 1), nao como imagem. Assim
-   ele se ajusta ao tamanho da tela e ganha as cores do tema que estiver
-   ligado. Sem biblioteca, sem rede. */
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('canvas-desenho');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
 
-(function () {
-  var LIMITE_DE_PONTOS = 20000;
-  var LARGURA_TRACO = 3;
-  var LARGURA_BORRACHA = 26;
-
-  var armazem = criarArmazenamento(window.localStorage);
-  var canvas = document.getElementById("tela-desenho");
-  var ctx = canvas.getContext("2d");
-  var recado = document.getElementById("recado-desenho");
-  var botaoTraco = document.getElementById("ferramenta-traco");
-  var botaoApagar = document.getElementById("ferramenta-apagar");
-  var botaoLimpar = document.getElementById("botao-limpar");
-
-  var tracos = armazem.ler().desenho;
-  var apagando = false;
-  var atual = null;
-
-  function totalDePontos() {
-    return tracos.reduce(function (soma, t) { return soma + t.pontos.length; }, 0);
-  }
-
-  function ajustarTamanho() {
-    var escala = window.devicePixelRatio || 1;
-    canvas.width = Math.max(1, Math.round(canvas.clientWidth * escala));
-    canvas.height = Math.max(1, Math.round(canvas.clientHeight * escala));
-    redesenhar();
-  }
-
-  function desenharTraco(t) {
-    var escala = window.devicePixelRatio || 1;
-    var cor = getComputedStyle(document.documentElement).getPropertyValue("--texto").trim() || "#1F7268";
-    ctx.globalCompositeOperation = t.apagar ? "destination-out" : "source-over";
-    ctx.strokeStyle = cor;
-    ctx.fillStyle = cor;
-    ctx.lineWidth = (t.apagar ? LARGURA_BORRACHA : LARGURA_TRACO) * escala;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
-    var w = canvas.width;
-    var h = canvas.height;
-    ctx.beginPath();
-    ctx.moveTo(t.pontos[0][0] * w, t.pontos[0][1] * h);
-    if (t.pontos.length === 1) {
-      /* Um toque sem arrastar vira um ponto. */
-      ctx.lineTo(t.pontos[0][0] * w + 0.01, t.pontos[0][1] * h);
+    function redimensionarCanvas() {
+        const container = canvas.parentElement;
+        canvas.width = container.clientWidth - 16;
+        canvas.height = 400;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#4A5568';
     }
-    for (var i = 1; i < t.pontos.length; i++) {
-      ctx.lineTo(t.pontos[i][0] * w, t.pontos[i][1] * h);
+
+    redimensionarCanvas();
+    window.addEventListener('resize', redimensionarCanvas);
+
+    let desenhando = false;
+    let ultimaX = 0;
+    let ultimaY = 0;
+
+    function obterPosicao(e) {
+        const rect = canvas.getBoundingClientRect();
+        if (e.touches && e.touches[0]) {
+            return {
+                x: e.touches[0].clientX - rect.left,
+                y: e.touches[0].clientY - rect.top
+            };
+        }
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
     }
-    ctx.stroke();
-    ctx.globalCompositeOperation = "source-over";
-  }
 
-  function redesenhar() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    tracos.forEach(desenharTraco);
-  }
-
-  function guardar() {
-    if (totalDePontos() > LIMITE_DE_PONTOS) {
-      recado.textContent = "O desenho ficou grande demais para guardar. Ele continua aqui até você sair da tela.";
-      return;
+    function iniciarDesenho(e) {
+        desenhando = true;
+        const pos = obterPosicao(e);
+        ultimaX = pos.x;
+        ultimaY = pos.y;
     }
-    var dados = armazem.ler();
-    dados.desenho = tracos;
-    var ok = armazem.gravar(dados);
-    recado.textContent = ok ? "" : "Não foi possível guardar neste aparelho.";
-  }
 
-  function ponto(evento) {
-    var caixa = canvas.getBoundingClientRect();
-    var x = (evento.clientX - caixa.left) / caixa.width;
-    var y = (evento.clientY - caixa.top) / caixa.height;
-    return [Math.round(Math.min(1, Math.max(0, x)) * 10000) / 10000,
-            Math.round(Math.min(1, Math.max(0, y)) * 10000) / 10000];
-  }
+    function desenhar(e) {
+        if (!desenhando) return;
+        e.preventDefault();
+        const pos = obterPosicao(e);
 
-  canvas.addEventListener("pointerdown", function (evento) {
-    evento.preventDefault();
-    canvas.setPointerCapture(evento.pointerId);
-    atual = { apagar: apagando, pontos: [ponto(evento)] };
-    tracos.push(atual);
-    desenharTraco(atual);
-    desfazerConfirmacao();
-  });
+        ctx.beginPath();
+        ctx.moveTo(ultimaX, ultimaY);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
 
-  canvas.addEventListener("pointermove", function (evento) {
-    if (!atual) { return; }
-    atual.pontos.push(ponto(evento));
-    redesenhar();
-  });
-
-  function soltar() {
-    if (!atual) { return; }
-    atual = null;
-    guardar();
-  }
-  canvas.addEventListener("pointerup", soltar);
-  canvas.addEventListener("pointercancel", soltar);
-
-  function dizerFerramenta() {
-    botaoTraco.setAttribute("aria-pressed", apagando ? "false" : "true");
-    botaoApagar.setAttribute("aria-pressed", apagando ? "true" : "false");
-    document.getElementById("ferramenta-atual").textContent =
-      "Agora está: " + (apagando ? "apagar." : "traço.");
-  }
-
-  botaoTraco.addEventListener("click", function () { apagando = false; dizerFerramenta(); });
-  botaoApagar.addEventListener("click", function () { apagando = true; dizerFerramenta(); });
-
-  function desfazerConfirmacao() {
-    botaoLimpar.removeAttribute("data-confirmar");
-    botaoLimpar.textContent = "Limpar o desenho";
-  }
-
-  botaoLimpar.addEventListener("click", function () {
-    if (botaoLimpar.getAttribute("data-confirmar") === "sim") {
-      tracos = [];
-      armazem.mudar(function (d) {
-        d.desenho = [];
-        return d;
-      });
-      redesenhar();
-      desfazerConfirmacao();
-      recado.textContent = "A tela está em branco.";
-      return;
+        ultimaX = pos.x;
+        ultimaY = pos.y;
     }
-    botaoLimpar.setAttribute("data-confirmar", "sim");
-    botaoLimpar.textContent = "Limpar mesmo";
-    recado.textContent = "Isso apaga o desenho inteiro. Não dá para desfazer.";
-  });
 
-  window.addEventListener("resize", ajustarTamanho);
-  dizerFerramenta();
-  ajustarTamanho();
-}());
+    function pararDesenho() {
+        desenhando = false;
+    }
+
+    canvas.addEventListener('mousedown', iniciarDesenho);
+    canvas.addEventListener('mousemove', desenhar);
+    canvas.addEventListener('mouseup', pararDesenho);
+    canvas.addEventListener('mouseleave', pararDesenho);
+
+    canvas.addEventListener('touchstart', iniciarDesenho, { passive: false });
+    canvas.addEventListener('touchmove', desenhar, { passive: false });
+    canvas.addEventListener('touchend', pararDesenho);
+
+    const botoesCor = document.querySelectorAll('.botao-cor');
+    botoesCor.forEach(botao => {
+        botao.addEventListener('click', () => {
+            botoesCor.forEach(b => {
+                b.classList.remove('ativa');
+                b.setAttribute('aria-pressed', 'false');
+            });
+            botao.classList.add('ativa');
+            botao.setAttribute('aria-pressed', 'true');
+            ctx.strokeStyle = botao.getAttribute('data-cor');
+        });
+    });
+
+    const btnLimpar = document.getElementById('btn-limpar');
+    if (btnLimpar) {
+        btnLimpar.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+    }
+
+    const btnSalvar = document.getElementById('btn-salvar');
+    if (btnSalvar) {
+        btnSalvar.addEventListener('click', () => {
+            const dataURL = canvas.toDataURL('image/png');
+            if (typeof salvarNoArmazenamento === 'function') {
+                salvarNoArmazenamento('enseada_ultimo_desenho', dataURL);
+            }
+            btnSalvar.textContent = 'Salvo com Sucesso!';
+            setTimeout(() => {
+                btnSalvar.textContent = 'Salvar Traço';
+            }, 2000);
+        });
+    }
+});
