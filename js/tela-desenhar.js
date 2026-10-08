@@ -12,13 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const LIMITE_DE_PONTOS = 20000;
     const LARGURA_TRACO = 4;
     const LARGURA_BORRACHA = 26;
-    const VARIAVEL_DA_COR = { texto: '--texto', destaque: '--destaque', detalhe: '--detalhe' };
-    const NOME_DA_FERRAMENTA = {
-        texto: 'Verde profundo',
-        destaque: 'Azul turquesa',
-        detalhe: 'Verde-água',
-        borracha: 'Borracha'
-    };
+    const NOME_DA_FERRAMENTA = { borracha: 'Borracha' };
+    PALETA_DESENHO.forEach(c => { NOME_DA_FERRAMENTA[c.nome] = c.rotulo; });
 
     const armazem = criarArmazenamento(window.localStorage);
     const recado = document.getElementById('recado-desenho');
@@ -34,11 +29,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return tracos.reduce((soma, t) => soma + t.pontos.length, 0);
     }
 
-    function corDoTema(nome) {
-        const valor = getComputedStyle(document.documentElement)
-            .getPropertyValue(VARIAVEL_DA_COR[nome] || '--texto').trim();
-        return valor || '#1F7268';
+    function modoBaixo() {
+        return document.documentElement.getAttribute('data-tema') === 'baixo';
     }
+
+    function lerVariavel(nome) {
+        return getComputedStyle(document.documentElement).getPropertyValue(nome).trim() || '#1F7268';
+    }
+
+    function corDoTema(nome) {
+        return corDoDesenho(nome, modoBaixo(), lerVariavel);
+    }
+
+    /* A bolinha de cada botao mostra o tom certo para o tema ligado. */
+    botoesCor.forEach(b => {
+        const nome = b.getAttribute('data-cor');
+        const amostra = b.querySelector('.amostra');
+        if (nome !== 'borracha' && amostra) amostra.style.background = corDoTema(nome);
+    });
 
     function desenharTraco(t) {
         const escala = window.devicePixelRatio || 1;

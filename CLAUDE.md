@@ -38,7 +38,8 @@ promete resultado.
 - Uma coisa por tela. Uma pergunta, uma lista, um botão grande.
 - Três cores por tema, no máximo: fundo, texto e um tom de destaque.
   Saturação baixa. Nem preto puro, nem branco puro.
-- **Nenhum vermelho em lugar nenhum**, nem para erro, nem para aviso.
+- **Nenhum vermelho na interface**, nem para erro, nem para aviso. Única
+  exceção: as cores de tinta do Desenhar (js/paleta.js), que são da pessoa.
 - Cor nunca carrega significado sozinha: sempre junto com palavra.
 - Sem animação. `prefers-reduced-motion` respeitado e, fora dele, nada anima.
 - Claro e escuro seguindo `prefers-color-scheme`, com troca manual só na Ajuda.

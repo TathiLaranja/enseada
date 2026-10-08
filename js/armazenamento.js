@@ -10,6 +10,11 @@ var CHAVE = "enseada.v1";
    trazer o que a pessoa escreveu antes da troca de nome. Nunca e gravada. */
 var CHAVE_ANTIGA = "pouso.v1";
 
+/* Nomes das cores do desenho (as cores em si ficam em js/paleta.js; um teste
+   confere que as duas listas dizem o mesmo). */
+var CORES_DO_DESENHO = ["texto", "destaque", "detalhe", "vermelho", "laranja", "amarelo",
+  "verde", "azul", "roxo", "rosa", "marrom", "grafite"];
+
 function depositoVazio() {
   return {
     versao: 1,
@@ -93,7 +98,7 @@ function normalizar(bruto) {
     }).map(function (t) {
       return {
         apagar: t.apagar === true,
-        cor: (t.cor === "destaque" || t.cor === "detalhe") ? t.cor : "texto",
+        cor: CORES_DO_DESENHO.indexOf(t.cor) !== -1 ? t.cor : "texto",
         pontos: t.pontos.filter(function (p) {
           return Array.isArray(p) && typeof p[0] === "number" && typeof p[1] === "number" &&
             isFinite(p[0]) && isFinite(p[1]);
@@ -184,6 +189,7 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     CHAVE: CHAVE,
     CHAVE_ANTIGA: CHAVE_ANTIGA,
+    CORES_DO_DESENHO: CORES_DO_DESENHO,
     depositoVazio: depositoVazio,
     normalizar: normalizar,
     criarArmazenamento: criarArmazenamento
