@@ -173,6 +173,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnSalvar.addEventListener('click', guardar);
 
+    /* Compartilhar: a imagem sai do aparelho SO quando a pessoa toca aqui e
+       escolhe para quem mandar na folha do proprio sistema (WhatsApp, e-mail,
+       etc.). O Enseada nao envia nada e nao guarda nada sobre isso. Se o
+       aparelho nao compartilha arquivos, o desenho vai para a pasta de
+       downloads e a pessoa manda por la. */
+    const NOME_DO_ARQUIVO = 'desenho-enseada.png';
+
+    function imagemDoDesenho() {
+        /* O canvas e transparente; a imagem leva o fundo do tema ligado. */
+        const folha = document.createElement('canvas');
+        folha.width = canvas.width;
+        folha.height = canvas.height;
+        const c2 = folha.getContext('2d');
+        c2.fillStyle = lerVariavel('--fundo') || '#F8F9FA';
+        c2.fillRect(0, 0, folha.width, folha.height);
+        c2.drawImage(canvas, 0, 0);
+        return new Promise(resolve => folha.toBlob(resolve, 'image/png'));
+    }
+
+    function baixar(blob) {
+        const endereco = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = endereco;
+        link.download = NOME_DO_ARQUIVO;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(endereco);
+    }
+
+    document.getElementById('btn-compartilhar').addEventListener('click', async () => {
+        if (tracos.length === 0) {
+            recado.textContent = 'Desenhe alguma coisa primeiro.';
+            return;
+        }
+        const blob = await imagemDoDesenho();
+        if (!blob) {
+            recado.textContent = 'Não foi possível preparar a imagem.';
+            return;
+        }
+        const arquivo = new File([blob], NOME_DO_ARQUIVO, { type: 'image/png' });
+        const dados = { files: [arquivo], title: 'Meu desenho' };
+
+        if (navigator.share && navigator.canShare && navigator.canShare(dados)) {
+            try {
+                await navigator.share(dados);
+                recado.textContent = '';
+            } catch (erro) {
+                /* A pessoa fechou a folha de compartilhar: nada foi enviado. */
+                recado.textContent = erro && erro.name === 'AbortError'
+                    ? 'Nada foi enviado.'
+                    : 'Não foi possível compartilhar. Tente de novo.';
+            }
+            return;
+        }
+        baixar(blob);
+        recado.textContent = 'Este aparelho não compartilha direto. A imagem foi para a pasta de downloads; mande por lá.';
+    });
+
     window.addEventListener('resize', ajustarTamanho);
     dizerFerramenta();
     ajustarTamanho();
