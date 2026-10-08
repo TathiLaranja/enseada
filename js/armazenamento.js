@@ -13,7 +13,8 @@ var CHAVE_ANTIGA = "pouso.v1";
 /* Nomes das cores do desenho (as cores em si ficam em js/paleta.js; um teste
    confere que as duas listas dizem o mesmo). */
 var CORES_DO_DESENHO = ["texto", "destaque", "detalhe", "vermelho", "laranja", "amarelo",
-  "verde", "azul", "roxo", "rosa", "marrom", "grafite"];
+  "verde", "azul", "roxo", "rosa", "marrom", "grafite", "sol", "laranjapastel", "salmao",
+  "rosapastel", "lilas", "azulsuave", "verdeclaro"];
 
 function depositoVazio() {
   return {

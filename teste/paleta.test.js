@@ -40,11 +40,23 @@ teste("toda cor tem nome escrito (cor nunca vai sozinha)", function () {
   p.PALETA_DESENHO.forEach(function (c) { assert.ok(c.rotulo && c.rotulo.length > 2); });
 });
 
-teste("cada tom aparece com contraste de 3:1 ou mais sobre o fundo do seu tema", function () {
+teste("cada tom aparece com contraste de 3:1 (suaves: 1.8:1 no claro) sobre o fundo do tema", function () {
   p.PALETA_DESENHO.filter(function (c) { return !c.tema; }).forEach(function (c) {
-    assert.ok(contraste(c.claro, "#F8F9FA") >= 3, c.nome + " no claro");
+    assert.ok(contraste(c.claro, "#F8F9FA") >= (c.suave ? 1.8 : 3), c.nome + " no claro");
     assert.ok(contraste(c.escuro, "#1B2328") >= 3, c.nome + " no escuro");
   });
+});
+
+teste("a paleta mantém o marrom e a mostarda e traz o amarelo-sol e os pastéis pedidos", function () {
+  const por = {};
+  p.PALETA_DESENHO.forEach(function (c) { por[c.nome] = c; });
+  assert.strictEqual(por.marrom.claro, "#6D4C41");
+  assert.strictEqual(por.amarelo.rotulo, "Mostarda");
+  assert.strictEqual(por.amarelo.claro, "#B58900");
+  ["sol", "laranjapastel", "salmao", "azulsuave", "verdeclaro"].forEach(function (n) {
+    assert.ok(por[n] && por[n].suave === true, n);
+  });
+  assert.ok(luz(por.sol.escuro) > luz(por.amarelo.claro));
 });
 
 teste("o tom muda com o tema e as cores do tema vêm das variáveis", function () {
