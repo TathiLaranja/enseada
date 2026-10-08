@@ -15,6 +15,8 @@
     <script src="js/ajustes.js"></script>
     <script src="js/memoria.js"></script>
     <script src="js/sudoku.js"></script>
+    <script src="js/tetris.js"></script>
+    <script src="js/cruzadas.js"></script>
 </head>
 <body>
     <header class="topo-pagina">
@@ -59,34 +61,41 @@
             <div id="painel-tetris" role="tabpanel" aria-labelledby="aba-tetris" class="painel-jogo oculto" hidden>
                 <div class="cabecalho-jogo">
                     <h2>Tetris Calmo</h2>
-                    <p class="instrucao-suave">Encaixe as peças tranquilamente. Sem aceleração punitiva ou game over.</p>
+                    <p class="instrucao-suave">A peça só se mexe quando você toca. Não tem tempo, não tem pontos e não tem como perder: se o tabuleiro encher, ele é esvaziado e você continua. No teclado, use as setas.</p>
                 </div>
                 <div class="tetris-wrapper">
                     <canvas id="canvas-tetris" width="200" height="400" aria-label="Tabuleiro de Tetris Calmo"></canvas>
                     <div class="controles-tetris">
-                        <button type="button" id="tetris-esq" class="botao-secundario">←</button>
+                        <button type="button" id="tetris-esq" class="botao-secundario">← Esquerda</button>
+                        <button type="button" id="tetris-dir" class="botao-secundario">Direita →</button>
                         <button type="button" id="tetris-girar" class="botao-secundario">Girar</button>
-                        <button type="button" id="tetris-dir" class="botao-secundario">→</button>
                         <button type="button" id="tetris-baixo" class="botao-secundario">Descer</button>
+                        <button type="button" id="tetris-soltar" class="botao-secundario">Soltar até o fundo</button>
                     </div>
                 </div>
+                <p id="recado-tetris" role="status"></p>
                 <button type="button" id="iniciar-tetris" class="botao-primario">Iniciar Tetris Calmo</button>
             </div>
 
-            <!-- Painel Palavras Cruzadas Clássicas -->
+            <!-- Painel Palavras Cruzadas -->
             <div id="painel-palavras" role="tabpanel" aria-labelledby="aba-palavras" class="painel-jogo oculto" hidden>
                 <div class="cabecalho-jogo">
                     <h2>Palavras Cruzadas Clássicas</h2>
-                    <p class="instrucao-suave">Complete as letras nas caixinhas guiando-se pelas dicas textuais simples.</p>
+                    <p class="instrucao-suave">Complete as letras guiando-se pelas dicas. Não tem tempo, não tem pontos e não tem como perder. Se travar, peça uma dica.</p>
                 </div>
                 <div id="container-cruzadas" class="container-cruzadas"></div>
+                <p id="recado-cruzadas" role="status"></p>
                 <button type="button" id="verificar-cruzadas" class="botao-primario">Conferir Respostas</button>
+                <button type="button" id="dica-cruzadas" class="botao-secundario">Pedir uma dica</button>
+                <button type="button" id="reiniciar-cruzadas" class="botao-secundario">Novas Palavras Cruzadas</button>
             </div>
         </section>
     </main>
 
     <script src="js/tela-jogos.js"></script>
     <script src="js/tela-sudoku.js"></script>
+    <script src="js/tela-tetris.js"></script>
+    <script src="js/tela-cruzadas.js"></script>
     <script src="js/menu.js"></script>
     <script src="js/registra-sw.js"></script>
 </body>

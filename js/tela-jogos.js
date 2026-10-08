@@ -1,5 +1,6 @@
 /* Enseada - a tela Jogos calmos: abas e jogo da memória.
-   Regras da memória em js/memoria.js; o sudoku vive em js/tela-sudoku.js.
+   Regras da memória em js/memoria.js. Sudoku, Tetris e palavras cruzadas vivem
+   em js/tela-sudoku.js, js/tela-tetris.js e js/tela-cruzadas.js.
    Sem derrota, sem cronômetro, sem pontuação. Estado dito em palavra. */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -80,42 +81,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     desenharMemoria();
-
-    /* Tetris Calmo e Palavras Cruzadas: ainda são protótipo, como estavam. */
-    const btnIniciarTetris = document.getElementById('iniciar-tetris');
-    const canvasTetris = document.getElementById('canvas-tetris');
-    if (btnIniciarTetris && canvasTetris) {
-        const ctxT = canvasTetris.getContext('2d');
-        btnIniciarTetris.addEventListener('click', () => {
-            ctxT.fillStyle = '#EDF2F7';
-            ctxT.fillRect(0, 0, canvasTetris.width, canvasTetris.height);
-            ctxT.fillStyle = '#319795';
-            ctxT.fillRect(80, 50, 40, 40);
-            ctxT.fillRect(80, 90, 40, 40);
-            btnIniciarTetris.textContent = 'Modo Calmo Ativo';
-        });
-    }
-
-    const containerCruzadas = document.getElementById('container-cruzadas');
-    if (containerCruzadas) {
-        containerCruzadas.innerHTML = `
-            <div class="dica-cruzada">
-                <p><strong>Dica 1:</strong> Estado de espírito tranquilo e pacífico.</p>
-                <div class="palavra-inputs">
-                    <input type="text" maxlength="1" class="letra-input" value="P" readonly>
-                    <input type="text" maxlength="1" class="letra-input" value="A" readonly>
-                    <input type="text" maxlength="1" class="letra-input" value="Z" readonly>
-                </div>
-            </div>
-            <div class="dica-cruzada">
-                <p><strong>Dica 2:</strong> Elemento essencial para a vida, fluido e cristalino.</p>
-                <div class="palavra-inputs">
-                    <input type="text" maxlength="1" class="letra-input">
-                    <input type="text" maxlength="1" class="letra-input">
-                    <input type="text" maxlength="1" class="letra-input">
-                    <input type="text" maxlength="1" class="letra-input">
-                </div>
-            </div>
-        `;
-    }
 });

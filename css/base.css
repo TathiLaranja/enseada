@@ -553,3 +553,34 @@ textarea {
   border: 2px solid var(--destaque);
   border-radius: var(--raio);
 }
+
+/* Palavras cruzadas: grade de ate 9 colunas; sem letra = casa vazia, sem borda. */
+.grade-cruzada {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 16px;
+}
+
+.celula-cruz { position: relative; aspect-ratio: 1; min-width: 0; }
+.celula-cruz.sem-letra { visibility: hidden; }
+
+.celula-cruz .letra-input {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  font-weight: 700;
+}
+
+.numero-cruz {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-size: 0.62em;
+  line-height: 1;
+  color: var(--texto);
+  pointer-events: none;
+}
+
+.dicas-cruzada h3 { font-size: 1em; margin: 0 0 6px; }
+.dicas-cruzada ul { margin: 0 0 14px; padding-left: 20px; }
+.dicas-cruzada li { margin-bottom: 4px; }
