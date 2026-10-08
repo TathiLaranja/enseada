@@ -1,7 +1,8 @@
 /* Enseada - tema
-   Tres cores por tema: fundo, texto e destaque. Mais nada.
-   --linha e --sombra sao a cor do texto com transparencia, nao cores novas.
-   Nenhum vermelho em lugar nenhum. Nem preto puro, nem branco puro. */
+   Identidade nova, a mesma do icone: fundo Branco Suave, e texto, botoes e
+   caixas variando so entre Azul Turquesa e Verde-agua.
+   Uma identidade so: a escolha de tema na tela de Ajuda continua sendo
+   guardada, mas nao muda mais a cor. */
 
 @font-face {
   font-family: "Atkinson Hyperlegible";
@@ -19,14 +20,13 @@
   src: url("../fontes/AtkinsonHyperlegible-Bold.woff2") format("woff2");
 }
 
-/* Padrao: tema claro. Paleta Mare. */
 :root {
-  --fundo: #F2F0EB;
-  --texto: #272C33;
-  --destaque: #3F5C6B;
-  --texto-no-destaque: #F2F0EB;
-  --linha: rgba(39, 44, 51, 0.30);
-  --fraco: rgba(39, 44, 51, 0.72);
+  --fundo: #F8F9FA;          /* Branco Suave */
+  --texto: #2A9D8F;          /* Verde-agua */
+  --destaque: #00AEEF;       /* Azul Turquesa */
+  --texto-no-destaque: #F8F9FA;
+  --linha: #2A9D8F;
+  --fraco: #00AEEF;
   color-scheme: light;
 
   --escala: 1;
@@ -35,28 +35,28 @@
   --largura: 34rem;
 }
 
-/* Quem nao escolheu nada segue o aparelho. */
+/* A identidade e uma so, entao o aparelho no modo escuro e a escolha manual
+   na tela de Ajuda recebem exatamente as mesmas cores. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema="claro"]) {
-    --fundo: #1C2127;
-    --texto: #D9DEE3;
-    --destaque: #8FA8B4;
-    --texto-no-destaque: #1C2127;
-    --linha: rgba(217, 222, 227, 0.30);
-    --fraco: rgba(217, 222, 227, 0.75);
-    color-scheme: dark;
+    --fundo: #F8F9FA;
+    --texto: #2A9D8F;
+    --destaque: #00AEEF;
+    --texto-no-destaque: #F8F9FA;
+    --linha: #2A9D8F;
+    --fraco: #00AEEF;
+    color-scheme: light;
   }
 }
 
-/* Quem escolheu na tela de Ajuda manda em cima do aparelho. */
 :root[data-tema="escuro"] {
-  --fundo: #1C2127;
-  --texto: #D9DEE3;
-  --destaque: #8FA8B4;
-  --texto-no-destaque: #1C2127;
-  --linha: rgba(217, 222, 227, 0.30);
-  --fraco: rgba(217, 222, 227, 0.75);
-  color-scheme: dark;
+  --fundo: #F8F9FA;
+  --texto: #2A9D8F;
+  --destaque: #00AEEF;
+  --texto-no-destaque: #F8F9FA;
+  --linha: #2A9D8F;
+  --fraco: #00AEEF;
+  color-scheme: light;
 }
 
 /* Tamanho da fonte, escolhido na tela de Ajuda. */
