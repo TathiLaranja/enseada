@@ -49,7 +49,7 @@ teste("aparelho novo começa com a letra normal", function () {
 teste("o tema escuro antigo não vale: só o Modo Baixo Estímulo liga o tema", function () {
   const bruto = JSON.stringify({ ajustes: { tema: "escuro", fonte: "normal" } });
   const ajustes = g.criarArmazenamento(depositoFalso({ "enseada.v1": bruto })).ler().ajustes;
-  assert.deepStrictEqual(Object.keys(ajustes).sort(), ["fonte", "tema"]);
+  assert.deepStrictEqual(Object.keys(ajustes).sort(), ["boasVindasVistas", "fonte", "tema"]);
   assert.strictEqual(ajustes.tema, "claro");
 });
 
@@ -163,6 +163,14 @@ teste("Modo Baixo Estímulo começa desligado e fica guardado quando ligado", fu
   assert.strictEqual(armazem.ler().ajustes.tema, "claro");
   armazem.mudar(function (d) { d.ajustes.tema = "baixo"; return d; });
   assert.strictEqual(armazem.ler().ajustes.tema, "baixo");
+});
+
+teste("boas-vindas: começa por mostrar, guarda só sim ou não, e valor estranho volta a mostrar", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  assert.strictEqual(armazem.ler().ajustes.boasVindasVistas, false);
+  armazem.mudar(function (d) { d.ajustes.boasVindasVistas = true; return d; });
+  assert.strictEqual(armazem.ler().ajustes.boasVindasVistas, true);
+  assert.strictEqual(g.normalizar({ ajustes: { boasVindasVistas: "sim" } }).ajustes.boasVindasVistas, false);
 });
 
 teste("tema desconhecido volta para o claro", function () {

@@ -14,7 +14,7 @@ function depositoVazio() {
   return {
     versao: 1,
     ancoras: [],
-    ajustes: { fonte: "normal", tema: "claro" },
+    ajustes: { fonte: "normal", tema: "claro", boasVindasVistas: false },
     rascunho: null,
     roteiro: null,
     escrita: "",
@@ -51,6 +51,8 @@ function normalizar(bruto) {
     var f = bruto.ajustes.fonte;
     limpo.ajustes.fonte = (f === "grande" || f === "maior") ? f : "normal";
     limpo.ajustes.tema = bruto.ajustes.tema === "baixo" ? "baixo" : "claro";
+    /* Só "já fechou a mensagem de boas-vindas": sem data, sem contagem. */
+    limpo.ajustes.boasVindasVistas = bruto.ajustes.boasVindasVistas === true;
   }
 
   if (bruto.rascunho && typeof bruto.rascunho === "object") {

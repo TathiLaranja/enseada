@@ -584,3 +584,15 @@ textarea {
 .dicas-cruzada h3 { font-size: 1em; margin: 0 0 6px; }
 .dicas-cruzada ul { margin: 0 0 14px; padding-left: 20px; }
 .dicas-cruzada li { margin-bottom: 4px; }
+
+/* Boas-vindas na tela Agora: texto leve, sem fundo, sem animacao. */
+.boas-vindas {
+  border: 2px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.boas-vindas h2 { margin-bottom: 6px; }
+.boas-vindas p { margin-bottom: 12px; }
+.boas-vindas .botao-simples { width: auto; margin-bottom: 0; min-height: 44px; }

@@ -71,4 +71,15 @@
   }
 
   desenhar();
+
+  /* Mensagem de boas-vindas: um bloco de texto simples, sem animação, que a
+     pessoa fecha uma vez e não volta. Aparece só enquanto não foi fechada. */
+  var boasVindas = document.getElementById("boas-vindas");
+  if (boasVindas && !armazem.ler().ajustes.boasVindasVistas) {
+    boasVindas.hidden = false;
+    document.getElementById("fechar-boas-vindas").addEventListener("click", function () {
+      guardarAjuste("boasVindasVistas", true);
+      boasVindas.hidden = true;
+    });
+  }
 }());
