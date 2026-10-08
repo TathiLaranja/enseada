@@ -72,14 +72,32 @@
 
   desenhar();
 
-  /* Mensagem de boas-vindas: um bloco de texto simples, sem animação, que a
-     pessoa fecha uma vez e não volta. Aparece só enquanto não foi fechada. */
-  var boasVindas = document.getElementById("boas-vindas");
-  if (boasVindas && !armazem.ler().ajustes.boasVindasVistas) {
-    boasVindas.hidden = false;
-    document.getElementById("fechar-boas-vindas").addEventListener("click", function () {
-      guardarAjuste("boasVindasVistas", true);
-      boasVindas.hidden = true;
+  /* Abertura: aparece na primeira vez e some quando a pessoa vai para a tela
+     Agora (ou toca em um dos links, que ja levam para outra tela). Sem
+     animacao, sem contagem e sem data: o ajuste guarda so sim ou nao.
+     Igual no navegador e no app instalado, porque os dois leem o mesmo
+     localStorage do endereco. */
+  var abertura = document.getElementById("abertura");
+  var agora = document.getElementById("tela-agora");
+
+  function mostrarAbertura(ligada) {
+    abertura.hidden = !ligada;
+    agora.hidden = ligada;
+    document.body.classList.toggle("com-abertura", ligada);
+  }
+
+  function fecharAbertura() {
+    guardarAjuste("boasVindasVistas", true);
+  }
+
+  if (abertura && agora && !armazem.ler().ajustes.boasVindasVistas) {
+    mostrarAbertura(true);
+    document.getElementById("entrar-no-app").addEventListener("click", function () {
+      fecharAbertura();
+      mostrarAbertura(false);
+    });
+    Array.prototype.forEach.call(abertura.querySelectorAll("a"), function (link) {
+      link.addEventListener("click", fecharAbertura);
     });
   }
 }());

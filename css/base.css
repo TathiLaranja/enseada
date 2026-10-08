@@ -585,14 +585,22 @@ textarea {
 .dicas-cruzada ul { margin: 0 0 14px; padding-left: 20px; }
 .dicas-cruzada li { margin-bottom: 4px; }
 
-/* Boas-vindas na tela Agora: texto leve, sem fundo, sem animacao. */
-.boas-vindas {
-  border: 2px solid var(--linha);
-  border-radius: var(--raio);
-  padding: 14px 16px;
-  margin-bottom: 20px;
+/* Abertura: uma coisa por tela, sem animacao, sem menu, so variaveis do tema. */
+.abertura { padding-top: 8px; }
+
+.gota {
+  display: block;
+  width: 140px;
+  height: auto;
+  margin: 0 auto 18px;
 }
 
-.boas-vindas h2 { margin-bottom: 6px; }
-.boas-vindas p { margin-bottom: 12px; }
-.boas-vindas .botao-simples { width: auto; margin-bottom: 0; min-height: 44px; }
+.abertura h1 { margin-bottom: 10px; }
+.abertura-frase { font-size: 1.1em; margin-bottom: 24px; }
+.abertura-lista { margin: 0 0 24px; padding-left: 20px; }
+.abertura-lista li { margin-bottom: 10px; }
+
+body.com-abertura .menu-rodape { display: none; }
+body.com-abertura .pagina {
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+}

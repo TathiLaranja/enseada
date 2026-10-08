@@ -17,17 +17,34 @@
 <body>
 <main class="pagina">
 
-  <div class="topo">
-    <h1>Agora</h1>
-  </div>
+  <!-- Abertura: aparece só até a pessoa ir para a tela Agora. Uma coisa por tela. -->
+  <section class="abertura" id="abertura" aria-labelledby="titulo-abertura" hidden>
+    <svg class="gota" viewBox="0 0 200 120" role="img" aria-label="Uma gota tocando a água">
+      <ellipse cx="100" cy="95" rx="30" ry="10" fill="none" stroke="var(--destaque)" stroke-width="3"/>
+      <ellipse cx="100" cy="95" rx="60" ry="18" fill="none" stroke="var(--detalhe)" stroke-width="2"/>
+      <path d="M100 8 C100 8, 114 42, 114 54 C114 62, 108 68, 100 68 C92 68, 86 62, 86 54 C86 42, 100 8, 100 8 Z" fill="var(--destaque)" stroke="var(--texto)" stroke-width="2"/>
+    </svg>
 
-  <section class="boas-vindas" id="boas-vindas" aria-labelledby="titulo-boas-vindas" hidden>
-    <h2 id="titulo-boas-vindas">Bem-vindos à Enseada</h2>
-    <p>Um espaço seguro e sem pressa para respirar, criar e pausar. Sinta-se em casa.</p>
-    <button type="button" class="botao-simples" id="fechar-boas-vindas">Fechar</button>
+    <h1 id="titulo-abertura">Bem-vindos à Enseada</h1>
+    <p class="abertura-frase">Um espaço seguro e sem pressa para respirar, criar e pausar. Sinta-se em casa.</p>
+
+    <h2>O que tem aqui</h2>
+    <ul class="abertura-lista">
+      <li><a href="jogos.html">Jogos calmos</a>: memória, sudoku, Tetris e palavras cruzadas, sem tempo e sem pontos.</li>
+      <li><a href="desenhar.html">Espaço de desenho</a>: traço e borracha, guardados só neste aparelho.</li>
+      <li><a href="ajuda.html">Ajustes</a>: tamanho da letra e Modo Baixo Estímulo.</li>
+    </ul>
+
+    <button type="button" class="botao" id="entrar-no-app">Ir para a tela Agora</button>
   </section>
 
-  <div id="lista"></div>
+  <div id="tela-agora">
+    <div class="topo">
+      <h1>Agora</h1>
+    </div>
+
+    <div id="lista"></div>
+  </div>
 
 </main>
 <script src="js/agora.js"></script>
