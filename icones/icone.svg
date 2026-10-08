@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Enseada">
+  <rect width="200" height="200" fill="#F8F9FA" rx="20"/>
+  <defs>
+    <linearGradient id="dropGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00FFEF" />
+      <stop offset="100%" stop-color="#2A9D8F" />
+    </linearGradient>
+  </defs>
+  <ellipse cx="100" cy="140" rx="12" ry="4" fill="#2A9D8F" opacity="0.3"/>
+  <ellipse cx="100" cy="140" rx="30" ry="10" fill="none" stroke="#00AEEF" stroke-width="3" opacity="0.9"/>
+  <ellipse cx="100" cy="140" rx="55" ry="18" fill="none" stroke="#2A9D8F" stroke-width="2" opacity="0.6"/>
+  <ellipse cx="100" cy="140" rx="85" ry="28" fill="none" stroke="#00FFEF" stroke-width="1.5" opacity="0.3"/>
+  <path d="M100 65 C100 65, 112 95, 112 105 C112 111.6 106.6 117 100 117 C93.4 117 88 111.6 88 105 C88 95, 100 65, 100 65 Z" fill="url(#dropGrad)"/>
+  <path d="M96 85 Q94 100 96 110" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+</svg>
