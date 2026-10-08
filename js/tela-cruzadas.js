@@ -55,8 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'Linha ' + (r + 1) + ', coluna ' + (c + 1) + (numero ? ', número ' + numero : ''));
 
         campo.addEventListener('input', () => {
-            const digitado = campo.value;
-            const letra = digitado === '' ? '' : cruzadasLetra(digitado.slice(-1));
+            const letra = cruzadasLerDigitacao(jogo.atual[r][c], campo.value);
             jogo = cruzadasColocar(jogo, r, c, letra);
             campo.value = jogo.atual[r][c];
             recado.textContent = '';
@@ -109,6 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const r = resultado.casa[0];
         const c = resultado.casa[1];
         desenhar();
+        const campos = area.querySelectorAll('.letra-input');
+        for (let i = 0; i < campos.length; i++) {
+            if (campos[i].getAttribute('aria-label').indexOf('Linha ' + (r + 1) + ', coluna ' + (c + 1) + ',') === 0) {
+                campos[i].focus();
+            }
+        }
         recado.textContent = 'Dica: pus a letra ' + jogo.atual[r][c] +
             ' na linha ' + (r + 1) + ', coluna ' + (c + 1) + '.';
     });

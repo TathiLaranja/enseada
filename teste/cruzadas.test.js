@@ -45,8 +45,8 @@ function gradeConsistente(j) {
   return achadas.map(function (a) { return a.join(); }).sort().join("|") === dasEntradas.join("|");
 }
 
-teste("em 200 jogos a grade nunca forma palavra que não esteja nas dicas", function () {
-  for (let n = 1; n <= 200; n++) {
+teste("em 1000 jogos a grade nunca forma palavra que não esteja nas dicas", function () {
+  for (let n = 1; n <= 1000; n++) {
     assert.ok(gradeConsistente(c.cruzadasNovo(sequencia(n))), "semente " + n);
   }
 });
@@ -114,6 +114,19 @@ teste("letra errada é aceita sem aviso; a dica corrige e nunca tira acerto", fu
   assert.strictEqual(c.cruzadasCerto(j), true);
   assert.strictEqual(c.cruzadasCheio(j), true);
   assert.strictEqual(c.cruzadasDica(j, sorteio).casa, null);
+});
+
+teste("digitar número ou símbolo por cima de uma letra NÃO apaga a letra", function () {
+  assert.strictEqual(c.cruzadasLerDigitacao("E", "E7"), "E");
+  assert.strictEqual(c.cruzadasLerDigitacao("E", "E!"), "E");
+  assert.strictEqual(c.cruzadasLerDigitacao("", "7"), "");
+});
+
+teste("digitar letra nova por cima troca a letra; apagar esvazia; acento vira letra", function () {
+  assert.strictEqual(c.cruzadasLerDigitacao("E", "Ea"), "A");
+  assert.strictEqual(c.cruzadasLerDigitacao("E", ""), "");
+  assert.strictEqual(c.cruzadasLerDigitacao("", "é"), "E");
+  assert.strictEqual(c.cruzadasLerDigitacao("A", "e\u0301"), "E");
 });
 
 fim("palavras cruzadas");

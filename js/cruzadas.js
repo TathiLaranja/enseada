@@ -51,6 +51,14 @@ function cruzadasLetra(texto) {
   return /^[A-Z]$/.test(limpo) ? limpo : "";
 }
 
+/* O que fica na casa depois de a pessoa digitar. A casa guarda ate 2 caracteres
+   para a letra nova poder entrar por cima da antiga. Digitou algo que nao e
+   letra (numero, simbolo): a letra que ja estava la fica, nao e apagada. */
+function cruzadasLerDigitacao(anterior, digitado) {
+  if (digitado === "") { return ""; }
+  return cruzadasLetra(digitado.slice(-1)) || cruzadasLetra(digitado) || anterior;
+}
+
 /* Uma tentativa de montar a grade. Devolve as palavras encaixadas. */
 function cruzadasTentar(sorteio) {
   var N = CRUZADAS_TAMANHO;
@@ -232,6 +240,7 @@ if (typeof module !== "undefined" && module.exports) {
     CRUZADAS_BANCO: CRUZADAS_BANCO,
     CRUZADAS_QUANTIDADE: CRUZADAS_QUANTIDADE,
     cruzadasLetra: cruzadasLetra,
+    cruzadasLerDigitacao: cruzadasLerDigitacao,
     cruzadasNovo: cruzadasNovo,
     cruzadasColocar: cruzadasColocar,
     cruzadasDica: cruzadasDica,
