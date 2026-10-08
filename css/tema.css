@@ -1,8 +1,11 @@
 /* Enseada - tema
-   Identidade nova, a mesma do icone: fundo Branco Suave, e texto, botoes e
-   caixas variando so entre Azul Turquesa e Verde-agua.
-   Uma identidade so: a escolha de tema na tela de Ajuda continua sendo
-   guardada, mas nao muda mais a cor. */
+   Identidade unica, a mesma do icone. Nao existe mais escolha de tema:
+   o app tem um visual so, em qualquer aparelho.
+
+   Leitura e cor sao coisas separadas aqui:
+   - texto corrido e titulo usam o Verde Profundo, que da 5.44:1 sobre o
+     fundo e passa o minimo de 4.5:1 da WCAG AA;
+   - botao, contorno, campo e detalhe usam os tons vibrantes. */
 
 @font-face {
   font-family: "Atkinson Hyperlegible";
@@ -21,12 +24,13 @@
 }
 
 :root {
-  --fundo: #F8F9FA;          /* Branco Suave */
-  --texto: #2A9D8F;          /* Verde-agua */
-  --destaque: #00AEEF;       /* Azul Turquesa */
-  --texto-no-destaque: #F8F9FA;
+  --fundo: #F8F9FA;             /* Branco Suave */
+  --texto: #1F7268;             /* Verde Profundo - so leitura. 5.44:1 */
+  --fraco: #1F7268;             /* texto de apoio: mesmo tom, corpo menor */
+  --destaque: #00AEEF;          /* Azul Turquesa - botao e contorno */
+  --detalhe: #2A9D8F;           /* Verde-agua - molduras e detalhes */
+  --texto-no-destaque: #0E3A36; /* sobre o botao azul: 4.95:1 */
   --linha: #2A9D8F;
-  --fraco: #00AEEF;
   color-scheme: light;
 
   --escala: 1;
@@ -35,30 +39,6 @@
   --largura: 34rem;
 }
 
-/* A identidade e uma so, entao o aparelho no modo escuro e a escolha manual
-   na tela de Ajuda recebem exatamente as mesmas cores. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-tema="claro"]) {
-    --fundo: #F8F9FA;
-    --texto: #2A9D8F;
-    --destaque: #00AEEF;
-    --texto-no-destaque: #F8F9FA;
-    --linha: #2A9D8F;
-    --fraco: #00AEEF;
-    color-scheme: light;
-  }
-}
-
-:root[data-tema="escuro"] {
-  --fundo: #F8F9FA;
-  --texto: #2A9D8F;
-  --destaque: #00AEEF;
-  --texto-no-destaque: #F8F9FA;
-  --linha: #2A9D8F;
-  --fraco: #00AEEF;
-  color-scheme: light;
-}
-
-/* Tamanho da fonte, escolhido na tela de Ajuda. */
+/* Tamanho da letra, escolhido na tela de Ajuda. */
 :root[data-fonte="grande"] { --escala: 1.15; }
 :root[data-fonte="maior"] { --escala: 1.35; }

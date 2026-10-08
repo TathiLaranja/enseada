@@ -5,26 +5,13 @@
   var armazem = criarArmazenamento(window.localStorage);
   var recado = document.getElementById("recado-dados");
 
-  var nomeDoTema = { sistema: "seguindo o celular", claro: "claro", escuro: "escuro" };
   var nomeDaFonte = { normal: "normal", grande: "grande", maior: "maior" };
 
   function dizerEscolhas() {
     var ajustes = armazem.ler().ajustes;
-    document.getElementById("tema-atual").textContent =
-      "Agora está: " + nomeDoTema[ajustes.tema] + ".";
     document.getElementById("fonte-atual").textContent =
       "Agora está: " + nomeDaFonte[ajustes.fonte] + ".";
   }
-
-  Array.prototype.forEach.call(
-    document.querySelectorAll("[data-tema-escolha]"),
-    function (botao) {
-      botao.addEventListener("click", function () {
-        guardarAjuste("tema", botao.getAttribute("data-tema-escolha"));
-        dizerEscolhas();
-      });
-    }
-  );
 
   Array.prototype.forEach.call(
     document.querySelectorAll("[data-fonte-escolha]"),

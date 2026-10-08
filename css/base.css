@@ -187,7 +187,7 @@ textarea {
 .escolha input { margin-right: 8px; }
 
 .escolha label:has(input:checked) {
-  border-color: var(--destaque);
+  border-color: var(--detalhe);
   border-width: 4px;
   padding: 10px 12px;
 }
@@ -207,7 +207,7 @@ textarea {
 .lista { list-style: none; margin: 0 0 8px; padding: 0; }
 
 .item {
-  border: 2px solid var(--destaque);
+  border: 2px solid var(--detalhe);
   border-radius: var(--raio);
   padding: 14px 16px;
   margin-bottom: 14px;

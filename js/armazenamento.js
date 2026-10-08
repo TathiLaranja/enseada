@@ -14,7 +14,7 @@ function depositoVazio() {
   return {
     versao: 1,
     ancoras: [],
-    ajustes: { tema: "sistema", fonte: "normal" },
+    ajustes: { fonte: "normal" },
     rascunho: null,
     roteiro: null
   };
@@ -45,9 +45,7 @@ function normalizar(bruto) {
   }
 
   if (bruto.ajustes && typeof bruto.ajustes === "object") {
-    var t = bruto.ajustes.tema;
     var f = bruto.ajustes.fonte;
-    limpo.ajustes.tema = (t === "claro" || t === "escuro") ? t : "sistema";
     limpo.ajustes.fonte = (f === "grande" || f === "maior") ? f : "normal";
   }
 

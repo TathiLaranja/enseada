@@ -41,10 +41,15 @@ teste("aparelho novo começa sem âncora nenhuma", function () {
   assert.deepStrictEqual(armazem.ler().ancoras, []);
 });
 
-teste("aparelho novo começa seguindo o celular, letra normal", function () {
+teste("aparelho novo começa com a letra normal", function () {
   const ajustes = g.criarArmazenamento(depositoFalso()).ler().ajustes;
-  assert.strictEqual(ajustes.tema, "sistema");
   assert.strictEqual(ajustes.fonte, "normal");
+});
+
+teste("não existe mais ajuste de tema guardado", function () {
+  const bruto = JSON.stringify({ ajustes: { tema: "escuro", fonte: "normal" } });
+  const ajustes = g.criarArmazenamento(depositoFalso({ "enseada.v1": bruto })).ler().ajustes;
+  assert.deepStrictEqual(Object.keys(ajustes), ["fonte"]);
 });
 
 teste("grava e lê de volta igual", function () {
@@ -78,10 +83,9 @@ teste("estado desconhecido vira ativa, peso desconhecido vira leve", function ()
   assert.strictEqual(lido.estado, "ativa");
 });
 
-teste("tema inventado volta para seguir o celular", function () {
-  const bruto = JSON.stringify({ ajustes: { tema: "roxo", fonte: "gigante" } });
+teste("tamanho de letra inventado volta para normal", function () {
+  const bruto = JSON.stringify({ ajustes: { fonte: "gigante" } });
   const ajustes = g.criarArmazenamento(depositoFalso({ "enseada.v1": bruto })).ler().ajustes;
-  assert.strictEqual(ajustes.tema, "sistema");
   assert.strictEqual(ajustes.fonte, "normal");
 });
 
