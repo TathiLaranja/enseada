@@ -8,17 +8,17 @@
   var escolhida = -1;
   var confirmando = false;
 
-  var grade = document.getElementById("sudoku-grade");
-  var teclado = document.getElementById("sudoku-teclado");
-  var recado = document.getElementById("sudoku-recado");
-  var botaoDica = document.getElementById("sudoku-dica");
-  var botaoNovo = document.getElementById("sudoku-novo");
+  var grade = document.getElementById("grid-sudoku");
+  var teclado = document.getElementById("teclado-sudoku");
+  var recado = document.getElementById("recado-sudoku");
+  var botaoDica = document.getElementById("dica-sudoku");
+  var botaoNovo = document.getElementById("reiniciar-sudoku");
 
   function comecar() {
     jogo = sudokuNovo(Math.random);
     escolhida = -1;
     confirmando = false;
-    botaoNovo.textContent = "Novo sudoku";
+    botaoNovo.textContent = "Novo Sudoku";
     recado.textContent = "";
     desenhar();
   }

@@ -91,6 +91,7 @@ function normalizar(bruto) {
     }).map(function (t) {
       return {
         apagar: t.apagar === true,
+        cor: (t.cor === "destaque" || t.cor === "detalhe") ? t.cor : "texto",
         pontos: t.pontos.filter(function (p) {
           return Array.isArray(p) && typeof p[0] === "number" && typeof p[1] === "number" &&
             isFinite(p[0]) && isFinite(p[1]);

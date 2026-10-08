@@ -186,6 +186,15 @@ teste("desenho guarda os traços e joga fora pontos estragados", function () {
   assert.deepStrictEqual(n.desenho[0].pontos, [[0.1, 0.2], [0.4, 0.5]]);
 });
 
+teste("traço guarda só o nome de uma cor do tema; código de cor solto vira o texto", function () {
+  const n = g.normalizar({ desenho: [
+    { cor: "detalhe", pontos: [[0, 0]] },
+    { cor: "#E53E3E", pontos: [[0, 0]] },
+    { pontos: [[0, 0]] }
+  ] });
+  assert.deepStrictEqual(n.desenho.map(function (t) { return t.cor; }), ["detalhe", "texto", "texto"]);
+});
+
 teste("rede guarda só nome e rótulo, e descarta o que não tem nome", function () {
   const n = g.normalizar({ rede: [
     { id: "a", nome: "Ana", rotulo: "vizinha", telefone: "123" },

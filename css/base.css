@@ -410,3 +410,146 @@ textarea {
   color: var(--texto);
   cursor: pointer;
 }
+
+/* Telas Desenhar e Jogos calmos: cabecalho, ferramentas, abas e paineis.
+   So variaveis do tema: nada de cor solta, e nada so em cor. */
+.topo-pagina,
+.conteudo-principal {
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding-inline: 20px;
+}
+
+.topo-pagina {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: calc(18px + env(safe-area-inset-top, 0px));
+  margin-bottom: 22px;
+}
+
+.conteudo-principal {
+  padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px));
+}
+
+.link-voltar {
+  font-size: 0.92em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.instrucao-suave {
+  color: var(--fraco);
+  margin-bottom: 20px;
+}
+
+.botao-primario,
+.botao-secundario {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: 700;
+  min-height: 52px;
+  padding: 12px 16px;
+  margin: 0 8px 12px 0;
+  border: 2px solid var(--destaque);
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.botao-primario {
+  background: var(--destaque);
+  color: var(--texto-no-destaque);
+}
+
+.botao-secundario {
+  background: transparent;
+  color: var(--texto);
+}
+
+.grupo-paleta,
+.grupo-acoes,
+.abas-jogos,
+.controles-tetris {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.botao-cor,
+.botao-aba {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: 400;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 2px solid var(--destaque);
+  border-radius: var(--raio);
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+/* Escolhido: borda grossa e negrito, alem do aria-pressed / aria-selected. */
+.botao-cor.ativa,
+.botao-aba.ativa {
+  font-weight: 700;
+  border-width: 4px;
+  padding: 8px 12px;
+}
+
+.amostra {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--texto);
+}
+
+.botao-cor[data-cor="texto"] .amostra { background: var(--texto); }
+.botao-cor[data-cor="destaque"] .amostra { background: var(--destaque); }
+.botao-cor[data-cor="detalhe"] .amostra { background: var(--detalhe); }
+.botao-cor[data-cor="borracha"] .amostra { background: transparent; border-style: dashed; }
+
+.canvas-container canvas {
+  display: block;
+  width: 100%;
+  height: 55vh;
+  border: 2px solid var(--detalhe);
+  border-radius: var(--raio);
+  background: var(--fundo);
+  touch-action: none;
+}
+
+.painel-jogo { margin-top: 8px; }
+.oculto { display: none !important; }
+.cabecalho-jogo h2 { margin-bottom: 4px; }
+
+.tetris-wrapper canvas {
+  display: block;
+  max-width: 100%;
+  border: 2px solid var(--detalhe);
+  border-radius: var(--raio);
+  margin-bottom: 12px;
+}
+
+.dica-cruzada { margin-bottom: 16px; }
+.palavra-inputs { display: flex; gap: 6px; }
+
+.letra-input {
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  text-align: center;
+  font-family: inherit;
+  font-size: 1.1em;
+  text-transform: uppercase;
+  color: var(--texto);
+  background: transparent;
+  border: 2px solid var(--destaque);
+  border-radius: var(--raio);
+}
