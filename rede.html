@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Minha rede — Enseada</title>
+<meta name="theme-color" content="#F8F9FA">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icones/icone-192.png">
+<link rel="apple-touch-icon" href="icones/icone-192.png">
+<link rel="stylesheet" href="css/tema.css">
+<link rel="stylesheet" href="css/base.css">
+<script src="js/ancoras.js"></script>
+<script src="js/armazenamento.js"></script>
+<script src="js/ajustes.js"></script>
+<script src="js/rede.js"></script>
+</head>
+<body>
+<main class="pagina">
+
+  <div class="topo">
+    <h1>Minha rede</h1>
+  </div>
+
+  <p class="explica">Quem você quer ter por perto. Só o nome e o rótulo, escritos por você. Fica só neste aparelho.</p>
+
+  <section id="formulario">
+    <h2 id="titulo-formulario">Guardar uma pessoa</h2>
+
+    <div class="campo">
+      <label for="campo-nome">Nome</label>
+      <input type="text" id="campo-nome" autocomplete="off">
+    </div>
+
+    <div class="campo">
+      <label for="campo-rotulo">Rótulo</label>
+      <span class="ajuda-campo">Opcional. Suas palavras.</span>
+      <input type="text" id="campo-rotulo" autocomplete="off">
+    </div>
+
+    <button type="button" class="botao" id="botao-guardar">Guardar</button>
+    <button type="button" class="botao-simples" id="botao-cancelar" hidden>Cancelar</button>
+    <p class="explica" id="recado-rede" role="status"></p>
+  </section>
+
+  <h2>Na minha rede</h2>
+  <div id="lista-rede"></div>
+
+</main>
+<script src="js/tela-rede.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/registra-sw.js"></script>
+</body>
+</html>

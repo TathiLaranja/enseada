@@ -5,7 +5,13 @@
    Leitura e cor sao coisas separadas aqui:
    - texto corrido e titulo usam o Verde Profundo, que da 5.44:1 sobre o
      fundo e passa o minimo de 4.5:1 da WCAG AA;
-   - botao, contorno, campo e detalhe usam os tons vibrantes. */
+   - botao, contorno, campo e detalhe usam os tons vibrantes.
+
+   Modo Baixo Estimulo: escolha da pessoa na tela de Ajuda, guardada no
+   aparelho. Tom de noite azulado e verde-agua apagado, sem branco puro e sem
+   vermelho. Contrastes conferidos (WCAG, minimo 4.5:1 para texto):
+   texto sobre fundo 9.03:1, texto do botao sobre o botao 6.36:1;
+   contorno e detalhe sobre fundo 5.63:1 e 5.76:1 (minimo 3:1). */
 
 @font-face {
   font-family: "Atkinson Hyperlegible";
@@ -42,3 +48,15 @@
 /* Tamanho da letra, escolhido na tela de Ajuda. */
 :root[data-fonte="grande"] { --escala: 1.15; }
 :root[data-fonte="maior"] { --escala: 1.35; }
+
+/* Modo Baixo Estimulo. Troca so as variaveis: nenhuma regra de tela muda. */
+:root[data-tema="baixo"] {
+  --fundo: #1B2328;
+  --texto: #A3CBC4;
+  --fraco: #A3CBC4;
+  --destaque: #5BA7AE;
+  --detalhe: #4FA89C;
+  --texto-no-destaque: #0D1B1E;
+  --linha: #4FA89C;
+  color-scheme: dark;
+}

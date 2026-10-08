@@ -80,10 +80,8 @@ Oferecer, nunca prometer. O ruído, quando entrar, leva aviso de volume.
 
 ## O que ainda falta
 
-- Telas Escrever e Desenhar (canvas, sem biblioteca).
-- Jogos calmos — sudoku primeiro, gerado em JS, com dica em vez de erro.
+- Jogos calmos: a memória entrou; falta o sudoku, gerado em JS, com dica em vez de erro.
 - Ruído de fundo em Web Audio, com aviso de volume e limite.
-- Minha rede (só nome e rótulo escritos pela pessoa).
 - Lembretes por arquivo `.ics`, que é o caminho sem servidor. Falta testar
   se importa limpo no iOS e no Android.
 - Ícone de verdade: os quatro PNGs de hoje são provisórios.

@@ -14,9 +14,12 @@ function depositoVazio() {
   return {
     versao: 1,
     ancoras: [],
-    ajustes: { fonte: "normal" },
+    ajustes: { fonte: "normal", tema: "claro" },
     rascunho: null,
-    roteiro: null
+    roteiro: null,
+    escrita: "",
+    desenho: [],
+    rede: []
   };
 }
 
@@ -47,6 +50,7 @@ function normalizar(bruto) {
   if (bruto.ajustes && typeof bruto.ajustes === "object") {
     var f = bruto.ajustes.fonte;
     limpo.ajustes.fonte = (f === "grande" || f === "maior") ? f : "normal";
+    limpo.ajustes.tema = bruto.ajustes.tema === "baixo" ? "baixo" : "claro";
   }
 
   if (bruto.rascunho && typeof bruto.rascunho === "object") {
@@ -74,6 +78,40 @@ function normalizar(bruto) {
         return typeof m === "string" ? m : "";
       }) : []
     };
+  }
+
+  /* Folha em branco da tela Escrever: so o texto, nada medido sobre ele. */
+  if (typeof bruto.escrita === "string") { limpo.escrita = bruto.escrita; }
+
+  /* Desenho guardado como tracos (pontos de 0 a 1), nao como imagem, para
+     poder ser redesenhado nas cores do tema que estiver ligado. */
+  if (Array.isArray(bruto.desenho)) {
+    limpo.desenho = bruto.desenho.filter(function (t) {
+      return t && typeof t === "object" && Array.isArray(t.pontos) && t.pontos.length > 0;
+    }).map(function (t) {
+      return {
+        apagar: t.apagar === true,
+        pontos: t.pontos.filter(function (p) {
+          return Array.isArray(p) && typeof p[0] === "number" && typeof p[1] === "number" &&
+            isFinite(p[0]) && isFinite(p[1]);
+        }).map(function (p) { return [p[0], p[1]]; })
+      };
+    }).filter(function (t) { return t.pontos.length > 0; });
+  }
+
+  /* Minha rede: so nome e rotulo, os dois escritos pela pessoa. */
+  if (Array.isArray(bruto.rede)) {
+    limpo.rede = bruto.rede.filter(function (c) {
+      return c && typeof c === "object" &&
+        typeof c.id === "string" &&
+        typeof c.nome === "string" && c.nome.trim() !== "";
+    }).map(function (c) {
+      return {
+        id: c.id,
+        nome: c.nome,
+        rotulo: typeof c.rotulo === "string" ? c.rotulo : ""
+      };
+    });
   }
 
   return limpo;

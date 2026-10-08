@@ -13,6 +13,22 @@
       "Agora está: " + nomeDaFonte[ajustes.fonte] + ".";
   }
 
+  var botaoTema = document.getElementById("botao-baixo-estimulo");
+
+  function dizerTema() {
+    var baixo = armazem.ler().ajustes.tema === "baixo";
+    botaoTema.setAttribute("aria-pressed", baixo ? "true" : "false");
+    botaoTema.textContent = baixo ? "Desativar Modo Baixo Estímulo" : "Ativar Modo Baixo Estímulo";
+    document.getElementById("tema-atual").textContent =
+      "Agora está: " + (baixo ? "ligado." : "desligado.");
+  }
+
+  botaoTema.addEventListener("click", function () {
+    var baixo = armazem.ler().ajustes.tema === "baixo";
+    guardarAjuste("tema", baixo ? "claro" : "baixo");
+    dizerTema();
+  });
+
   Array.prototype.forEach.call(
     document.querySelectorAll("[data-fonte-escolha]"),
     function (botao) {
@@ -46,12 +62,14 @@
       recado.textContent = "Apagado. Não ficou nada neste aparelho.";
       aplicarAjustes();
       dizerEscolhas();
+      dizerTema();
       return;
     }
     botaoApagar.setAttribute("data-confirmar", "sim");
     botaoApagar.textContent = "Apagar mesmo";
-    recado.textContent = "Isso apaga as âncoras, os ajustes e o roteiro. Não dá para desfazer.";
+    recado.textContent = "Isso apaga as âncoras, o que você escreveu e desenhou, a sua rede, os ajustes e o roteiro. Não dá para desfazer.";
   });
 
   dizerEscolhas();
+  dizerTema();
 }());

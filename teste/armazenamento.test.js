@@ -46,10 +46,11 @@ teste("aparelho novo começa com a letra normal", function () {
   assert.strictEqual(ajustes.fonte, "normal");
 });
 
-teste("não existe mais ajuste de tema guardado", function () {
+teste("o tema escuro antigo não vale: só o Modo Baixo Estímulo liga o tema", function () {
   const bruto = JSON.stringify({ ajustes: { tema: "escuro", fonte: "normal" } });
   const ajustes = g.criarArmazenamento(depositoFalso({ "enseada.v1": bruto })).ler().ajustes;
-  assert.deepStrictEqual(Object.keys(ajustes), ["fonte"]);
+  assert.deepStrictEqual(Object.keys(ajustes).sort(), ["fonte", "tema"]);
+  assert.strictEqual(ajustes.tema, "claro");
 });
 
 teste("grava e lê de volta igual", function () {
@@ -155,6 +156,60 @@ teste("aparelho sem espaço não quebra o app", function () {
   const armazem = g.criarArmazenamento(depositoCheio());
   assert.strictEqual(armazem.gravar({ ancoras: [] }), false);
   assert.deepStrictEqual(armazem.ler().ancoras, []);
+});
+
+teste("Modo Baixo Estímulo começa desligado e fica guardado quando ligado", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  assert.strictEqual(armazem.ler().ajustes.tema, "claro");
+  armazem.mudar(function (d) { d.ajustes.tema = "baixo"; return d; });
+  assert.strictEqual(armazem.ler().ajustes.tema, "baixo");
+});
+
+teste("tema desconhecido volta para o claro", function () {
+  const n = g.normalizar({ ajustes: { fonte: "normal", tema: "vermelho" } });
+  assert.strictEqual(n.ajustes.tema, "claro");
+});
+
+teste("a folha de Escrever volta exatamente como foi escrita", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  armazem.mudar(function (d) { d.escrita = "linha 1\n\n  linha 3"; return d; });
+  assert.strictEqual(armazem.ler().escrita, "linha 1\n\n  linha 3");
+});
+
+teste("desenho guarda os traços e joga fora pontos estragados", function () {
+  const n = g.normalizar({ desenho: [
+    { apagar: false, pontos: [[0.1, 0.2], [0.3, "x"], null, [0.4, 0.5]] },
+    { apagar: true, pontos: [] },
+    "lixo"
+  ] });
+  assert.strictEqual(n.desenho.length, 1);
+  assert.deepStrictEqual(n.desenho[0].pontos, [[0.1, 0.2], [0.4, 0.5]]);
+});
+
+teste("rede guarda só nome e rótulo, e descarta o que não tem nome", function () {
+  const n = g.normalizar({ rede: [
+    { id: "a", nome: "Ana", rotulo: "vizinha", telefone: "123" },
+    { id: "b", nome: "   ", rotulo: "x" },
+    { id: "c", nome: "Bia" }
+  ] });
+  assert.deepStrictEqual(n.rede, [
+    { id: "a", nome: "Ana", rotulo: "vizinha" },
+    { id: "c", nome: "Bia", rotulo: "" }
+  ]);
+});
+
+teste("apagar tudo também apaga escrita, desenho e rede", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  armazem.mudar(function (d) {
+    d.escrita = "oi"; d.desenho = [{ apagar: false, pontos: [[0, 0]] }];
+    d.rede = [{ id: "a", nome: "Ana", rotulo: "" }];
+    return d;
+  });
+  armazem.apagarTudo();
+  const d = armazem.ler();
+  assert.strictEqual(d.escrita, "");
+  assert.deepStrictEqual(d.desenho, []);
+  assert.deepStrictEqual(d.rede, []);
 });
 
 if (falhas.length > 0) {

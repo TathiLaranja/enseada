@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Agora — Enseada</title>
+<title>Desenhar — Enseada</title>
 <meta name="theme-color" content="#F8F9FA">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icones/icone-192.png">
@@ -18,13 +18,22 @@
 <main class="pagina">
 
   <div class="topo">
-    <h1>Agora</h1>
+    <h1>Desenhar</h1>
   </div>
 
-  <div id="lista"></div>
+  <canvas id="tela-desenho" class="tela-desenho" aria-label="Área de desenho. Use o dedo ou o mouse."></canvas>
+
+  <div class="botao-fileira">
+    <button type="button" class="botao-simples" id="ferramenta-traco" aria-pressed="true">Traço</button>
+    <button type="button" class="botao-simples" id="ferramenta-apagar" aria-pressed="false">Apagar</button>
+  </div>
+  <p class="explica" id="ferramenta-atual" role="status"></p>
+
+  <button type="button" class="botao-simples" id="botao-limpar">Limpar o desenho</button>
+  <p class="explica" id="recado-desenho" role="status"></p>
 
 </main>
-<script src="js/agora.js"></script>
+<script src="js/tela-desenhar.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/registra-sw.js"></script>
 </body>

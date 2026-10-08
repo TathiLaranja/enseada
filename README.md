@@ -52,22 +52,33 @@ que o teste acusa. As quatro últimas provas feitas estão no histórico de comm
 | `index.html` | Agora | As âncoras ativas em botões grandes. Nada mais. |
 | `ancoras.html` | Minhas âncoras | Guardar, editar, deixar dormente, trazer de volta, apagar. |
 | `achar.html` | Me ajuda a achar | O roteiro de perguntas. |
-| `ajuda.html` | Ajuda | O aviso, o CVV 188, cor, tamanho da letra e os dados. |
+| `escrever.html` | Escrever | Uma folha em branco, guardada sozinha neste aparelho. |
+| `desenhar.html` | Desenhar | Traço e borracha num canvas, guardado como traços. |
+| `jogos.html` | Jogos calmos | Jogo da memória: sem derrota, sem tempo, sem pontos. |
+| `rede.html` | Minha rede | Nome e rótulo de quem apoia, escritos pela pessoa. |
+| `ajuda.html` | Ajuda | O aviso, o CVV 188, Modo Baixo Estímulo, tamanho da letra e os dados. |
+
+O menu fixo de baixo é o mesmo em todas as telas e vive em `js/menu.js`.
 
 ## Os arquivos
 
 ```
 index.html  ancoras.html  achar.html  ajuda.html
+escrever.html  desenhar.html  jogos.html  rede.html
 manifest.json  service-worker.js
 
-css/tema.css        as três cores, claro e escuro, tamanho da letra
+css/tema.css        as três cores, Modo Baixo Estímulo, tamanho da letra
 css/base.css        o resto do visual
 
 js/ancoras.js       regras de âncora (funções puras, sem tela e sem gravação)
 js/roteiro.js       regras do roteiro (funções puras)
 js/perguntas.js     o texto das perguntas, separado da lógica
 js/armazenamento.js a única porta dos dados (localStorage)
-js/ajustes.js       cor e tamanho da letra, aplicados antes de desenhar
+js/ajustes.js       Modo Baixo Estímulo e tamanho da letra, aplicados antes de desenhar
+js/menu.js          o menu fixo de baixo, igual em todas as telas
+js/rede.js          regras da Minha rede (funções puras)
+js/memoria.js       regras do jogo da memória (funções puras)
+js/tela-escrever.js js/tela-desenhar.js js/tela-jogos.js js/tela-rede.js
 js/agora.js         a tela Agora
 js/tela-ancoras.js  a tela Minhas âncoras
 js/tela-achar.js    a tela do roteiro

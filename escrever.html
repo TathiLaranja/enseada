@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Agora — Enseada</title>
+<title>Escrever — Enseada</title>
 <meta name="theme-color" content="#F8F9FA">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icones/icone-192.png">
@@ -18,13 +18,20 @@
 <main class="pagina">
 
   <div class="topo">
-    <h1>Agora</h1>
+    <h1>Escrever</h1>
   </div>
 
-  <div id="lista"></div>
+  <div class="campo">
+    <label for="folha">Folha em branco</label>
+    <span class="ajuda-campo">Escreva o que quiser, do tamanho que quiser. Guarda sozinho, só neste aparelho.</span>
+    <textarea id="folha" class="folha" autocomplete="off" spellcheck="false"></textarea>
+  </div>
+
+  <button type="button" class="botao-simples" id="botao-apagar-folha">Apagar a folha</button>
+  <p class="explica" id="recado-folha" role="status"></p>
 
 </main>
-<script src="js/agora.js"></script>
+<script src="js/tela-escrever.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/registra-sw.js"></script>
 </body>
