@@ -1,60 +1,80 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jogos calmos — Enseada</title>
-<meta name="theme-color" content="#F8F9FA">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icones/icone-192.png">
-<link rel="apple-touch-icon" href="icones/icone-192.png">
-<link rel="stylesheet" href="css/tema.css">
-<link rel="stylesheet" href="css/base.css">
-<script src="js/ancoras.js"></script>
-<script src="js/armazenamento.js"></script>
-<script src="js/ajustes.js"></script>
-<script src="js/memoria.js"></script>
-<script src="js/sudoku.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enseada - Jogos Calmos</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/tema.css">
 </head>
 <body>
-<main class="pagina">
+    <header class="topo-pagina">
+        <h1>Jogos Calmos</h1>
+        <a href="index.html" class="link-voltar" aria-label="Voltar ao menu principal">← Voltar</a>
+    </header>
 
-  <div class="topo">
-    <h1>Jogos calmos</h1>
-  </div>
+    <main class="conteudo-principal">
+        <nav class="abas-jogos" role="tablist" aria-label="Seleção de Jogos Calmos">
+            <button role="tab" aria-selected="true" aria-controlspanel="painel-memoria" id="aba-memoria" class="botao-aba ativa">Memória</button>
+            <button role="tab" aria-selected="false" aria-controlspanel="painel-sudoku" id="aba-sudoku" class="botao-aba">Sudoku</button>
+            <button role="tab" aria-selected="false" aria-controlspanel="painel-tetris" id="aba-tetris" class="botao-aba">Tetris Calmo</button>
+            <button role="tab" aria-selected="false" aria-controlspanel="painel-palavras" id="aba-palavras" class="botao-aba">Palavras Cruzadas</button>
+        </nav>
 
-  <div class="botao-fileira">
-    <button type="button" class="botao-simples" id="escolha-memoria" aria-pressed="true">Memória</button>
-    <button type="button" class="botao-simples" id="escolha-sudoku" aria-pressed="false">Sudoku</button>
-  </div>
-  <p class="explica" id="jogo-atual" role="status"></p>
+        <section class="container-painel-jogos">
+            <!-- Painel Memória -->
+            <div id="painel-memoria" role="tabpanel" aria-labelledby="aba-memoria" class="painel-jogo ativo">
+                <div class="cabecalho-jogo">
+                    <h2>Jogo da Memória</h2>
+                    <p class="instrucao-suave">Encontre os pares com calma, sem contagem regressiva.</p>
+                </div>
+                <div id="grid-memoria" class="grid-memoria"></div>
+                <button id="reiniciar-memoria" class="botao-secundario">Recomeçar Memória</button>
+            </div>
 
-  <section id="jogo-memoria">
-    <h2>Jogo da memória</h2>
-    <p class="explica">Vire duas cartas. Se forem iguais, ficam abertas. Não tem tempo, não tem pontos e não tem como perder.</p>
+            <!-- Painel Sudoku -->
+            <div id="painel-sudoku" role="tabpanel" aria-labelledby="aba-sudoku" class="painel-jogo oculto">
+                <div class="cabecalho-jogo">
+                    <h2>Sudoku Suave</h2>
+                    <p class="instrucao-suave">Preencha os espaços no seu próprio ritmo.</p>
+                </div>
+                <div id="grid-sudoku" class="grid-sudoku"></div>
+                <button id="reiniciar-sudoku" class="botao-secundario">Novo Sudoku</button>
+            </div>
 
-    <div class="cartas" id="cartas"></div>
+            <!-- Painel Tetris Calmo -->
+            <div id="painel-tetris" role="tabpanel" aria-labelledby="aba-tetris" class="painel-jogo oculto">
+                <div class="cabecalho-jogo">
+                    <h2>Tetris Calmo</h2>
+                    <p class="instrucao-suave">Encaixe as peças tranquilamente. Sem aceleração punitiva ou game over.</p>
+                </div>
+                <div class="tetris-wrapper">
+                    <canvas id="canvas-tetris" width="200" height="400" aria-label="Tabuleiro de Tetris Calmo"></canvas>
+                    <div class="controles-tetris">
+                        <button id="tetris-esq" class="botao-secundario">←</button>
+                        <button id="tetris-girar" class="botao-secundario">Girar</button>
+                        <button id="tetris-dir" class="botao-secundario">→</button>
+                        <button id="tetris-baixo" class="botao-secundario">Descer</button>
+                    </div>
+                </div>
+                <button id="iniciar-tetris" class="botao-primario">Iniciar Tetris Calmo</button>
+            </div>
 
-    <p id="recado-jogo" role="status"></p>
-    <button type="button" class="botao-simples" id="botao-embaralhar">Embaralhar de novo</button>
-  </section>
+            <!-- Painel Palavras Cruzadas Clássicas -->
+            <div id="painel-palavras" role="tabpanel" aria-labelledby="aba-palavras" class="painel-jogo oculto">
+                <div class="cabecalho-jogo">
+                    <h2>Palavras Cruzadas Clássicas</h2>
+                    <p class="instrucao-suave">Complete as letras nas caixinhas guiando-se pelas dicas textuais simples.</p>
+                </div>
+                <div id="container-cruzadas" class="container-cruzadas"></div>
+                <button id="verificar-cruzadas" class="botao-primario">Conferir Respostas</button>
+            </div>
+        </section>
+    </main>
 
-  <section id="jogo-sudoku" hidden>
-    <h2>Sudoku calmo</h2>
-    <p class="explica">Cada linha, coluna e quadrado de 3 por 3 leva os números de 1 a 9, sem repetir. Não tem tempo, não tem pontos e não tem como perder. Se travar, peça uma dica.</p>
-
-    <div class="sudoku" id="sudoku-grade"></div>
-    <div class="teclado" id="sudoku-teclado"></div>
-
-    <p id="sudoku-recado" role="status"></p>
-    <button type="button" class="botao-simples" id="sudoku-dica">Pedir uma dica</button>
-    <button type="button" class="botao-simples" id="sudoku-novo">Novo sudoku</button>
-  </section>
-
-</main>
-<script src="js/tela-jogos.js"></script>
-<script src="js/tela-sudoku.js"></script>
-<script src="js/menu.js"></script>
-<script src="js/registra-sw.js"></script>
+    <script src="js/armazenamento.js"></script>
+    <script src="js/memoria.js"></script>
+    <script src="js/sudoku.js"></script>
+    <script src="js/tela-jogos.js"></script>
 </body>
 </html>
