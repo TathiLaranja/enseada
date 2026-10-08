@@ -53,5 +53,22 @@
     desenhar();
   });
 
+  /* Um jogo por vez na tela: o estado fica dito em palavra e em aria-pressed. */
+  var botaoMemoria = document.getElementById("escolha-memoria");
+  var botaoSudoku = document.getElementById("escolha-sudoku");
+
+  function mostrar(sudoku) {
+    document.getElementById("jogo-memoria").hidden = sudoku;
+    document.getElementById("jogo-sudoku").hidden = !sudoku;
+    botaoMemoria.setAttribute("aria-pressed", sudoku ? "false" : "true");
+    botaoSudoku.setAttribute("aria-pressed", sudoku ? "true" : "false");
+    document.getElementById("jogo-atual").textContent =
+      "Agora está: " + (sudoku ? "sudoku." : "memória.");
+  }
+
+  botaoMemoria.addEventListener("click", function () { mostrar(false); });
+  botaoSudoku.addEventListener("click", function () { mostrar(true); });
+
+  mostrar(false);
   desenhar();
 }());

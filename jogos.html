@@ -14,6 +14,7 @@
 <script src="js/armazenamento.js"></script>
 <script src="js/ajustes.js"></script>
 <script src="js/memoria.js"></script>
+<script src="js/sudoku.js"></script>
 </head>
 <body>
 <main class="pagina">
@@ -22,16 +23,37 @@
     <h1>Jogos calmos</h1>
   </div>
 
-  <h2>Jogo da memória</h2>
-  <p class="explica">Vire duas cartas. Se forem iguais, ficam abertas. Não tem tempo, não tem pontos e não tem como perder.</p>
+  <div class="botao-fileira">
+    <button type="button" class="botao-simples" id="escolha-memoria" aria-pressed="true">Memória</button>
+    <button type="button" class="botao-simples" id="escolha-sudoku" aria-pressed="false">Sudoku</button>
+  </div>
+  <p class="explica" id="jogo-atual" role="status"></p>
 
-  <div class="cartas" id="cartas"></div>
+  <section id="jogo-memoria">
+    <h2>Jogo da memória</h2>
+    <p class="explica">Vire duas cartas. Se forem iguais, ficam abertas. Não tem tempo, não tem pontos e não tem como perder.</p>
 
-  <p id="recado-jogo" role="status"></p>
-  <button type="button" class="botao-simples" id="botao-embaralhar">Embaralhar de novo</button>
+    <div class="cartas" id="cartas"></div>
+
+    <p id="recado-jogo" role="status"></p>
+    <button type="button" class="botao-simples" id="botao-embaralhar">Embaralhar de novo</button>
+  </section>
+
+  <section id="jogo-sudoku" hidden>
+    <h2>Sudoku calmo</h2>
+    <p class="explica">Cada linha, coluna e quadrado de 3 por 3 leva os números de 1 a 9, sem repetir. Não tem tempo, não tem pontos e não tem como perder. Se travar, peça uma dica.</p>
+
+    <div class="sudoku" id="sudoku-grade"></div>
+    <div class="teclado" id="sudoku-teclado"></div>
+
+    <p id="sudoku-recado" role="status"></p>
+    <button type="button" class="botao-simples" id="sudoku-dica">Pedir uma dica</button>
+    <button type="button" class="botao-simples" id="sudoku-novo">Novo sudoku</button>
+  </section>
 
 </main>
 <script src="js/tela-jogos.js"></script>
+<script src="js/tela-sudoku.js"></script>
 <script src="js/menu.js"></script>
 <script src="js/registra-sw.js"></script>
 </body>

@@ -54,7 +54,7 @@ que o teste acusa. As quatro últimas provas feitas estão no histórico de comm
 | `achar.html` | Me ajuda a achar | O roteiro de perguntas. |
 | `escrever.html` | Escrever | Uma folha em branco, guardada sozinha neste aparelho. |
 | `desenhar.html` | Desenhar | Traço e borracha num canvas, guardado como traços. |
-| `jogos.html` | Jogos calmos | Jogo da memória: sem derrota, sem tempo, sem pontos. |
+| `jogos.html` | Jogos calmos | Memória e sudoku: sem derrota, sem tempo, sem pontos. |
 | `rede.html` | Minha rede | Nome e rótulo de quem apoia, escritos pela pessoa. |
 | `ajuda.html` | Ajuda | O aviso, o CVV 188, Modo Baixo Estímulo, tamanho da letra e os dados. |
 
@@ -78,7 +78,8 @@ js/ajustes.js       Modo Baixo Estímulo e tamanho da letra, aplicados antes de 
 js/menu.js          o menu fixo de baixo, igual em todas as telas
 js/rede.js          regras da Minha rede (funções puras)
 js/memoria.js       regras do jogo da memória (funções puras)
-js/tela-escrever.js js/tela-desenhar.js js/tela-jogos.js js/tela-rede.js
+js/sudoku.js        gera e confere o sudoku, com dica em vez de erro (funções puras)
+js/tela-escrever.js js/tela-desenhar.js js/tela-jogos.js js/tela-sudoku.js js/tela-rede.js
 js/agora.js         a tela Agora
 js/tela-ancoras.js  a tela Minhas âncoras
 js/tela-achar.js    a tela do roteiro

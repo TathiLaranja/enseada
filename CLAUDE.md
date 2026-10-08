@@ -80,7 +80,6 @@ Oferecer, nunca prometer. O ruído, quando entrar, leva aviso de volume.
 
 ## O que ainda falta
 
-- Jogos calmos: a memória entrou; falta o sudoku, gerado em JS, com dica em vez de erro.
 - Ruído de fundo em Web Audio, com aviso de volume e limite.
 - Lembretes por arquivo `.ics`, que é o caminho sem servidor. Falta testar
   se importa limpo no iOS e no Android.

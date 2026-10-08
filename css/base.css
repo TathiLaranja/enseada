@@ -353,3 +353,60 @@ textarea {
 
 /* Minha rede */
 .item .rotulo { color: var(--fraco); }
+
+/* Sudoku calmo: nove colunas, borda mais grossa entre os quadrados de 3x3. */
+.sudoku {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  border: 3px solid var(--detalhe);
+  border-radius: var(--raio);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.casa {
+  font-family: inherit;
+  font-size: 1.1em;
+  min-height: 38px;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid var(--linha);
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.casa[data-dada="sim"] {
+  font-weight: 700;
+  background: var(--destaque);
+  color: var(--texto-no-destaque);
+  cursor: default;
+}
+
+.casa[data-borda-direita="sim"] { border-right: 3px solid var(--detalhe); }
+.casa[data-borda-baixo="sim"] { border-bottom: 3px solid var(--detalhe); }
+
+/* A casa escolhida ganha contorno grosso por dentro; o foco do teclado e outro. */
+.casa[aria-pressed="true"] {
+  outline: 4px solid var(--destaque);
+  outline-offset: -4px;
+}
+
+.teclado {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.tecla {
+  font-family: inherit;
+  font-size: 1.05em;
+  font-weight: 700;
+  min-height: 48px;
+  border: 2px solid var(--destaque);
+  border-radius: var(--raio);
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
