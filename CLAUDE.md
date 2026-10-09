@@ -100,6 +100,14 @@ Ficam em `localStorage` pela porta única, reduzidas (lado maior 900 px) e
 regravadas como JPEG, o que apaga a localização. Teto de 12 fotos. Só JPEG em
 data URL é aceito na leitura.
 
+## Álbum de retratos
+
+Aberto pela tela Fotos (o card Fotos do menu fica marcado nas duas). Começa com
+3 páginas e a pessoa acrescenta quantas quiser. Cada foto vira uma polaroid
+(foto quadrada + moldura + anotação opcional) que se arrasta por toque, mouse ou
+setas. Posição guardada como fração da página. Salva sozinho em `localStorage`
+(teto de 30 polaroids, fotos de 640 px em JPEG) e baixa a página como PNG.
+
 ## O que ainda falta
 
 - Ruído de fundo em Web Audio, com aviso de volume e limite.

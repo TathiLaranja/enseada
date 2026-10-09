@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Álbum de retratos — Enseada</title>
+<meta name="theme-color" content="#FAF8F5">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icones/icone-192.png">
+<link rel="apple-touch-icon" href="icones/icone-192.png">
+<link rel="stylesheet" href="css/tema.css">
+<link rel="stylesheet" href="css/base.css">
+<script src="js/ancoras.js"></script>
+<script src="js/armazenamento.js"></script>
+<script src="js/ajustes.js"></script>
+<script src="js/fotos.js"></script>
+<script src="js/album.js"></script>
+</head>
+<body>
+<main class="pagina">
+
+  <div class="topo">
+    <h1>Álbum de retratos</h1>
+    <a class="saida" href="fotos.html">Fotos</a>
+  </div>
+
+  <p class="explica">Cada foto vira uma polaroid com espaço para uma anotação. Arraste as polaroids para montar a página do seu jeito. Tudo fica só neste aparelho.</p>
+
+  <div class="abas-paginas" id="abas-paginas" role="group" aria-label="Páginas do álbum"></div>
+  <button type="button" class="botao-simples" id="nova-pagina">Nova página</button>
+
+  <div class="mural" id="mural" role="group" aria-label="Página do álbum"></div>
+
+  <p class="explica" id="recado-album" role="status"></p>
+
+  <div class="botao-fileira" id="acoes-polaroid">
+    <button type="button" class="botao-simples" id="trazer-frente" disabled>Trazer para a frente</button>
+    <button type="button" class="botao-simples" id="tirar-polaroid" disabled>Tirar da página</button>
+  </div>
+
+  <button type="button" class="botao" id="adicionar-foto">Adicionar uma foto a esta página</button>
+  <input type="file" id="entrada-foto" accept="image/*" hidden>
+
+  <button type="button" class="botao-simples" id="baixar-pagina">Baixar esta página como imagem</button>
+
+</main>
+<script src="js/tela-album.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/registra-sw.js"></script>
+</body>
+</html>

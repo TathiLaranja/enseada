@@ -8,7 +8,7 @@
 
    Trocar VERSAO a cada publicação faz o aparelho buscar os arquivos novos. */
 
-var VERSAO = "enseada-v14";
+var VERSAO = "enseada-v15";
 
 var ARQUIVOS = [
   "./",
@@ -20,6 +20,7 @@ var ARQUIVOS = [
   "desenhar.html",
   "jogos.html",
   "fotos.html",
+  "album.html",
   "rede.html",
   "manifest.json",
   "css/tema.css",
@@ -29,6 +30,8 @@ var ARQUIVOS = [
   "js/ajustes.js",
   "js/menu.js",
   "js/fotos.js",
+  "js/album.js",
+  "js/tela-album.js",
   "js/tela-fotos.js",
   "js/mini.js",
   "js/tela-mini.js",

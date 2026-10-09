@@ -14,7 +14,7 @@ var ITENS_DO_MENU = [
   { arquivo: "achar.html", texto: "Achar", nome: "Me ajuda a achar", icone: "M10 4 A6 6 0 1 0 10 16 A6 6 0 1 0 10 4 M14.5 14.5 L20 20" },
   { arquivo: "escrever.html", texto: "Escrever", nome: "Escrever", icone: "M4 20 L5 15 L16 4 L20 8 L9 19 Z M14 6 L18 10" },
   { arquivo: "desenhar.html", texto: "Desenhar", nome: "Desenhar", icone: "M3 16 C7 6 10 20 14 10 C16 5 19 8 21 6" },
-  { arquivo: "fotos.html", texto: "Fotos", nome: "Fotos", icone: "M3 7 H8 L10 5 H14 L16 7 H21 V19 H3 Z M12 9 A3.5 3.5 0 1 0 12 16 A3.5 3.5 0 1 0 12 9" },
+  { arquivo: "fotos.html", tambem: ["album.html"], texto: "Fotos", nome: "Fotos e álbum", icone: "M3 7 H8 L10 5 H14 L16 7 H21 V19 H3 Z M12 9 A3.5 3.5 0 1 0 12 16 A3.5 3.5 0 1 0 12 9" },
   { arquivo: "jogos.html", texto: "Jogos", nome: "Jogos calmos", icone: "M5 5 H19 V19 H5 Z M9 9 H9.01 M15 9 H15.01 M12 12 H12.01 M9 15 H9.01 M15 15 H15.01" },
   { arquivo: "rede.html", texto: "Rede", nome: "Minha rede", icone: "M8 7 A3 3 0 1 0 8 13 A3 3 0 1 0 8 7 M16 9 A2.5 2.5 0 1 0 16 14 A2.5 2.5 0 1 0 16 9 M3 20 C3 16 5 15 8 15 C11 15 13 16 13 20 M14 20 C14 17.5 15 17 16 17 C18 17 19 18 20 20" },
   { arquivo: "ajuda.html", texto: "Ajuda", nome: "Ajuda", icone: "M4 7 H20 M4 12 H20 M4 17 H20 M9 5 V9 M15 10 V14 M8 15 V19" }
@@ -59,7 +59,7 @@ function montarMenu(caminho) {
     texto.textContent = item.texto;
     link.appendChild(texto);
     link.setAttribute("aria-label", item.nome);
-    if (item.arquivo === atual) {
+    if (item.arquivo === atual || (item.tambem || []).indexOf(atual) !== -1) {
       link.setAttribute("aria-current", "page");
     }
     nav.appendChild(link);

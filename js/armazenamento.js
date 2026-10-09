@@ -9,6 +9,10 @@ var CHAVE = "enseada.v1";
 /* Teto de fotos: o localStorage do aparelho e pequeno e e dividido com o resto. */
 var MAXIMO_DE_FOTOS = 12;
 
+/* Teto das polaroids do album (as fotos ficam dentro do proprio album). */
+var MAXIMO_DE_POLAROIDS = 30;
+var MAXIMO_DE_PAGINAS = 200;
+
 /* O app ja se chamou Pouso. Esta chave antiga so e LIDA, uma unica vez, para
    trazer o que a pessoa escreveu antes da troca de nome. Nunca e gravada. */
 var CHAVE_ANTIGA = "pouso.v1";
@@ -26,6 +30,7 @@ function depositoVazio() {
     ajustes: { fonte: "normal", tema: "claro", boasVindasVistas: false, modo: "adulto" },
     fotos: [],
     mini: {},
+    album: null,
     rascunho: null,
     roteiro: null,
     escrita: "",
@@ -140,6 +145,33 @@ function normalizar(bruto) {
     }).slice(0, MAXIMO_DE_FOTOS).map(function (f) { return { id: f.id, dados: f.dados }; });
   }
 
+  /* Album de retratos: paginas de polaroids. Foto so JPEG em data URL; posicao
+     sempre dentro da pagina; anotacao curta. Tudo que nao for reconhecido cai. */
+  if (bruto.album && typeof bruto.album === "object" && Array.isArray(bruto.album.paginas)) {
+    var restantes = MAXIMO_DE_POLAROIDS;
+    var limitar = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+    var paginas = bruto.album.paginas.filter(function (p) {
+      return p && typeof p === "object" && typeof p.id === "string" && /^[a-z0-9]{1,24}$/.test(p.id) && Array.isArray(p.polaroids);
+    }).slice(0, MAXIMO_DE_PAGINAS).map(function (p) {
+      var pols = p.polaroids.filter(function (q) {
+        return q && typeof q === "object" && typeof q.id === "string" && /^[a-z0-9]{1,24}$/.test(q.id) &&
+          typeof q.foto === "string" && /^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(q.foto);
+      }).slice(0, restantes).map(function (q) {
+        return {
+          id: q.id,
+          foto: q.foto,
+          nota: typeof q.nota === "string" ? q.nota.slice(0, 40) : "",
+          x: limitar(typeof q.x === "number" && isFinite(q.x) ? q.x : 0.3, 0, 0.58),
+          y: limitar(typeof q.y === "number" && isFinite(q.y) ? q.y : 0.3, 0, 0.6346),
+          giro: limitar(typeof q.giro === "number" && isFinite(q.giro) ? q.giro : 0, -8, 8)
+        };
+      });
+      restantes -= pols.length;
+      return { id: p.id, polaroids: pols };
+    });
+    if (paginas.length > 0) { limpo.album = { paginas: paginas }; }
+  }
+
   /* Modo Mini: o que a crianca disse, por pergunta. Sem nota e sem certo ou errado. */
   if (bruto.mini && typeof bruto.mini === "object" && !Array.isArray(bruto.mini)) {
     Object.keys(bruto.mini).forEach(function (k) {
@@ -218,6 +250,7 @@ if (typeof module !== "undefined" && module.exports) {
     CHAVE_ANTIGA: CHAVE_ANTIGA,
     CORES_DO_DESENHO: CORES_DO_DESENHO,
     MAXIMO_DE_FOTOS: MAXIMO_DE_FOTOS,
+    MAXIMO_DE_POLAROIDS: MAXIMO_DE_POLAROIDS,
     depositoVazio: depositoVazio,
     normalizar: normalizar,
     criarArmazenamento: criarArmazenamento

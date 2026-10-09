@@ -41,6 +41,17 @@ teste("toda tela existe, carrega o menu e o service worker guarda o arquivo", fu
   });
 });
 
+teste("o álbum tem menu, vive no cartão Fotos e o service worker guarda seus arquivos", function () {
+  const html = fs.readFileSync("album.html", "utf8");
+  const sw = fs.readFileSync("service-worker.js", "utf8");
+  assert.ok(html.indexOf('src="js/menu.js"') !== -1);
+  ["album.html", "js/album.js", "js/tela-album.js"].forEach(function (n) {
+    assert.ok(sw.indexOf('"' + n + '"') !== -1, n);
+  });
+  const fotos = menu.ITENS_DO_MENU.filter(function (i) { return i.arquivo === "fotos.html"; })[0];
+  assert.ok(fotos.tambem.indexOf("album.html") !== -1);
+});
+
 teste("todo arquivo listado no service worker existe", function () {
   const sw = fs.readFileSync("service-worker.js", "utf8");
   const bloco = sw.slice(sw.indexOf("var ARQUIVOS"), sw.indexOf("];"));

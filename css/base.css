@@ -720,3 +720,85 @@ body.com-abertura .pagina {
 .mini-desenho svg { display: block; width: 100%; height: auto; }
 .mini-pergunta { font-size: 1.5em; text-align: center; margin-bottom: 18px; }
 #resposta-mini { min-height: 130px; font-size: 1.15em; }
+
+/* Album de retratos: pagina em pe (3 por 4), polaroids que se arrastam. */
+.abas-paginas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.mural {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  margin: 12px 0;
+  background: var(--restinga);
+  border: 2px solid var(--contorno);
+  border-radius: var(--raio);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.mural-vazio {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  color: var(--texto-no-bloco);
+}
+
+/* Cartao polaroid: as medidas em porcentagem sao do proprio cartao. */
+.polaroid {
+  position: absolute;
+  width: 42%;
+  aspect-ratio: 1 / 1.16;
+  background: #FFFDF9;
+  border-radius: 3px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.28);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.polaroid.arrastando { cursor: grabbing; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.36); z-index: 5; }
+
+.polaroid.escolhida {
+  outline: 4px solid var(--texto);
+  outline-offset: 2px;
+}
+
+.polaroid-foto {
+  position: absolute;
+  left: 6%;
+  top: 6%;
+  width: 88%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+input[type="text"].polaroid-nota {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 3%;
+  height: 15%;
+  min-height: 0;
+  width: 88%;
+  padding: 0 2px;
+  font-family: var(--fonte);
+  font-size: 0.78em;
+  color: #454640;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #85867A;
+  border-radius: 0;
+}
+
+input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; outline-offset: 1px; }
