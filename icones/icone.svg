@@ -1,15 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Enseada">
-  <rect width="200" height="200" fill="#F8F9FA" rx="20"/>
-  <defs>
-    <linearGradient id="dropGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#00FFEF" />
-      <stop offset="100%" stop-color="#2A9D8F" />
-    </linearGradient>
-  </defs>
-  <ellipse cx="100" cy="140" rx="12" ry="4" fill="#2A9D8F" opacity="0.3"/>
-  <ellipse cx="100" cy="140" rx="30" ry="10" fill="none" stroke="#00AEEF" stroke-width="3" opacity="0.9"/>
-  <ellipse cx="100" cy="140" rx="55" ry="18" fill="none" stroke="#2A9D8F" stroke-width="2" opacity="0.6"/>
-  <ellipse cx="100" cy="140" rx="85" ry="28" fill="none" stroke="#00FFEF" stroke-width="1.5" opacity="0.3"/>
-  <path d="M100 65 C100 65, 112 95, 112 105 C112 111.6 106.6 117 100 117 C93.4 117 88 111.6 88 105 C88 95, 100 65, 100 65 Z" fill="url(#dropGrad)"/>
-  <path d="M96 85 Q94 100 96 110" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="Enseada">
+  <rect width="1024" height="1024" rx="230" fill="#FAF6EA"/>
+  <circle cx="512" cy="512" r="358.4" fill="#F4B6A6"/>
+  <circle cx="512" cy="570.4" r="300" fill="#FAF6EA"/>
+  <g transform="translate(512 640) scale(1.14) translate(-512 -640)">
+  <path d="M512,812 C508,740 528,660 548,596 C560,556 566,500 560,430" fill="none" stroke="#9DB17C" stroke-width="13" stroke-linecap="round"/>
+  <path d="M520,640 Q482.4,532.6 372,505 Q409.6,612.4 520,640 Z" fill="#9DB17C"/>
+  <path d="M520,640 Q439.3,579.9 372,505" fill="none" stroke="#7C9360" stroke-width="4" stroke-linecap="round"/>
+  <path d="M540,560 Q614.0,534.0 640,460 Q566.0,486.0 540,560 Z" fill="#9DB17C"/>
+  <path d="M540,560 Q585.0,505.0 640,460" fill="none" stroke="#7C9360" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M372,522 C387,546 396,560 396,572 A24,24 0 1 1 348,572 C348,560 357,546 372,522 Z" fill="#A9A1BD"/>
+  <ellipse cx="364" cy="566" rx="5" ry="9" fill="#FAF6EA" opacity="0.55"/>
+  </g>
 </svg>

@@ -84,5 +84,6 @@ Oferecer, nunca prometer. O ruído, quando entrar, leva aviso de volume.
 - Ruído de fundo em Web Audio, com aviso de volume e limite.
 - Lembretes por arquivo `.ics`, que é o caminho sem servidor. Falta testar
   se importa limpo no iOS e no Android.
-- Ícone de verdade: os quatro PNGs de hoje são provisórios.
+- Ícone: o desenho novo (gota de orvalho na folha) está em assets/icon.png e nos
+  quatro PNGs de icones/. Falta a Tathi aprovar antes de ir para a loja.
 - Conversa com advogado antes de abrir ao público (LGPD art. 14 e ECA).
