@@ -14,6 +14,7 @@
     <script src="js/armazenamento.js"></script>
     <script src="js/ajustes.js"></script>
     <script src="js/memoria.js"></script>
+    <script src="js/quebra-cabeca.js"></script>
     <script src="js/sudoku.js"></script>
     <script src="js/tetris.js"></script>
     <script src="js/cruzadas.js"></script>
@@ -27,6 +28,7 @@
     <main class="conteudo-principal">
         <nav class="abas-jogos" role="tablist" aria-label="Seleção de Jogos Calmos">
             <button type="button" role="tab" aria-selected="true" aria-controls="painel-memoria" id="aba-memoria" class="botao-aba ativa">Memória</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="painel-quebra-cabeca" id="aba-quebra-cabeca" class="botao-aba">Quebra-cabeça</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-sudoku" id="aba-sudoku" class="botao-aba">Sudoku</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-tetris" id="aba-tetris" class="botao-aba">Tetris Calmo</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-palavras" id="aba-palavras" class="botao-aba">Palavras Cruzadas</button>
@@ -36,12 +38,30 @@
             <!-- Painel Memória -->
             <div id="painel-memoria" role="tabpanel" aria-labelledby="aba-memoria" class="painel-jogo ativo">
                 <div class="cabecalho-jogo">
-                    <h2>Jogo da Memória</h2>
-                    <p class="instrucao-suave">Encontre os pares com calma, sem contagem regressiva. Não tem tempo, não tem pontos e não tem como perder.</p>
+                    <h2>Pequenos Tesouros</h2>
+                    <p class="instrucao-suave">Encontre os pares no seu ritmo. Escolha uma coleção.</p>
                 </div>
+                <div id="colecoes-memoria" class="colecoes-memoria" role="group" aria-label="Coleções de fichas"></div>
                 <div id="grid-memoria" class="grid-memoria cartas"></div>
                 <p id="recado-memoria" role="status"></p>
-                <button type="button" id="reiniciar-memoria" class="botao-secundario">Recomeçar Memória</button>
+                <button type="button" id="reiniciar-memoria" class="botao-secundario">Recomeçar coleção</button>
+            </div>
+
+            <!-- Painel Quebra-cabeça -->
+            <div id="painel-quebra-cabeca" role="tabpanel" aria-labelledby="aba-quebra-cabeca" class="painel-jogo oculto" hidden>
+                <div class="cabecalho-jogo">
+                    <h2>Cantinho Tranquilo</h2>
+                    <p class="instrucao-suave">Escolha um nível. Arraste cada peça até o espaço correspondente ou selecione a peça e o espaço.</p>
+                </div>
+                <div class="niveis-quebra-cabeca" role="group" aria-label="Níveis do quebra-cabeça">
+                    <button type="button" class="botao-secundario" data-nivel-quebra-cabeca="chegar" aria-pressed="true">Chegar</button>
+                    <button type="button" class="botao-secundario" data-nivel-quebra-cabeca="explorar" aria-pressed="false">Explorar</button>
+                    <button type="button" class="botao-secundario" data-nivel-quebra-cabeca="permanecer" aria-pressed="false">Permanecer</button>
+                </div>
+                <div id="tabuleiro-quebra-cabeca" class="tabuleiro-quebra-cabeca" role="group" aria-label="Espaços para montar a imagem do sol e do mar"></div>
+                <div id="pecas-quebra-cabeca" class="pecas-quebra-cabeca" role="group" aria-label="Peças disponíveis"></div>
+                <p id="recado-quebra-cabeca" role="status"></p>
+                <button type="button" id="novo-quebra-cabeca" class="botao-secundario">Recomeçar este nível</button>
             </div>
 
             <!-- Painel Sudoku -->
@@ -93,6 +113,7 @@
     </main>
 
     <script src="js/tela-jogos.js"></script>
+    <script src="js/tela-quebra-cabeca.js"></script>
     <script src="js/tela-sudoku.js"></script>
     <script src="js/tela-tetris.js"></script>
     <script src="js/tela-cruzadas.js"></script>

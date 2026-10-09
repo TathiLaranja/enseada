@@ -54,7 +54,7 @@ que o teste acusa. As quatro últimas provas feitas estão no histórico de comm
 | `achar.html` | Me ajuda a achar | O roteiro de perguntas. |
 | `escrever.html` | Escrever | Uma folha em branco, guardada sozinha neste aparelho. |
 | `desenhar.html` | Desenhar | Traço e borracha num canvas, guardado como traços. |
-| `jogos.html` | Jogos calmos | Memória, sudoku, Tetris Calmo e palavras cruzadas: sem derrota, sem tempo, sem pontos. |
+| `jogos.html` | Jogos calmos | Pequenos Tesouros (três coleções), Cantinho Tranquilo (6, 12 ou 30 peças), sudoku, Tetris Calmo e palavras cruzadas. Sem cronômetro. |
 | `rede.html` | Minha rede | Nome e rótulo de quem apoia, escritos pela pessoa. |
 | `fotos.html` | Fotos | Tirar ou escolher fotos; ficam só neste aparelho, reduzidas e sem localização. |
 | `album.html` | Álbum de retratos | Scrapbook: páginas marfim com polaroids presas com fita e adesivos que se arrastam; baixa a página como imagem. Aberto pela tela Fotos. |
@@ -85,11 +85,12 @@ js/mini.js          as perguntas do Modo Mini (funções puras)
 js/paleta.js        as cores do desenho
 js/tela-fotos.js js/tela-album.js js/tela-mini.js
 js/rede.js          regras da Minha rede (funções puras)
-js/memoria.js       regras do jogo da memória (funções puras)
+js/memoria.js       regras e coleções do Pequenos Tesouros (funções puras)
+js/quebra-cabeca.js regras dos níveis do Cantinho Tranquilo (funções puras)
 js/sudoku.js        gera e confere o sudoku, com dica em vez de erro (funções puras)
 js/tetris.js        regras do Tetris Calmo: sem queda sozinha, sem fim (funções puras)
 js/cruzadas.js      monta e confere as palavras cruzadas, com dica (funções puras)
-js/tela-escrever.js js/tela-desenhar.js js/tela-jogos.js js/tela-sudoku.js js/tela-tetris.js js/tela-cruzadas.js js/tela-rede.js
+js/tela-escrever.js js/tela-desenhar.js js/tela-jogos.js js/tela-quebra-cabeca.js js/tela-sudoku.js js/tela-tetris.js js/tela-cruzadas.js js/tela-rede.js
 js/agora.js         a tela Agora
 js/tela-ancoras.js  a tela Minhas âncoras
 js/tela-achar.js    a tela do roteiro
@@ -99,6 +100,7 @@ js/registra-sw.js   liga o service worker
 teste/              testes em Node puro
 fontes/             Atkinson Hyperlegible, servida de dentro do projeto
 icones/             os quatro ícones do PWA
+public/images/       ilustração local do quebra-cabeça
 ```
 
 ## Regras técnicas que não se negociam

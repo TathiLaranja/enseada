@@ -8,7 +8,7 @@
 
    Trocar VERSAO a cada publicação faz o aparelho buscar os arquivos novos. */
 
-var VERSAO = "enseada-v16";
+var VERSAO = "enseada-v19";
 
 var ARQUIVOS = [
   "./",
@@ -38,6 +38,7 @@ var ARQUIVOS = [
   "js/tela-mini.js",
   "js/rede.js",
   "js/memoria.js",
+  "js/quebra-cabeca.js",
   "js/sudoku.js",
   "js/tetris.js",
   "js/cruzadas.js",
@@ -45,6 +46,7 @@ var ARQUIVOS = [
   "js/paleta.js",
   "js/tela-desenhar.js",
   "js/tela-jogos.js",
+  "js/tela-quebra-cabeca.js",
   "js/tela-sudoku.js",
   "js/tela-tetris.js",
   "js/tela-cruzadas.js",
@@ -59,6 +61,8 @@ var ARQUIVOS = [
   "fontes/AtkinsonHyperlegible-Regular.woff2",
   "fontes/AtkinsonHyperlegible-Bold.woff2",
   "assets/icon.png",
+  "imagem2.png.jpeg",
+  "public/images/quebra-cabeca.jpg",
   "icones/icone-192.png",
   "icones/icone-512.png",
   "icones/icone-192-mascara.png",

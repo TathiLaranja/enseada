@@ -1,11 +1,6 @@
-/* Enseada - a tela Jogos calmos: abas e jogo da memória.
-   Regras da memória em js/memoria.js. Sudoku, Tetris e palavras cruzadas vivem
-   em js/tela-sudoku.js, js/tela-tetris.js e js/tela-cruzadas.js.
-   Sem derrota, sem cronômetro, sem pontuação. Estado dito em palavra. */
+/* Enseada - a tela Jogos calmos. */
 
 document.addEventListener('DOMContentLoaded', () => {
-    /* Abas: uma por vez. aria-selected diz qual está aberta; a classe "ativa"
-       e a palavra em negrito mostram o mesmo sem depender de cor. */
     const abas = document.querySelectorAll('.abas-jogos button[role="tab"]');
     const paineis = document.querySelectorAll('.container-painel-jogos .painel-jogo');
 
@@ -29,32 +24,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /* Jogo da memória. */
     const areaMemoria = document.getElementById('grid-memoria');
     const recadoMemoria = document.getElementById('recado-memoria');
-    let jogo = novoJogo(Math.random);
+    const botoesColecao = document.getElementById('colecoes-memoria');
+    let colecaoAtual = COLECOES_MEMORIA[0].id;
+    let jogo = novoJogo(Math.random, colecaoAtual);
+
+    function desenharColecoes() {
+        botoesColecao.textContent = '';
+        COLECOES_MEMORIA.forEach(colecao => {
+            const botao = document.createElement('button');
+            botao.type = 'button';
+            botao.className = 'botao-secundario';
+            botao.textContent = colecao.nome;
+            botao.setAttribute('aria-pressed', String(colecao.id === colecaoAtual));
+            botao.addEventListener('click', () => {
+                colecaoAtual = colecao.id;
+                jogo = novoJogo(Math.random, colecaoAtual);
+                recadoMemoria.textContent = '';
+                desenharColecoes();
+                desenharMemoria();
+            });
+            botoesColecao.appendChild(botao);
+        });
+    }
 
     function desenharMemoria() {
         areaMemoria.textContent = '';
-        jogo.cartas.forEach((palavra, i) => {
+        jogo.cartas.forEach((ficha, i) => {
             const achada = jogo.achadas.indexOf(i) !== -1;
             const aberta = jogo.viradas.indexOf(i) !== -1;
             const botao = document.createElement('button');
             botao.type = 'button';
             botao.className = 'carta';
+            botao.setAttribute('aria-label', achada || aberta
+                ? ficha.nome + (achada ? ', par encontrado' : ', ficha virada')
+                : 'Ficha fechada. Toque para virar.');
 
-            if (achada) {
-                botao.setAttribute('data-estado', 'achada');
-                botao.textContent = palavra + ' (par)';
-                botao.setAttribute('aria-label', palavra + ', par achado');
-                botao.disabled = true;
-            } else if (aberta) {
-                botao.setAttribute('data-estado', 'aberta');
-                botao.textContent = palavra;
-                botao.setAttribute('aria-label', palavra + ', carta virada');
+            if (achada || aberta) {
+                botao.setAttribute('data-estado', achada ? 'achada' : 'aberta');
+                const imagem = document.createElement('span');
+                imagem.className = 'ficha-icone';
+                imagem.setAttribute('aria-hidden', 'true');
+                imagem.style.backgroundPosition = (ficha.coluna * 25) + '% ' + (ficha.linha * 25) + '%';
+                botao.appendChild(imagem);
+                if (achada) { botao.disabled = true; }
             } else {
                 botao.textContent = 'Virar';
-                botao.setAttribute('aria-label', 'Carta fechada, tocar para virar');
             }
 
             botao.addEventListener('click', () => {
@@ -67,18 +83,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (terminou(jogo)) {
-            recadoMemoria.textContent = 'Todos os pares foram achados.';
+            recadoMemoria.textContent = 'Todos os pares foram encontrados.';
         } else if (jogo.viradas.length === 2) {
-            recadoMemoria.textContent = 'Não são iguais. Toque em outra carta quando quiser.';
+            recadoMemoria.textContent = 'As fichas são diferentes. Toque em outra quando quiser.';
         } else {
             recadoMemoria.textContent = '';
         }
     }
 
     document.getElementById('reiniciar-memoria').addEventListener('click', () => {
-        jogo = novoJogo(Math.random);
+        jogo = novoJogo(Math.random, colecaoAtual);
+        recadoMemoria.textContent = '';
         desenharMemoria();
     });
 
+    desenharColecoes();
     desenharMemoria();
 });
