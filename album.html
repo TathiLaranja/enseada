@@ -15,6 +15,7 @@
 <script src="js/ajustes.js"></script>
 <script src="js/fotos.js"></script>
 <script src="js/album.js"></script>
+<script src="js/adesivos.js"></script>
 </head>
 <body>
 <main class="pagina">
@@ -24,18 +25,28 @@
     <a class="saida" href="fotos.html">Fotos</a>
   </div>
 
-  <p class="explica">Cada foto vira uma polaroid com espaço para uma anotação. Arraste as polaroids para montar a página do seu jeito. Tudo fica só neste aparelho.</p>
+  <p class="explica">Cada foto vira uma polaroid presa com fita, com espaço para uma anotação. Arraste as polaroids e os adesivos para montar a página do seu jeito. Tudo fica só neste aparelho.</p>
 
   <div class="abas-paginas" id="abas-paginas" role="group" aria-label="Páginas do álbum"></div>
   <button type="button" class="botao-simples" id="nova-pagina">Nova página</button>
 
   <div class="mural" id="mural" role="group" aria-label="Página do álbum"></div>
 
+  <details class="gaveta" open>
+    <summary>Gaveta de adesivos</summary>
+    <p class="explica">Toque num adesivo para pô-lo na página. Depois arraste para onde quiser.</p>
+    <div class="gaveta-grade" id="gaveta-adesivos"></div>
+  </details>
+
   <p class="explica" id="recado-album" role="status"></p>
 
   <div class="botao-fileira" id="acoes-polaroid">
     <button type="button" class="botao-simples" id="trazer-frente" disabled>Trazer para a frente</button>
     <button type="button" class="botao-simples" id="tirar-polaroid" disabled>Tirar da página</button>
+  </div>
+  <div class="botao-fileira" id="acoes-adesivo">
+    <button type="button" class="botao-simples" id="adesivo-menor" disabled>Adesivo menor</button>
+    <button type="button" class="botao-simples" id="adesivo-maior" disabled>Adesivo maior</button>
   </div>
 
   <button type="button" class="botao" id="adicionar-foto">Adicionar uma foto a esta página</button>

@@ -734,7 +734,7 @@ body.com-abertura .pagina {
   width: 100%;
   aspect-ratio: 3 / 4;
   margin: 12px 0;
-  background: var(--restinga);
+  background: #FAF8F5;   /* Marfim fixo: e uma folha de papel, igual na imagem baixada */
   border: 2px solid var(--contorno);
   border-radius: var(--raio);
   overflow: hidden;
@@ -750,7 +750,7 @@ body.com-abertura .pagina {
   margin: 0;
   padding: 20px;
   text-align: center;
-  color: var(--texto-no-bloco);
+  color: #454640;
 }
 
 /* Cartao polaroid: as medidas em porcentagem sao do proprio cartao. */
@@ -760,7 +760,8 @@ body.com-abertura .pagina {
   aspect-ratio: 1 / 1.16;
   background: #FFFDF9;
   border-radius: 3px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.28);
+  border: 1px solid #D8D3C8;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -802,3 +803,68 @@ input[type="text"].polaroid-nota {
 }
 
 input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; outline-offset: 1px; }
+
+/* Fita adesiva no topo da polaroid (washi tape): quatro tons da paleta. */
+.fita {
+  position: absolute;
+  left: 50%;
+  top: -4%;
+  width: 34%;
+  height: 10%;
+  opacity: 0.86;
+  pointer-events: none;
+  clip-path: polygon(0 0, 100% 0, 97% 20%, 100% 40%, 97% 60%, 100% 80%, 97% 100%, 0 100%, 3% 80%, 0 60%, 3% 40%, 0 20%, 3% 0);
+  box-shadow: inset 0 0 0 100px rgba(255, 255, 255, 0.08);
+}
+.fita[data-fita="0"] { background: #E8B9A8; }
+.fita[data-fita="1"] { background: #B8B0C8; }
+.fita[data-fita="2"] { background: #A5B09A; }
+.fita[data-fita="3"] { background: #9EBBC0; }
+
+/* Adesivos: arrastam como as polaroids, sempre por cima delas. */
+.adesivo {
+  position: absolute;
+  aspect-ratio: 1;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  z-index: 3;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.28));
+}
+.adesivo img { display: block; width: 100%; height: 100%; pointer-events: none; }
+.adesivo.arrastando { cursor: grabbing; z-index: 6; }
+.adesivo.escolhida { outline: 3px dashed var(--texto); outline-offset: 3px; border-radius: 6px; }
+
+/* Gaveta de adesivos. */
+.gaveta {
+  border: 2px solid var(--contorno);
+  border-radius: var(--raio);
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+.gaveta summary { font-weight: 700; cursor: pointer; min-height: 40px; display: flex; align-items: center; }
+/* Uma fileira que desliza de lado, logo abaixo da pagina, para ver a pagina e a gaveta juntas. */
+.gaveta-grade {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  touch-action: pan-x;
+}
+.adesivo-da-gaveta {
+  flex: 0 0 4.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 72px;
+  padding: 4px 2px;
+  font-family: inherit;
+  font-size: 0.78em;
+  color: var(--texto);
+  background: #FAF8F5;
+  border: 2px solid var(--contorno);
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+.adesivo-da-gaveta img { width: 44px; height: 44px; }

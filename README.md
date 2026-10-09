@@ -57,7 +57,7 @@ que o teste acusa. As quatro últimas provas feitas estão no histórico de comm
 | `jogos.html` | Jogos calmos | Memória, sudoku, Tetris Calmo e palavras cruzadas: sem derrota, sem tempo, sem pontos. |
 | `rede.html` | Minha rede | Nome e rótulo de quem apoia, escritos pela pessoa. |
 | `fotos.html` | Fotos | Tirar ou escolher fotos; ficam só neste aparelho, reduzidas e sem localização. |
-| `album.html` | Álbum de retratos | Páginas de polaroids que se arrastam; baixa a página como imagem. Aberto pela tela Fotos. |
+| `album.html` | Álbum de retratos | Scrapbook: páginas marfim com polaroids presas com fita e adesivos que se arrastam; baixa a página como imagem. Aberto pela tela Fotos. |
 | `ajuda.html` | Ajuda | O aviso, o CVV 188, Modo de uso (Adulto ou Mini), Modo Baixo Estímulo, tamanho da letra e os dados. |
 
 O menu fixo de baixo é o mesmo em todas as telas e vive em `js/menu.js`: cards grandes, e o último liga e desliga o Modo Mini (Enseadinha), que troca as perguntas da tela Me ajuda a achar por perguntas curtas, com desenho, para crianças a partir de 3 anos.
@@ -79,7 +79,8 @@ js/armazenamento.js a única porta dos dados (localStorage)
 js/ajustes.js       Modo Baixo Estímulo e tamanho da letra, aplicados antes de desenhar
 js/menu.js          o menu fixo de baixo, igual em todas as telas
 js/fotos.js         regras das fotos: reduzir, teto, só JPEG (funções puras)
-js/album.js         regras do álbum: páginas, polaroids, mover, anotar (funções puras)
+js/album.js         regras do álbum: páginas, polaroids, adesivos, mover, anotar (funções puras)
+js/adesivos.js      os desenhos dos adesivos, em vetor
 js/mini.js          as perguntas do Modo Mini (funções puras)
 js/paleta.js        as cores do desenho
 js/tela-fotos.js js/tela-album.js js/tela-mini.js

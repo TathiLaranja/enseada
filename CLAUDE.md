@@ -100,13 +100,18 @@ Ficam em `localStorage` pela porta única, reduzidas (lado maior 900 px) e
 regravadas como JPEG, o que apaga a localização. Teto de 12 fotos. Só JPEG em
 data URL é aceito na leitura.
 
-## Álbum de retratos
+## Álbum de retratos (scrapbook)
 
 Aberto pela tela Fotos (o card Fotos do menu fica marcado nas duas). Começa com
-3 páginas e a pessoa acrescenta quantas quiser. Cada foto vira uma polaroid
-(foto quadrada + moldura + anotação opcional) que se arrasta por toque, mouse ou
-setas. Posição guardada como fração da página. Salva sozinho em `localStorage`
-(teto de 30 polaroids, fotos de 640 px em JPEG) e baixa a página como PNG.
+3 páginas e a pessoa acrescenta quantas quiser. A página é uma folha em Marfim
+`#FAF8F5` fixo (igual nos dois temas e na imagem baixada). Cada foto vira uma
+polaroid (foto quadrada + moldura + anotação opcional) presa com uma fita
+adesiva de um dos quatro tons da paleta. Há uma gaveta de 14 adesivos em vetor
+(natureza, bichinhos, brinquedos e veículos, sem cor "de menino" ou "de
+menina"). Polaroids e adesivos se arrastam por toque, mouse ou setas; adesivos
+ficam sempre por cima das polaroids e mudam de tamanho. Posição guardada como
+fração da página. Salva sozinho em `localStorage` (teto de 30 polaroids e 80
+adesivos; fotos de 640 px em JPEG) e baixa a página como PNG de 1200 x 1600.
 
 ## O que ainda falta
 

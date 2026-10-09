@@ -12,6 +12,7 @@ var MAXIMO_DE_FOTOS = 12;
 /* Teto das polaroids do album (as fotos ficam dentro do proprio album). */
 var MAXIMO_DE_POLAROIDS = 30;
 var MAXIMO_DE_PAGINAS = 200;
+var MAXIMO_DE_ADESIVOS = 80;
 
 /* O app ja se chamou Pouso. Esta chave antiga so e LIDA, uma unica vez, para
    trazer o que a pessoa escreveu antes da troca de nome. Nunca e gravada. */
@@ -149,7 +150,9 @@ function normalizar(bruto) {
      sempre dentro da pagina; anotacao curta. Tudo que nao for reconhecido cai. */
   if (bruto.album && typeof bruto.album === "object" && Array.isArray(bruto.album.paginas)) {
     var restantes = MAXIMO_DE_POLAROIDS;
+    var restantesAdesivos = MAXIMO_DE_ADESIVOS;
     var limitar = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+    var numero = function (v, padrao) { return typeof v === "number" && isFinite(v) ? v : padrao; };
     var paginas = bruto.album.paginas.filter(function (p) {
       return p && typeof p === "object" && typeof p.id === "string" && /^[a-z0-9]{1,24}$/.test(p.id) && Array.isArray(p.polaroids);
     }).slice(0, MAXIMO_DE_PAGINAS).map(function (p) {
@@ -161,13 +164,30 @@ function normalizar(bruto) {
           id: q.id,
           foto: q.foto,
           nota: typeof q.nota === "string" ? q.nota.slice(0, 40) : "",
-          x: limitar(typeof q.x === "number" && isFinite(q.x) ? q.x : 0.3, 0, 0.58),
-          y: limitar(typeof q.y === "number" && isFinite(q.y) ? q.y : 0.3, 0, 0.6346),
-          giro: limitar(typeof q.giro === "number" && isFinite(q.giro) ? q.giro : 0, -8, 8)
+          x: limitar(numero(q.x, 0.3), 0, 0.58),
+          y: limitar(numero(q.y, 0.3), 0, 0.6346),
+          giro: limitar(numero(q.giro, 0), -8, 8),
+          fita: limitar(Math.floor(numero(q.fita, 0)), 0, 3)
         };
       });
       restantes -= pols.length;
-      return { id: p.id, polaroids: pols };
+      /* Adesivos: o desenho em si vive em js/adesivos.js; aqui so o nome, o lugar e o tamanho. */
+      var ades = (Array.isArray(p.adesivos) ? p.adesivos : []).filter(function (a) {
+        return a && typeof a === "object" && typeof a.id === "string" && /^[a-z0-9]{1,24}$/.test(a.id) &&
+          typeof a.tipo === "string" && /^[a-z]{2,16}$/.test(a.tipo);
+      }).slice(0, restantesAdesivos).map(function (a) {
+        var tam = limitar(numero(a.tam, 0.22), 0.1, 0.4);
+        return {
+          id: a.id,
+          tipo: a.tipo,
+          x: limitar(numero(a.x, 0.3), 0, 1 - tam),
+          y: limitar(numero(a.y, 0.3), 0, 1 - tam * 0.75),
+          tam: tam,
+          giro: limitar(numero(a.giro, 0), -12, 12)
+        };
+      });
+      restantesAdesivos -= ades.length;
+      return { id: p.id, polaroids: pols, adesivos: ades };
     });
     if (paginas.length > 0) { limpo.album = { paginas: paginas }; }
   }
@@ -251,6 +271,7 @@ if (typeof module !== "undefined" && module.exports) {
     CORES_DO_DESENHO: CORES_DO_DESENHO,
     MAXIMO_DE_FOTOS: MAXIMO_DE_FOTOS,
     MAXIMO_DE_POLAROIDS: MAXIMO_DE_POLAROIDS,
+    MAXIMO_DE_ADESIVOS: MAXIMO_DE_ADESIVOS,
     depositoVazio: depositoVazio,
     normalizar: normalizar,
     criarArmazenamento: criarArmazenamento

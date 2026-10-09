@@ -45,7 +45,7 @@ teste("o álbum tem menu, vive no cartão Fotos e o service worker guarda seus a
   const html = fs.readFileSync("album.html", "utf8");
   const sw = fs.readFileSync("service-worker.js", "utf8");
   assert.ok(html.indexOf('src="js/menu.js"') !== -1);
-  ["album.html", "js/album.js", "js/tela-album.js"].forEach(function (n) {
+  ["album.html", "js/album.js", "js/adesivos.js", "js/tela-album.js"].forEach(function (n) {
     assert.ok(sw.indexOf('"' + n + '"') !== -1, n);
   });
   const fotos = menu.ITENS_DO_MENU.filter(function (i) { return i.arquivo === "fotos.html"; })[0];
