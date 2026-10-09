@@ -8,8 +8,8 @@
   "orientation": "portrait",
   "lang": "pt-BR",
   "dir": "ltr",
-  "background_color": "#F8F9FA",
-  "theme_color": "#F8F9FA",
+  "background_color": "#FAF8F5",
+  "theme_color": "#FAF8F5",
   "icons": [
     {
       "src": "assets/icon.png",

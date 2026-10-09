@@ -18,9 +18,9 @@ function fim(nomeDoTeste) {
 const fs = require("node:fs");
 const menu = require("../js/menu.js");
 
-const telas = ["index", "ancoras", "achar", "escrever", "desenhar", "jogos", "rede", "ajuda"];
+const telas = ["index", "ancoras", "achar", "escrever", "desenhar", "fotos", "jogos", "rede", "ajuda"];
 
-teste("o menu tem as oito telas, sem repetir", function () {
+teste("o menu tem as nove telas, sem repetir", function () {
   const arquivos = menu.ITENS_DO_MENU.map(function (i) { return i.arquivo; });
   assert.deepStrictEqual(arquivos, telas.map(function (t) { return t + ".html"; }));
 });

@@ -13,6 +13,25 @@
       "Agora está: " + nomeDaFonte[ajustes.fonte] + ".";
   }
 
+  function dizerModo() {
+    var mini = armazem.ler().ajustes.modo === "mini";
+    Array.prototype.forEach.call(document.querySelectorAll("[data-modo-escolha]"), function (b) {
+      var esse = b.getAttribute("data-modo-escolha") === "mini";
+      b.setAttribute("aria-pressed", esse === mini ? "true" : "false");
+    });
+    document.getElementById("modo-atual").textContent =
+      "Agora está: " + (mini ? "Mini (Enseadinha)." : "Adulto.");
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-modo-escolha]"), function (b) {
+    b.addEventListener("click", function () {
+      guardarAjuste("modo", b.getAttribute("data-modo-escolha"));
+      dizerModo();
+      var card = document.getElementById("card-mini");
+      if (card) { window.location.reload(); }
+    });
+  });
+
   var botaoTema = document.getElementById("botao-baixo-estimulo");
 
   function dizerTema() {
@@ -63,13 +82,15 @@
       aplicarAjustes();
       dizerEscolhas();
       dizerTema();
+      dizerModo();
       return;
     }
     botaoApagar.setAttribute("data-confirmar", "sim");
     botaoApagar.textContent = "Apagar mesmo";
-    recado.textContent = "Isso apaga as âncoras, o que você escreveu e desenhou, a sua rede, os ajustes e o roteiro. Não dá para desfazer.";
+    recado.textContent = "Isso apaga as âncoras, o que você escreveu e desenhou, as fotos, as respostas do Modo Mini, a sua rede, os ajustes e o roteiro. Não dá para desfazer.";
   });
 
   dizerEscolhas();
   dizerTema();
+  dizerModo();
 }());

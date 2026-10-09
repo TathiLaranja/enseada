@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Desenhar — Enseada</title>
-    <meta name="theme-color" content="#F8F9FA">
+    <meta name="theme-color" content="#FAF8F5">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icones/icone-192.png">
     <link rel="apple-touch-icon" href="icones/icone-192.png">
@@ -26,9 +26,9 @@
 
             <div class="painel-ferramentas">
                 <div class="grupo-paleta" role="group" aria-label="Cores e borracha">
-                    <button type="button" class="botao-cor ativa" data-cor="texto" aria-pressed="true"><span class="amostra" aria-hidden="true"></span>Verde profundo</button>
-                    <button type="button" class="botao-cor" data-cor="destaque" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Azul turquesa</button>
-                    <button type="button" class="botao-cor" data-cor="detalhe" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Verde-água</button>
+                    <button type="button" class="botao-cor ativa" data-cor="texto" aria-pressed="true"><span class="amostra" aria-hidden="true"></span>Grafite quente</button>
+                    <button type="button" class="botao-cor" data-cor="destaque" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Azul de enseada</button>
+                    <button type="button" class="botao-cor" data-cor="detalhe" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Verde de restinga</button>
                     <button type="button" class="botao-cor" data-cor="vermelho" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Vermelho</button>
                     <button type="button" class="botao-cor" data-cor="laranja" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Laranja</button>
                     <button type="button" class="botao-cor" data-cor="amarelo" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Mostarda</button>
@@ -37,7 +37,7 @@
                     <button type="button" class="botao-cor" data-cor="roxo" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Roxo</button>
                     <button type="button" class="botao-cor" data-cor="rosa" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Rosa</button>
                     <button type="button" class="botao-cor" data-cor="marrom" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Marrom</button>
-                    <button type="button" class="botao-cor" data-cor="grafite" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Grafite</button>
+                    <button type="button" class="botao-cor" data-cor="grafite" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Cinza-azulado</button>
                     <button type="button" class="botao-cor" data-cor="sol" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Amarelo sol</button>
                     <button type="button" class="botao-cor" data-cor="laranjapastel" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Laranja pastel</button>
                     <button type="button" class="botao-cor" data-cor="salmao" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Salmão</button>
@@ -48,6 +48,17 @@
                     <button type="button" class="botao-cor" data-cor="borracha" aria-pressed="false"><span class="amostra" aria-hidden="true"></span>Borracha</button>
                 </div>
                 <p class="explica" id="ferramenta-atual" role="status"></p>
+
+                <div class="grupo-espessura" role="group" aria-label="Espessura do traço">
+                    <button type="button" class="botao-espessura" data-largura="fino" aria-pressed="false"><span class="risco risco-fino" aria-hidden="true"></span>Fino</button>
+                    <button type="button" class="botao-espessura ativa" data-largura="medio" aria-pressed="true"><span class="risco risco-medio" aria-hidden="true"></span>Médio</button>
+                    <button type="button" class="botao-espessura" data-largura="grosso" aria-pressed="false"><span class="risco risco-grosso" aria-hidden="true"></span>Grosso</button>
+                </div>
+
+                <div class="grupo-acoes">
+                    <button type="button" id="btn-desfazer" class="botao-secundario" disabled>Desfazer</button>
+                    <button type="button" id="btn-refazer" class="botao-secundario" disabled>Refazer</button>
+                </div>
 
                 <div class="grupo-acoes">
                     <button type="button" id="btn-limpar" class="botao-secundario">Limpar tela</button>

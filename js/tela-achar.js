@@ -9,6 +9,10 @@
   var armazem = criarArmazenamento(window.localStorage);
   var tela = document.getElementById("tela");
 
+  /* No Modo Mini (Enseadinha) quem desenha a tela e js/tela-mini.js; o
+     roteiro dos adultos fica como esta, guardado, esperando. */
+  if (armazem.ler().ajustes.modo === "mini") { return; }
+
   var estado = armazem.ler().roteiro || iniciar();
 
   function salvar() {

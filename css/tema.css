@@ -1,17 +1,20 @@
 /* Enseada - tema
-   Identidade unica, a mesma do icone. Nao existe mais escolha de tema:
-   o app tem um visual so, em qualquer aparelho.
+   Identidade unica, a mesma do icone. Proporcao das cores:
+   - 70% base neutra: Marfim (fundo) e grafite quente (texto);
+   - 25% cores de expressao: Pessego suave, Verde de restinga e Lavanda de
+     neblina, para blocos e ferramentas;
+   -  5% presenca aquatica: Azul de enseada, so em destaque e selecao.
 
-   Leitura e cor sao coisas separadas aqui:
-   - texto corrido e titulo usam o Verde Profundo, que da 5.44:1 sobre o
-     fundo e passa o minimo de 4.5:1 da WCAG AA;
-   - botao, contorno, campo e detalhe usam os tons vibrantes.
+   Contrastes conferidos (WCAG, minimo 4.5:1 para texto, 3:1 para contorno):
+   texto sobre fundo 8.99:1; texto-no-bloco sobre pessego 7.67:1, restinga
+   5.96:1, lavanda 6.48:1 e azul 6.63:1; contorno sobre fundo 3.48:1.
+   O azul de enseada e claro demais para ser contorno (1.8:1): ele so
+   preenche a selecao, que tambem ganha borda grossa e negrito.
 
    Modo Baixo Estimulo: escolha da pessoa na tela de Ajuda, guardada no
-   aparelho. Tom de noite azulado e verde-agua apagado, sem branco puro e sem
-   vermelho. Contrastes conferidos (WCAG, minimo 4.5:1 para texto):
-   texto sobre fundo 9.03:1, texto do botao sobre o botao 6.36:1;
-   contorno e detalhe sobre fundo 5.63:1 e 5.76:1 (minimo 3:1). */
+   aparelho. Mesmo desenho em tom de noite quente, sem branco puro. Texto
+   sobre fundo 11.49:1; texto-no-bloco sobre os blocos 6.06:1 ou mais;
+   contorno sobre fundo 4.62:1. */
 
 @font-face {
   font-family: "Atkinson Hyperlegible";
@@ -30,13 +33,18 @@
 }
 
 :root {
-  --fundo: #F8F9FA;             /* Branco Suave */
-  --texto: #1F7268;             /* Verde Profundo - so leitura. 5.44:1 */
-  --fraco: #1F7268;             /* texto de apoio: mesmo tom, corpo menor */
-  --destaque: #00AEEF;          /* Azul Turquesa - botao e contorno */
-  --detalhe: #2A9D8F;           /* Verde-agua - molduras e detalhes */
-  --texto-no-destaque: #0E3A36; /* sobre o botao azul: 4.95:1 */
-  --linha: #2A9D8F;
+  --fundo: #FAF8F5;             /* Marfim - base de tudo */
+  --texto: #454640;             /* Grafite quente - leitura. 8.99:1 */
+  --fraco: #585951;             /* texto de apoio. 6.69:1 */
+  --contorno: #85867A;          /* linhas e molduras. 3.48:1 */
+  --linha: #85867A;
+  --pessego: #E8B9A8;           /* bloco principal e botao */
+  --restinga: #A5B09A;          /* bloco de apoio */
+  --lavanda: #B8B0C8;           /* bloco de apoio */
+  --destaque: #9EBBC0;          /* Azul de enseada - so destaque e selecao */
+  --detalhe: #A5B09A;           /* mesmo tom da restinga */
+  --texto-no-bloco: #2E2F2A;    /* sobre pessego, restinga, lavanda e azul */
+  --texto-no-destaque: #2E2F2A;
   color-scheme: light;
 
   --escala: 1;
@@ -51,12 +59,17 @@
 
 /* Modo Baixo Estimulo. Troca so as variaveis: nenhuma regra de tela muda. */
 :root[data-tema="baixo"] {
-  --fundo: #1B2328;
-  --texto: #A3CBC4;
-  --fraco: #A3CBC4;
-  --destaque: #5BA7AE;
-  --detalhe: #4FA89C;
-  --texto-no-destaque: #0D1B1E;
-  --linha: #4FA89C;
+  --fundo: #25272B;
+  --texto: #E6E1D8;
+  --fraco: #CFCABF;
+  --contorno: #8E9086;
+  --linha: #8E9086;
+  --pessego: #D9A593;
+  --restinga: #9BA68F;
+  --lavanda: #A9A1BC;
+  --destaque: #7FA3AA;
+  --detalhe: #9BA68F;
+  --texto-no-bloco: #1E1F22;
+  --texto-no-destaque: #1E1F22;
   color-scheme: dark;
 }

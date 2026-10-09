@@ -23,7 +23,7 @@ function aplicarAjustes() {
   }
 
   var barra = document.querySelector('meta[name="theme-color"]');
-  if (barra) { barra.setAttribute("content", baixo ? "#1B2328" : "#F8F9FA"); }
+  if (barra) { barra.setAttribute("content", baixo ? "#25272B" : "#FAF8F5"); }
 }
 
 function guardarAjuste(nome, valor) {

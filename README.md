@@ -56,15 +56,16 @@ que o teste acusa. As quatro últimas provas feitas estão no histórico de comm
 | `desenhar.html` | Desenhar | Traço e borracha num canvas, guardado como traços. |
 | `jogos.html` | Jogos calmos | Memória, sudoku, Tetris Calmo e palavras cruzadas: sem derrota, sem tempo, sem pontos. |
 | `rede.html` | Minha rede | Nome e rótulo de quem apoia, escritos pela pessoa. |
-| `ajuda.html` | Ajuda | O aviso, o CVV 188, Modo Baixo Estímulo, tamanho da letra e os dados. |
+| `fotos.html` | Fotos | Tirar ou escolher fotos; ficam só neste aparelho, reduzidas e sem localização. |
+| `ajuda.html` | Ajuda | O aviso, o CVV 188, Modo de uso (Adulto ou Mini), Modo Baixo Estímulo, tamanho da letra e os dados. |
 
-O menu fixo de baixo é o mesmo em todas as telas e vive em `js/menu.js`.
+O menu fixo de baixo é o mesmo em todas as telas e vive em `js/menu.js`: cards grandes, e o último liga e desliga o Modo Mini (Enseadinha), que troca as perguntas da tela Me ajuda a achar por perguntas curtas, com desenho, para crianças a partir de 3 anos.
 
 ## Os arquivos
 
 ```
 index.html  ancoras.html  achar.html  ajuda.html
-escrever.html  desenhar.html  jogos.html  rede.html
+escrever.html  desenhar.html  fotos.html  jogos.html  rede.html
 manifest.json  service-worker.js
 
 css/tema.css        as três cores, Modo Baixo Estímulo, tamanho da letra
@@ -76,6 +77,10 @@ js/perguntas.js     o texto das perguntas, separado da lógica
 js/armazenamento.js a única porta dos dados (localStorage)
 js/ajustes.js       Modo Baixo Estímulo e tamanho da letra, aplicados antes de desenhar
 js/menu.js          o menu fixo de baixo, igual em todas as telas
+js/fotos.js         regras das fotos: reduzir, teto, só JPEG (funções puras)
+js/mini.js          as perguntas do Modo Mini (funções puras)
+js/paleta.js        as cores do desenho
+js/tela-fotos.js js/tela-mini.js
 js/rede.js          regras da Minha rede (funções puras)
 js/memoria.js       regras do jogo da memória (funções puras)
 js/sudoku.js        gera e confere o sudoku, com dica em vez de erro (funções puras)

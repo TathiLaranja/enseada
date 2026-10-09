@@ -42,8 +42,8 @@ teste("toda cor tem nome escrito (cor nunca vai sozinha)", function () {
 
 teste("cada tom aparece com contraste de 3:1 (suaves: 1.8:1 no claro) sobre o fundo do tema", function () {
   p.PALETA_DESENHO.filter(function (c) { return !c.tema; }).forEach(function (c) {
-    assert.ok(contraste(c.claro, "#F8F9FA") >= (c.suave ? 1.8 : 3), c.nome + " no claro");
-    assert.ok(contraste(c.escuro, "#1B2328") >= 3, c.nome + " no escuro");
+    assert.ok(contraste(c.claro, "#FAF8F5") >= (c.suave ? 1.8 : 3), c.nome + " no claro");
+    assert.ok(contraste(c.escuro, "#25272B") >= 3, c.nome + " no escuro");
   });
 });
 

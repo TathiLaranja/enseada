@@ -42,7 +42,7 @@ promete resultado.
   exceção: as cores de tinta do Desenhar (js/paleta.js), que são da pessoa.
 - Cor nunca carrega significado sozinha: sempre junto com palavra.
 - Sem animação. `prefers-reduced-motion` respeitado e, fora dele, nada anima.
-- Claro e escuro seguindo `prefers-color-scheme`, com troca manual só na Ajuda.
+- Claro e escuro: o Modo Baixo Estímulo liga só por escolha da pessoa (Ajuda).
 - Botões que dizem o que fazem ("Guardar uma âncora", não "Vamos lá").
 - Texto curto, sem metáfora. Nada de "respire e deixe a calma fluir".
 - Atkinson Hyperlegible, tamanho ajustável, servida de dentro do projeto.
@@ -56,15 +56,22 @@ A pesquisa não sustenta quase nenhuma das ideias. O app **nunca** anuncia
 benefício comprovado, em tela nenhuma, nem em loja, nem em divulgação.
 Oferecer, nunca prometer. O ruído, quando entrar, leva aviso de volume.
 
-## Paleta em uso (Maré)
+## Paleta em uso (css/tema.css)
 
-| | Claro | Escuro |
+Proporção: **70% base neutra, 25% cores de expressão, 5% azul de enseada.**
+
+| | Claro | Escuro (Baixo Estímulo) |
 | --- | --- | --- |
-| Fundo | `#F2F0EB` | `#1C2127` |
-| Texto | `#272C33` | `#D9DEE3` |
-| Destaque | `#3F5C6B` | `#8FA8B4` |
+| Fundo (Marfim) | `#FAF8F5` | `#25272B` |
+| Texto (grafite quente) | `#454640` | `#E6E1D8` |
+| Pêssego suave | `#E8B9A8` | `#D9A593` |
+| Verde de restinga | `#A5B09A` | `#9BA68F` |
+| Lavanda de neblina | `#B8B0C8` | `#A9A1BC` |
+| Azul de enseada (destaque e seleção) | `#9EBBC0` | `#7FA3AA` |
 
-`--linha` e `--fraco` não são cores novas: são a cor do texto com transparência.
+O azul é claro demais para contorno (1,8:1): ele só preenche a seleção, que
+também leva borda grossa e negrito. Contorno usa `--contorno` (3:1 ou mais).
+Texto sobre bloco colorido usa `--texto-no-bloco`.
 
 ## Como trabalhar aqui
 
@@ -78,6 +85,20 @@ Oferecer, nunca prometer. O ruído, quando entrar, leva aviso de volume.
    acusa. Teste de tela no navegador quando mexer em tela.
 6. Antes de decidir cor ou aparência, mostrar as opções para a Tathi escolher.
 7. Commit descreve o DEFEITO ou a decisão, não só a mudança.
+
+## Modo Mini (Enseadinha)
+
+Escolha de modo de uso (Adulto ou Mini), na Ajuda e no último card do menu.
+Só a tela Me ajuda a achar muda: perguntas de até 6 palavras, uma por tela, com
+desenho, para crianças a partir de 3 anos. Sem certo e sem errado, sem nota, sem
+sublinhado de ortografia, sem resposta pronta. A criança fala (um adulto escreve),
+escreve do jeito dela ou desenha. O roteiro dos adultos fica como está.
+
+## Fotos
+
+Ficam em `localStorage` pela porta única, reduzidas (lado maior 900 px) e
+regravadas como JPEG, o que apaga a localização. Teto de 12 fotos. Só JPEG em
+data URL é aceito na leitura.
 
 ## O que ainda falta
 

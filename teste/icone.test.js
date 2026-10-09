@@ -23,7 +23,8 @@ const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
 function lerPng(caminho) {
   const b = fs.readFileSync(caminho);
   const largura = b.readUInt32BE(16), altura = b.readUInt32BE(20);
-  assert.strictEqual(b[24], 8); assert.strictEqual(b[25], 6); assert.strictEqual(b[28], 0);
+  assert.strictEqual(b[24], 8); assert.ok(b[25] === 6 || b[25] === 2, "so RGB ou RGBA"); assert.strictEqual(b[28], 0);
+  const bpp = b[25] === 6 ? 4 : 3;
   let pos = 8; const dados = [];
   while (pos < b.length) {
     const tam = b.readUInt32BE(pos), tipo = b.slice(pos + 4, pos + 8).toString();
@@ -31,14 +32,14 @@ function lerPng(caminho) {
     pos += 12 + tam;
   }
   const bruto = zlib.inflateSync(Buffer.concat(dados));
-  const linha = largura * 4, px = Buffer.alloc(linha * altura);
+  const linha = largura * bpp, px = Buffer.alloc(linha * altura);
   for (let y = 0; y < altura; y++) {
     const f = bruto[y * (linha + 1)];
     for (let x = 0; x < linha; x++) {
       const v = bruto[y * (linha + 1) + 1 + x];
-      const a = x >= 4 ? px[y * linha + x - 4] : 0;
+      const a = x >= bpp ? px[y * linha + x - bpp] : 0;
       const c = y > 0 ? px[(y - 1) * linha + x] : 0;
-      const d = (x >= 4 && y > 0) ? px[(y - 1) * linha + x - 4] : 0;
+      const d = (x >= bpp && y > 0) ? px[(y - 1) * linha + x - bpp] : 0;
       let r = v;
       if (f === 1) { r = v + a; }
       else if (f === 2) { r = v + c; }
@@ -51,8 +52,8 @@ function lerPng(caminho) {
     }
   }
   return function (x, y) {
-    const i = (y * largura + x) * 4;
-    return [px[i], px[i + 1], px[i + 2], px[i + 3]];
+    const i = (y * largura + x) * bpp;
+    return [px[i], px[i + 1], px[i + 2], bpp === 4 ? px[i + 3] : 255];
   };
 }
 function hex(r) { return "#" + r.slice(0, 3).map(function (n) { return n.toString(16).padStart(2, "0"); }).join("").toUpperCase(); }
@@ -90,38 +91,29 @@ teste("o PNG tem canal de transparencia (cantos arredondados de verdade)", funct
   assert.strictEqual(b[25], 6, "tipo de cor deveria ser RGBA");
 });
 
-teste("as camadas do desenho: fundo marfim, arco pêssego por baixo, círculo interno marfim igual ao fundo", function () {
+teste("as camadas do icone: fundo pêssego, céu marfim no círculo, morros verdes por baixo", function () {
   const ler = lerPng("assets/icon.png");
   assert.strictEqual(ler(2, 2)[3], 0, "canto deveria ser transparente (arredondado)");
-  assert.strictEqual(hex(ler(512, 8)), "#FAF8F5", "fundo");
-  assert.strictEqual(ler(512, 8)[3], 255);
-  const marfimFundo = hex(ler(60, 512));
-  assert.strictEqual(marfimFundo, "#FAF8F5");
-  assert.strictEqual(hex(ler(512, 165)), "#F6B9A3", "arco pessego no alto");
-  assert.strictEqual(hex(ler(300, 494)), marfimFundo, "circulo interno com a mesma cor do fundo");
-  assert.strictEqual(hex(ler(512, 840)), "#F6B9A3", "faixa pessego por baixo");
-  assert.strictEqual(hex(ler(512, 890)), marfimFundo, "fora do circulo pessego");
+  assert.strictEqual(hex(ler(512, 8)), "#E8B9A8", "fundo pessego");
+  assert.strictEqual(hex(ler(60, 512)), "#E8B9A8", "fundo pessego na lateral");
+  assert.strictEqual(hex(ler(512, 300)), "#FAF8F5", "ceu marfim dentro do circulo");
+  const morro = ler(400, 740);
+  assert.ok(morro[1] > morro[0] && morro[2] > morro[0], "morro deveria ser verde-azulado, foi " + hex(morro));
 });
 
-teste("o circulo marfim NÃO encosta na base: a faixa pêssego é mais grossa embaixo que em cima", function () {
-  const ler = lerPng("assets/icon.png");
-  function faixa(passo, de) {
-    let n = 0;
-    for (let y = de; y > 0 && y < 1024; y += passo) {
-      if (hex(ler(512, y)) === "#F6B9A3") { n++; } else if (n > 0) { break; }
-    }
-    return n;
-  }
-  const alto = faixa(1, 120), baixo = faixa(-1, 900);
-  assert.ok(baixo > 40 && baixo > alto + 15, "alto " + alto + ", baixo " + baixo);
-});
-
-teste("o círculo pêssego ocupa cerca de 70% da largura do ícone", function () {
+teste("o círculo interno ocupa cerca de 55% da largura do ícone, centrado", function () {
   const ler = lerPng("assets/icon.png");
   let esq = -1, dir = -1;
-  for (let x = 0; x < 1024; x++) { if (hex(ler(x, 512)) === "#F6B9A3") { if (esq < 0) { esq = x; } dir = x; } }
+  for (let x = 0; x < 1024; x++) { if (hex(ler(x, 512)) !== "#E8B9A8") { if (esq < 0) { esq = x; } dir = x; } }
   const razao = (dir - esq + 1) / 1024;
-  assert.ok(razao > 0.68 && razao < 0.72, "razao " + razao);
+  assert.ok(razao > 0.53 && razao < 0.57, "razao " + razao);
+  assert.ok(Math.abs((esq + dir) / 2 - 512) < 4, "fora do centro");
+});
+
+teste("o ícone maskable é quadrado cheio, sem cantos transparentes", function () {
+  const ler = lerPng("icones/icone-512-mascara.png");
+  assert.strictEqual(ler(1, 1)[3], 255);
+  assert.strictEqual(hex(ler(1, 1)), "#E8B9A8");
 });
 
 fim("icone");

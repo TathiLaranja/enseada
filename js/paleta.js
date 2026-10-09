@@ -8,9 +8,9 @@
    O desenho guarda so o NOME da cor, nunca o codigo. */
 
 var PALETA_DESENHO = [
-  { nome: "texto", rotulo: "Verde profundo", tema: "--texto" },
-  { nome: "destaque", rotulo: "Azul turquesa", tema: "--destaque" },
-  { nome: "detalhe", rotulo: "Verde-água", tema: "--detalhe" },
+  { nome: "texto", rotulo: "Grafite quente", tema: "--texto" },
+  { nome: "destaque", rotulo: "Azul de enseada", tema: "--destaque" },
+  { nome: "detalhe", rotulo: "Verde de restinga", tema: "--detalhe" },
   { nome: "vermelho", rotulo: "Vermelho", claro: "#C62828", escuro: "#EF7B7B" },
   { nome: "laranja", rotulo: "Laranja", claro: "#D84A00", escuro: "#FFA040" },
   { nome: "amarelo", rotulo: "Mostarda", claro: "#B58900", escuro: "#FFD54F" },
@@ -19,7 +19,7 @@ var PALETA_DESENHO = [
   { nome: "roxo", rotulo: "Roxo", claro: "#7B1FA2", escuro: "#BF8BE0" },
   { nome: "rosa", rotulo: "Rosa", claro: "#D81B60", escuro: "#F58FB5" },
   { nome: "marrom", rotulo: "Marrom", claro: "#6D4C41", escuro: "#C09A86" },
-  { nome: "grafite", rotulo: "Grafite", claro: "#263238", escuro: "#CFD8DC" },
+  { nome: "grafite", rotulo: "Cinza-azulado", claro: "#263238", escuro: "#CFD8DC" },
   { nome: "sol", rotulo: "Amarelo sol", claro: "#E5B200", escuro: "#FFE066", suave: true },
   { nome: "laranjapastel", rotulo: "Laranja pastel", claro: "#F0955A", escuro: "#FFC299", suave: true },
   { nome: "salmao", rotulo: "Salmão", claro: "#E8837A", escuro: "#FFA8A0", suave: true },

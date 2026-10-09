@@ -6,6 +6,9 @@
 
 var CHAVE = "enseada.v1";
 
+/* Teto de fotos: o localStorage do aparelho e pequeno e e dividido com o resto. */
+var MAXIMO_DE_FOTOS = 12;
+
 /* O app ja se chamou Pouso. Esta chave antiga so e LIDA, uma unica vez, para
    trazer o que a pessoa escreveu antes da troca de nome. Nunca e gravada. */
 var CHAVE_ANTIGA = "pouso.v1";
@@ -20,7 +23,9 @@ function depositoVazio() {
   return {
     versao: 1,
     ancoras: [],
-    ajustes: { fonte: "normal", tema: "claro", boasVindasVistas: false },
+    ajustes: { fonte: "normal", tema: "claro", boasVindasVistas: false, modo: "adulto" },
+    fotos: [],
+    mini: {},
     rascunho: null,
     roteiro: null,
     escrita: "",
@@ -59,6 +64,8 @@ function normalizar(bruto) {
     limpo.ajustes.tema = bruto.ajustes.tema === "baixo" ? "baixo" : "claro";
     /* Só "já fechou a mensagem de boas-vindas": sem data, sem contagem. */
     limpo.ajustes.boasVindasVistas = bruto.ajustes.boasVindasVistas === true;
+    /* Modo de uso: adulto (padrao) ou mini (Enseadinha, para criancas). */
+    limpo.ajustes.modo = bruto.ajustes.modo === "mini" ? "mini" : "adulto";
   }
 
   if (bruto.rascunho && typeof bruto.rascunho === "object") {
@@ -100,6 +107,7 @@ function normalizar(bruto) {
       return {
         apagar: t.apagar === true,
         cor: CORES_DO_DESENHO.indexOf(t.cor) !== -1 ? t.cor : "texto",
+        largura: (t.largura === "fino" || t.largura === "grosso") ? t.largura : "medio",
         pontos: t.pontos.filter(function (p) {
           return Array.isArray(p) && typeof p[0] === "number" && typeof p[1] === "number" &&
             isFinite(p[0]) && isFinite(p[1]);
@@ -120,6 +128,24 @@ function normalizar(bruto) {
         nome: c.nome,
         rotulo: typeof c.rotulo === "string" ? c.rotulo : ""
       };
+    });
+  }
+
+  /* Fotos guardadas so neste aparelho. So entra imagem JPEG em data URL:
+     qualquer outra coisa (outro tipo, endereco, script) e jogada fora. */
+  if (Array.isArray(bruto.fotos)) {
+    limpo.fotos = bruto.fotos.filter(function (f) {
+      return f && typeof f === "object" && typeof f.id === "string" &&
+        typeof f.dados === "string" && /^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(f.dados);
+    }).slice(0, MAXIMO_DE_FOTOS).map(function (f) { return { id: f.id, dados: f.dados }; });
+  }
+
+  /* Modo Mini: o que a crianca disse, por pergunta. Sem nota e sem certo ou errado. */
+  if (bruto.mini && typeof bruto.mini === "object" && !Array.isArray(bruto.mini)) {
+    Object.keys(bruto.mini).forEach(function (k) {
+      if (/^[a-z0-9-]{1,24}$/.test(k) && typeof bruto.mini[k] === "string") {
+        limpo.mini[k] = bruto.mini[k].slice(0, 2000);
+      }
     });
   }
 
@@ -191,6 +217,7 @@ if (typeof module !== "undefined" && module.exports) {
     CHAVE: CHAVE,
     CHAVE_ANTIGA: CHAVE_ANTIGA,
     CORES_DO_DESENHO: CORES_DO_DESENHO,
+    MAXIMO_DE_FOTOS: MAXIMO_DE_FOTOS,
     depositoVazio: depositoVazio,
     normalizar: normalizar,
     criarArmazenamento: criarArmazenamento

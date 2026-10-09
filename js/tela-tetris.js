@@ -21,11 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function desenhar() {
         const lado = canvas.width / TETRIS_LARGURA;
-        ctx.fillStyle = cor('--fundo') || '#F8F9FA';
+        ctx.fillStyle = cor('--fundo') || '#FAF8F5';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         if (!jogo) return;
 
-        ctx.fillStyle = cor('--detalhe') || '#2A9D8F';
+        ctx.fillStyle = cor('--detalhe') || '#A5B09A';
         jogo.celulas.forEach((linha, r) => {
             linha.forEach((v, c) => {
                 if (v) ctx.fillRect(c * lado + 1, r * lado + 1, lado - 2, lado - 2);
@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const p = jogo.peca;
-        ctx.fillStyle = cor('--destaque') || '#00AEEF';
-        ctx.strokeStyle = cor('--texto') || '#1F7268';
+        ctx.fillStyle = cor('--destaque') || '#9EBBC0';
+        ctx.strokeStyle = cor('--texto') || '#454640';
         ctx.lineWidth = 3;
         p.forma.forEach(q => {
             const x = (p.coluna + q[1]) * lado;

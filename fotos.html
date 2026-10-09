@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fotos — Enseada</title>
+<meta name="theme-color" content="#FAF8F5">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icones/icone-192.png">
+<link rel="apple-touch-icon" href="icones/icone-192.png">
+<link rel="stylesheet" href="css/tema.css">
+<link rel="stylesheet" href="css/base.css">
+<script src="js/ancoras.js"></script>
+<script src="js/armazenamento.js"></script>
+<script src="js/ajustes.js"></script>
+<script src="js/fotos.js"></script>
+</head>
+<body>
+<main class="pagina">
+
+  <div class="topo">
+    <h1>Fotos</h1>
+  </div>
+
+  <p class="explica">As fotos ficam só neste aparelho. Cada uma é reduzida e a localização dela é apagada. Nada é enviado para lugar nenhum.</p>
+
+  <button type="button" class="botao" id="botao-camera">Tirar uma foto</button>
+  <button type="button" class="botao-simples" id="botao-galeria">Escolher fotos do aparelho</button>
+  <input type="file" id="entrada-camera" accept="image/*" capture="environment" hidden>
+  <input type="file" id="entrada-galeria" accept="image/*" multiple hidden>
+
+  <p class="explica" id="recado-fotos" role="status"></p>
+
+  <h2>Fotos guardadas</h2>
+  <div id="lista-fotos" class="grade-fotos"></div>
+
+</main>
+<script src="js/tela-fotos.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/registra-sw.js"></script>
+</body>
+</html>

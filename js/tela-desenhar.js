@@ -10,8 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
 
     const LIMITE_DE_PONTOS = 20000;
-    const LARGURA_TRACO = 4;
-    const LARGURA_BORRACHA = 26;
+    /* Tres espessuras, em pixels de tela. A borracha e mais larga que o traco. */
+    const LARGURA_TRACO = { fino: 2.5, medio: 5, grosso: 10 };
+    const LARGURA_BORRACHA = { fino: 14, medio: 28, grosso: 48 };
+    const NOME_DA_LARGURA = { fino: 'fino', medio: 'médio', grosso: 'grosso' };
     const NOME_DA_FERRAMENTA = { borracha: 'Borracha' };
     PALETA_DESENHO.forEach(c => { NOME_DA_FERRAMENTA[c.nome] = c.rotulo; });
 
@@ -23,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let tracos = armazem.ler().desenho;
     let ferramenta = 'texto';
+    let largura = 'medio';
+    let refeitos = [];
     let atual = null;
 
     function totalDePontos() {
@@ -34,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function lerVariavel(nome) {
-        return getComputedStyle(document.documentElement).getPropertyValue(nome).trim() || '#1F7268';
+        return getComputedStyle(document.documentElement).getPropertyValue(nome).trim() || '#454640';
     }
 
     function corDoTema(nome) {
@@ -53,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cor = corDoTema(t.cor);
         ctx.globalCompositeOperation = t.apagar ? 'destination-out' : 'source-over';
         ctx.strokeStyle = cor;
-        ctx.lineWidth = (t.apagar ? LARGURA_BORRACHA : LARGURA_TRACO) * escala;
+        ctx.lineWidth = (t.apagar ? LARGURA_BORRACHA : LARGURA_TRACO)[t.largura || 'medio'] * escala;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
@@ -112,9 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
         atual = {
             apagar: ferramenta === 'borracha',
             cor: ferramenta === 'borracha' ? 'texto' : ferramenta,
+            largura: largura,
             pontos: [ponto(evento)]
         };
         tracos.push(atual);
+        refeitos = [];
         desenharTraco(atual);
         desfazerConfirmacao();
     });
@@ -129,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!atual) return;
         atual = null;
         guardar();
+        atualizarDesfazer();
     }
     canvas.addEventListener('pointerup', soltar);
     canvas.addEventListener('pointercancel', soltar);
@@ -140,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             b.setAttribute('aria-pressed', ligada ? 'true' : 'false');
         });
         document.getElementById('ferramenta-atual').textContent =
-            'Agora está: ' + NOME_DA_FERRAMENTA[ferramenta] + '.';
+            'Agora está: ' + NOME_DA_FERRAMENTA[ferramenta] + ', traço ' + NOME_DA_LARGURA[largura] + '.';
     }
 
     botoesCor.forEach(botao => {
@@ -158,6 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btnLimpar.addEventListener('click', () => {
         if (btnLimpar.getAttribute('data-confirmar') === 'sim') {
             tracos = [];
+            refeitos = [];
+            atualizarDesfazer();
             const dados = armazem.ler();
             dados.desenho = [];
             armazem.gravar(dados);
@@ -169,6 +178,54 @@ document.addEventListener('DOMContentLoaded', () => {
         btnLimpar.setAttribute('data-confirmar', 'sim');
         btnLimpar.textContent = 'Limpar mesmo';
         recado.textContent = 'Isso apaga o desenho inteiro. Não dá para desfazer.';
+    });
+
+    /* Espessura do traco: tres opcoes, cada uma com o nome escrito. */
+    const botoesLargura = document.querySelectorAll('.botao-espessura');
+    botoesLargura.forEach(b => {
+        b.addEventListener('click', () => {
+            largura = b.getAttribute('data-largura');
+            botoesLargura.forEach(o => {
+                const ligada = o === b;
+                o.classList.toggle('ativa', ligada);
+                o.setAttribute('aria-pressed', ligada ? 'true' : 'false');
+            });
+            document.getElementById('ferramenta-atual').textContent =
+                'Agora está: ' + NOME_DA_FERRAMENTA[ferramenta] + ', traço ' + NOME_DA_LARGURA[largura] + '.';
+        });
+    });
+
+    /* Desfazer e refazer: tiram e devolvem o ultimo traco (ou borracha). */
+    const btnDesfazer = document.getElementById('btn-desfazer');
+    const btnRefazer = document.getElementById('btn-refazer');
+
+    function atualizarDesfazer() {
+        btnDesfazer.disabled = tracos.length === 0;
+        btnRefazer.disabled = refeitos.length === 0;
+    }
+
+    function guardarSemRecado() {
+        const dados = armazem.ler();
+        dados.desenho = tracos;
+        armazem.gravar(dados);
+    }
+
+    btnDesfazer.addEventListener('click', () => {
+        if (tracos.length === 0) return;
+        refeitos.push(tracos.pop());
+        redesenhar();
+        guardarSemRecado();
+        recado.textContent = 'Desfeito.';
+        atualizarDesfazer();
+    });
+
+    btnRefazer.addEventListener('click', () => {
+        if (refeitos.length === 0) return;
+        tracos.push(refeitos.pop());
+        redesenhar();
+        guardarSemRecado();
+        recado.textContent = 'Refeito.';
+        atualizarDesfazer();
     });
 
     btnSalvar.addEventListener('click', guardar);
@@ -186,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         folha.width = canvas.width;
         folha.height = canvas.height;
         const c2 = folha.getContext('2d');
-        c2.fillStyle = lerVariavel('--fundo') || '#F8F9FA';
+        c2.fillStyle = lerVariavel('--fundo') || '#FAF8F5';
         c2.fillRect(0, 0, folha.width, folha.height);
         c2.drawImage(canvas, 0, 0);
         return new Promise(resolve => folha.toBlob(resolve, 'image/png'));
@@ -234,5 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('resize', ajustarTamanho);
     dizerFerramenta();
+    atualizarDesfazer();
     ajustarTamanho();
 });

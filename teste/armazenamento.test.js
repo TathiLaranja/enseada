@@ -49,7 +49,7 @@ teste("aparelho novo começa com a letra normal", function () {
 teste("o tema escuro antigo não vale: só o Modo Baixo Estímulo liga o tema", function () {
   const bruto = JSON.stringify({ ajustes: { tema: "escuro", fonte: "normal" } });
   const ajustes = g.criarArmazenamento(depositoFalso({ "enseada.v1": bruto })).ler().ajustes;
-  assert.deepStrictEqual(Object.keys(ajustes).sort(), ["boasVindasVistas", "fonte", "tema"]);
+  assert.deepStrictEqual(Object.keys(ajustes).sort(), ["boasVindasVistas", "fonte", "modo", "tema"]);
   assert.strictEqual(ajustes.tema, "claro");
 });
 
@@ -171,6 +171,36 @@ teste("boas-vindas: começa por mostrar, guarda só sim ou não, e valor estranh
   armazem.mudar(function (d) { d.ajustes.boasVindasVistas = true; return d; });
   assert.strictEqual(armazem.ler().ajustes.boasVindasVistas, true);
   assert.strictEqual(g.normalizar({ ajustes: { boasVindasVistas: "sim" } }).ajustes.boasVindasVistas, false);
+});
+
+teste("modo de uso: começa adulto, guarda mini, e valor estranho volta para adulto", function () {
+  const armazem = g.criarArmazenamento(depositoFalso());
+  assert.strictEqual(armazem.ler().ajustes.modo, "adulto");
+  armazem.mudar(function (d) { d.ajustes.modo = "mini"; return d; });
+  assert.strictEqual(armazem.ler().ajustes.modo, "mini");
+  assert.strictEqual(g.normalizar({ ajustes: { modo: "crianca" } }).ajustes.modo, "adulto");
+});
+
+teste("fotos: só JPEG em data URL entra; endereço, script e SVG são jogados fora; teto de 12", function () {
+  const boa = "data:image/jpeg;base64,/9j/4AAQ";
+  const lista = [];
+  for (let i = 0; i < 15; i++) { lista.push({ id: "f" + i, dados: boa }); }
+  lista.push({ id: "x", dados: "javascript:alert(1)" }, { id: "y", dados: "data:image/svg+xml;base64,AAAA" }, { id: "z", dados: "https://exemplo.com/a.jpg" });
+  const n = g.normalizar({ fotos: lista });
+  assert.strictEqual(n.fotos.length, g.MAXIMO_DE_FOTOS);
+  assert.ok(n.fotos.every(function (f) { return f.dados === boa; }));
+  assert.strictEqual(g.normalizar({ fotos: [{ id: "y", dados: "javascript:alert(1)" }] }).fotos.length, 0);
+});
+
+teste("mini: guarda só texto, com chave simples, e limita o tamanho", function () {
+  const n = g.normalizar({ mini: { brincar: "bola", "chave ruim!": "x", rir: 5, longa: "a".repeat(5000) } });
+  assert.deepStrictEqual(Object.keys(n.mini).sort(), ["brincar", "longa"]);
+  assert.strictEqual(n.mini.longa.length, 2000);
+});
+
+teste("traço guarda a espessura; valor desconhecido vira médio", function () {
+  const n = g.normalizar({ desenho: [{ largura: "fino", pontos: [[0, 0]] }, { largura: "enorme", pontos: [[0, 0]] }, { pontos: [[0, 0]] }] });
+  assert.deepStrictEqual(n.desenho.map(function (t) { return t.largura; }), ["fino", "medio", "medio"]);
 });
 
 teste("tema desconhecido volta para o claro", function () {

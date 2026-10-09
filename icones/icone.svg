@@ -1,14 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="Enseada">
-  <rect width="1024" height="1024" rx="230" fill="#FAF8F5"/>
-  <circle cx="512" cy="512" r="358.4" fill="#F6B9A3"/>
-  <circle cx="512" cy="494" r="316" fill="#FAF8F5"/>
-  <g id="planta" transform="translate(-41.3 -201.5) scale(1.12)">
-  <path d="M512,812 C508,740 528,660 548,596 C560,556 566,500 560,430" fill="none" stroke="#9DB17C" stroke-width="13" stroke-linecap="round"/>
-  <path d="M520,640 Q482.4,532.6 372,505 Q409.6,612.4 520,640 Z" fill="#9DB17C"/>
-  <path d="M520,640 Q439.3,579.9 372,505" fill="none" stroke="#7C9360" stroke-width="4" stroke-linecap="round"/>
-  <path d="M540,560 Q614.0,534.0 640,460 Q566.0,486.0 540,560 Z" fill="#9DB17C"/>
-  <path d="M540,560 Q585.0,505.0 640,460" fill="none" stroke="#7C9360" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M372,522 C387,546 396,560 396,572 A24,24 0 1 1 348,572 C348,560 357,546 372,522 Z" fill="#A9A1BD"/>
-  <ellipse cx="364" cy="566" rx="5" ry="9" fill="#FAF8F5" opacity="0.55"/>
+  <defs><clipPath id="c"><circle cx="512" cy="512" r="282"/></clipPath></defs>
+  <rect width="1024" height="1024" rx="230" fill="#E8B9A8"/>
+  <circle cx="512" cy="512" r="282" fill="#FAF8F5"/>
+  <g clip-path="url(#c)">
+    <path d="M220,392 C348.48,366 418.56,410 512,386.4 S698.88,414 804,405 V804 H220 Z" fill="#E2EEEE"/>
+    <path d="M220,428 C348.48,442 418.56,406 512,436 S698.88,416 804,421 V804 H220 Z" fill="#CDE1E1"/>
+    <path d="M220,466 C348.48,446 418.56,490 512,458.8 S698.88,482 804,476 V804 H220 Z" fill="#B6D2D1"/>
+    <path d="M220,512 C348.48,534 418.56,496 512,521.6 S698.88,492 804,501 V804 H220 Z" fill="#9CC2BF"/>
+    <path d="M220,566 C348.48,548 418.56,588 512,556.4 S698.88,584 804,575 V804 H220 Z" fill="#7FB0AA"/>
+    <path d="M220,628 C348.48,648 418.56,604 512,634.4 S698.88,606 804,618 V804 H220 Z" fill="#66998F"/>
+    <path d="M220,700 C348.48,678 418.56,718 512,693.6 S698.88,724 804,711 V804 H220 Z" fill="#4F8479"/>
+    <path d="M462,800 Q470,640 588,466" fill="none" stroke="#2F6B62" stroke-width="7" stroke-linecap="round"/><path d="M480.2,689.6 L458.1,644.0" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M480.2,689.6 L522.4,661.8" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M496.9,638.2 L480.6,595.2" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M496.9,638.2 L537.4,616.4" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M518.9,586.1 L507.4,546.3" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M518.9,586.1 L556.8,569.5" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M546.2,533.3 L538.6,497.3" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M546.2,533.3 L580.9,521.1" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M578.7,479.9 L574.2,448.0" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M578.7,479.9 L609.8,471.3" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M588.0,466.0 L606.1,439.4" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/>
+    <path d="M516,800 Q522,700 606,586" fill="none" stroke="#2F6B62" stroke-width="7" stroke-linecap="round"/><path d="M529.1,730.4 L512.1,692.2" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M529.1,730.4 L564.7,708.5" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M545.9,686.5 L535.1,651.0" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M545.9,686.5 L579.6,671.2" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M569.3,641.4 L563.2,609.7" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M569.3,641.4 L600.0,631.2" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M599.4,595.1 L596.6,567.7" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M599.4,595.1 L626.2,588.8" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/><path d="M606.0,586.0 L621.8,564.6" stroke="#2F6B62" stroke-width="6" stroke-linecap="round"/>
   </g>
 </svg>
