@@ -123,18 +123,55 @@ a { color: var(--texto); }
 }
 
 /* Menu fixo de baixo: cards grandes, cinco por fileira, dois toques de altura. */
-.menu-rodape {
+.menu-envoltorio {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.menu-rodape {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
   background: var(--fundo);
   border-top: 2px solid var(--contorno);
   padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
-  z-index: 10;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: transform 240ms ease !important;
+}
+
+.menu-alternar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 44px;
+  height: 36px;
+  padding: 0;
+  transform: translate(-50%, -100%);
+  border: 2px solid var(--contorno);
+  border-bottom: 0;
+  border-radius: var(--raio) var(--raio) 0 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.menu-envoltorio.recolhido .menu-rodape {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+body.menu-recolhido .pagina {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
 
 .card-menu {
@@ -308,6 +345,7 @@ textarea {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .menu-rodape { transition: none !important; }
 }
 
 [hidden] { display: none !important; }
@@ -702,8 +740,11 @@ textarea {
 .abertura-lista { margin: 0 0 24px; padding-left: 20px; }
 .abertura-lista li { margin-bottom: 10px; }
 
-body.com-abertura .menu-rodape { display: none; }
+body.com-abertura .menu-envoltorio { display: none; }
 body.com-abertura .pagina {
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+}
+body.com-abertura.menu-recolhido .pagina {
   padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 }
 

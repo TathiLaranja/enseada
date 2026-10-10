@@ -14,6 +14,9 @@
   var recado = document.getElementById("recado-album");
   var btnFrente = document.getElementById("trazer-frente");
   var btnTirar = document.getElementById("tirar-polaroid");
+  var btnInclinarEsquerda = document.getElementById("inclinar-esquerda");
+  var btnInclinarDireita = document.getElementById("inclinar-direita");
+  var btnEndireitar = document.getElementById("endireitar-polaroid");
   var btnMenor = document.getElementById("adesivo-menor");
   var btnMaior = document.getElementById("adesivo-maior");
 
@@ -90,6 +93,9 @@
     var achado = id ? albumBuscar(paginaAtual(), id) : null;
     btnFrente.disabled = !achado;
     btnTirar.disabled = !achado;
+    btnInclinarEsquerda.disabled = !achado || achado.tipo !== "polaroid";
+    btnInclinarDireita.disabled = !achado || achado.tipo !== "polaroid";
+    btnEndireitar.disabled = !achado || achado.tipo !== "polaroid";
     btnMenor.disabled = !achado || achado.tipo !== "adesivo";
     btnMaior.disabled = !achado || achado.tipo !== "adesivo";
     Array.prototype.forEach.call(mural.children, function (c) {
@@ -260,6 +266,23 @@
     escolhida = null;
     guardar();
     recado.textContent = "Foi tirado da página.";
+    desenhar();
+  });
+
+  function inclinarPolaroid(sentido) {
+    if (!escolhida) { return; }
+    var polaroid = buscar(escolhida);
+    if (!polaroid) { return; }
+    album = albumGirarPolaroid(album, paginaId, escolhida, polaroid.giro + sentido * 2);
+    if (!guardar()) { dizerFalha(); }
+    desenhar();
+  }
+  btnInclinarEsquerda.addEventListener("click", function () { inclinarPolaroid(-1); });
+  btnInclinarDireita.addEventListener("click", function () { inclinarPolaroid(1); });
+  btnEndireitar.addEventListener("click", function () {
+    if (!escolhida || !buscar(escolhida)) { return; }
+    album = albumGirarPolaroid(album, paginaId, escolhida, 0);
+    if (!guardar()) { dizerFalha(); }
     desenhar();
   });
 

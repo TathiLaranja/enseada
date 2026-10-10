@@ -46,9 +46,30 @@ function desenharIcone(caminho) {
 
 function montarMenu(caminho) {
   var atual = arquivoDaTela(caminho);
+  var envoltorio = document.createElement("div");
+  envoltorio.className = "menu-envoltorio";
+
+  var alternar = document.createElement("button");
+  alternar.type = "button";
+  alternar.className = "menu-alternar";
+  alternar.setAttribute("aria-expanded", "true");
+
   var nav = document.createElement("nav");
   nav.className = "menu-rodape";
   nav.setAttribute("aria-label", "Telas do Enseada");
+
+  function atualizarBotao(recolhido) {
+    alternar.textContent = recolhido ? "⌃" : "⌄";
+    alternar.setAttribute("aria-label", recolhido ? "Mostrar navegação" : "Recolher navegação");
+    alternar.setAttribute("aria-expanded", recolhido ? "false" : "true");
+    nav.inert = recolhido;
+    envoltorio.classList.toggle("recolhido", recolhido);
+    document.body.classList.toggle("menu-recolhido", recolhido);
+  }
+
+  alternar.addEventListener("click", function () {
+    atualizarBotao(!envoltorio.classList.contains("recolhido"));
+  });
 
   ITENS_DO_MENU.forEach(function (item) {
     var link = document.createElement("a");
@@ -66,7 +87,10 @@ function montarMenu(caminho) {
   });
 
   nav.appendChild(montarCardMini(atual));
-  document.body.appendChild(nav);
+  envoltorio.appendChild(alternar);
+  envoltorio.appendChild(nav);
+  document.body.appendChild(envoltorio);
+  atualizarBotao(false);
 }
 
 function montarCardMini(atual) {

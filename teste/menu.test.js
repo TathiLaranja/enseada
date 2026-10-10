@@ -31,6 +31,19 @@ teste("caminho vazio ou barra final é a tela Agora", function () {
   assert.strictEqual(menu.arquivoDaTela("/enseada/rede.html"), "rede.html");
 });
 
+teste("o menu pode ser recolhido sem bloquear a tela e respeita movimento reduzido", function () {
+  const js = fs.readFileSync("js/menu.js", "utf8");
+  const css = fs.readFileSync("css/base.css", "utf8");
+  assert.ok(js.indexOf('className = "menu-envoltorio"') !== -1);
+  assert.ok(js.indexOf('className = "menu-alternar"') !== -1);
+  assert.ok(js.indexOf('nav.inert = recolhido') !== -1);
+  assert.ok(js.indexOf('"Mostrar navegação"') !== -1);
+  assert.ok(css.indexOf(".menu-envoltorio.recolhido .menu-rodape") !== -1);
+  assert.ok(css.indexOf("pointer-events: none") !== -1);
+  assert.ok(css.indexOf("transition: transform 240ms ease") !== -1);
+  assert.ok(css.indexOf("@media (prefers-reduced-motion: reduce)") !== -1);
+});
+
 teste("toda tela existe, carrega o menu e o service worker guarda o arquivo", function () {
   const sw = fs.readFileSync("service-worker.js", "utf8");
   telas.forEach(function (t) {

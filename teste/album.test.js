@@ -61,6 +61,18 @@ teste("mover leva a polaroid ao lugar pedido e nunca a deixa sair da página", f
   assert.ok(Math.abs(al.paginas[0].polaroids[0].y - (1 - a.POLAROID_ALTURA)) < 1e-9);
 });
 
+teste("a inclinação das polaroides pode ser ajustada e fica limitada a oito graus", function () {
+  let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
+  al = a.albumGirarPolaroid(al, "p0", "q1", 4);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, 4);
+  al = a.albumGirarPolaroid(al, "p0", "q1", 20);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, 8);
+  al = a.albumGirarPolaroid(al, "p0", "q1", -20);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, -8);
+  al = a.albumGirarPolaroid(al, "p0", "q1", 0);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, 0);
+});
+
 teste("a anotação é opcional e tem tamanho máximo", function () {
   let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
   al = a.albumAnotar(al, "p0", "q1", "praia com a vovó");
