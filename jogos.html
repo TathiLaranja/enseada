@@ -14,6 +14,8 @@
     <script src="js/armazenamento.js"></script>
     <script src="js/ajustes.js"></script>
     <script src="js/memoria.js"></script>
+    <script src="js/fichas.js"></script>
+    <script src="js/quebracabeca.js"></script>
     <script src="js/sudoku.js"></script>
     <script src="js/tetris.js"></script>
     <script src="js/cruzadas.js"></script>
@@ -26,22 +28,41 @@
 
     <main class="conteudo-principal">
         <nav class="abas-jogos" role="tablist" aria-label="Seleção de Jogos Calmos">
-            <button type="button" role="tab" aria-selected="true" aria-controls="painel-memoria" id="aba-memoria" class="botao-aba ativa">Memória</button>
+            <button type="button" role="tab" aria-selected="true" aria-controls="painel-memoria" id="aba-memoria" class="botao-aba ativa">Pequenos Tesouros</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="painel-quebra" id="aba-quebra" class="botao-aba">Cantinho Tranquilo</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-sudoku" id="aba-sudoku" class="botao-aba">Sudoku</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-tetris" id="aba-tetris" class="botao-aba">Tetris Calmo</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-palavras" id="aba-palavras" class="botao-aba">Palavras Cruzadas</button>
         </nav>
 
         <section class="container-painel-jogos">
-            <!-- Painel Memória -->
+            <!-- Painel Memória: Pequenos Tesouros -->
             <div id="painel-memoria" role="tabpanel" aria-labelledby="aba-memoria" class="painel-jogo ativo">
                 <div class="cabecalho-jogo">
-                    <h2>Jogo da Memória</h2>
-                    <p class="instrucao-suave">Encontre os pares com calma, sem contagem regressiva. Não tem tempo, não tem pontos e não tem como perder.</p>
+                    <h2>Pequenos Tesouros</h2>
+                    <p class="instrucao-suave">Vire duas fichas. Se forem iguais, ficam abertas. Não tem tempo, não tem pontos e não tem como perder. Cada partida usa fichas de uma coleção só.</p>
                 </div>
-                <div id="grid-memoria" class="grid-memoria cartas"></div>
+                <div class="botao-fileira" id="temas-memoria" role="group" aria-label="Coleção de fichas"></div>
+                <p class="explica" id="tema-atual-memoria" role="status"></p>
+                <div id="grid-memoria" class="grid-memoria fichas"></div>
                 <p id="recado-memoria" role="status"></p>
-                <button type="button" id="reiniciar-memoria" class="botao-secundario">Recomeçar Memória</button>
+                <button type="button" id="reiniciar-memoria" class="botao-secundario">Recomeçar com outras fichas</button>
+            </div>
+
+            <!-- Painel Quebra-cabeça: Cantinho Tranquilo -->
+            <div id="painel-quebra" role="tabpanel" aria-labelledby="aba-quebra" class="painel-jogo oculto" hidden>
+                <div class="cabecalho-jogo">
+                    <h2>Cantinho Tranquilo</h2>
+                    <p class="instrucao-suave">Arraste cada peça até o lugar dela no quadro. Perto do lugar certo, ela encaixa sozinha. Não tem tempo, não tem pontos e não tem como errar: a peça só fica onde você soltar.</p>
+                </div>
+                <div class="botao-fileira" id="imagens-quebra" role="group" aria-label="Imagem do quebra-cabeça"></div>
+                <p class="explica" id="imagem-atual-quebra" role="status"></p>
+                <div class="botao-fileira" id="niveis-quebra" role="group" aria-label="Nível do quebra-cabeça"></div>
+                <p class="explica" id="nivel-atual-quebra" role="status"></p>
+                <div class="mesa-quebra" id="mesa-quebra" role="group" aria-label="Mesa do quebra-cabeça"></div>
+                <p id="recado-quebra" role="status"></p>
+                <button type="button" id="ajuda-quebra" class="botao-secundario">Encaixar uma peça por mim</button>
+                <button type="button" id="reiniciar-quebra" class="botao-secundario">Recomeçar</button>
             </div>
 
             <!-- Painel Sudoku -->
@@ -93,6 +114,7 @@
     </main>
 
     <script src="js/tela-jogos.js"></script>
+    <script src="js/tela-quebracabeca.js"></script>
     <script src="js/tela-sudoku.js"></script>
     <script src="js/tela-tetris.js"></script>
     <script src="js/tela-cruzadas.js"></script>

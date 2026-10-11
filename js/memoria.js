@@ -18,8 +18,15 @@ function embaralhar(lista, sorteio) {
   return copia;
 }
 
-function novoJogo(sorteio) {
-  var pares = PALAVRAS_DO_JOGO.concat(PALAVRAS_DO_JOGO);
+/* Sorteia `quantidade` itens da lista, sem repetir e sem mexer na lista original. */
+function sortearItens(lista, quantidade, sorteio) {
+  return embaralhar(lista, sorteio).slice(0, Math.min(quantidade, lista.length));
+}
+
+/* `itens` sao os pares do jogo (cada um vira duas cartas). Sem eles, usa as palavras. */
+function novoJogo(sorteio, itens) {
+  var base = itens || PALAVRAS_DO_JOGO;
+  var pares = base.concat(base);
   return {
     cartas: embaralhar(pares, sorteio),
     achadas: [],
@@ -57,6 +64,7 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     PALAVRAS_DO_JOGO: PALAVRAS_DO_JOGO,
     embaralhar: embaralhar,
+    sortearItens: sortearItens,
     novoJogo: novoJogo,
     tocar: tocar,
     terminou: terminou

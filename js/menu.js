@@ -5,8 +5,12 @@
    nunca e a unica pista.
 
    O ultimo card nao leva a lugar nenhum: liga e desliga o Modo Mini
-   (Enseadinha). Ele diz o estado em palavra ("ligado" / "desligado") e usa
-   aria-pressed. */
+   (Enseadinha). Usa aria-pressed e sempre diz "Versao Mini" -- o estado aparece
+   pela cor (azul = ligado) e pelo aria-pressed.
+
+   Acima da barra ha um botao minusculo (▼/▲) que recolhe e expande a barra.
+   O estado fica em localStorage["menu-oculto"]. Quando a barra esta oculta
+   (translateY 100%) o botao desce junto (bottom 0) para a pessoa poder tapa-lo. */
 
 var ITENS_DO_MENU = [
   { arquivo: "index.html", texto: "Agora", nome: "Agora", icone: "M4 11 L12 4 L20 11 V20 H4 Z" },
@@ -19,6 +23,9 @@ var ITENS_DO_MENU = [
   { arquivo: "rede.html", texto: "Rede", nome: "Minha rede", icone: "M8 7 A3 3 0 1 0 8 13 A3 3 0 1 0 8 7 M16 9 A2.5 2.5 0 1 0 16 14 A2.5 2.5 0 1 0 16 9 M3 20 C3 16 5 15 8 15 C11 15 13 16 13 20 M14 20 C14 17.5 15 17 16 17 C18 17 19 18 20 20" },
   { arquivo: "ajuda.html", texto: "Ajuda", nome: "Ajuda", icone: "M4 7 H20 M4 12 H20 M4 17 H20 M9 5 V9 M15 10 V14 M8 15 V19" }
 ];
+
+/* Itens que so aparecem em modo Adulto: ficam ocultos no Modo Mini. */
+var ITENS_ADULTO = ["ancoras.html", "achar.html", "escrever.html", "rede.html"];
 
 var ICONE_MINI = "M12 4 A4 4 0 1 0 12 12 A4 4 0 1 0 12 4 M5 20 C5 16 8 14 12 14 C16 14 19 16 19 20";
 
@@ -46,9 +53,19 @@ function desenharIcone(caminho) {
 
 function montarMenu(caminho) {
   var atual = arquivoDaTela(caminho);
+  var modo = typeof criarArmazenamento === "function" &&
+    criarArmazenamento(window.localStorage).ler().ajustes.modo;
+
+  /* Botao de recolher/expandir acima da barra (posicao bottom e definida pelo JS). */
+  var gatilho = document.createElement("button");
+  gatilho.type = "button";
+  gatilho.className = "menu-gatilho-btn";
+  document.body.appendChild(gatilho);
+
   var nav = document.createElement("nav");
   nav.className = "menu-rodape";
   nav.setAttribute("aria-label", "Telas do Enseada");
+  if (modo === "mini") { nav.classList.add("menu-modo-mini"); }
 
   ITENS_DO_MENU.forEach(function (item) {
     var link = document.createElement("a");
@@ -59,38 +76,79 @@ function montarMenu(caminho) {
     texto.textContent = item.texto;
     link.appendChild(texto);
     link.setAttribute("aria-label", item.nome);
+    if (ITENS_ADULTO.indexOf(item.arquivo) !== -1) {
+      link.setAttribute("data-adulto", "true");
+    }
     if (item.arquivo === atual || (item.tambem || []).indexOf(atual) !== -1) {
       link.setAttribute("aria-current", "page");
     }
     nav.appendChild(link);
   });
 
-  nav.appendChild(montarCardMini(atual));
+  nav.appendChild(montarCardMini(atual, nav));
   document.body.appendChild(nav);
+
+  /* Gatilho: recolher e expandir o menu, com estado persistido. */
+  var oculto = window.localStorage.getItem("menu-oculto") === "1";
+
+  function posicionarGatilho() {
+    gatilho.style.bottom = oculto ? "0" : (nav.offsetHeight + "px");
+  }
+
+  function aplicarEstado() {
+    if (oculto) {
+      nav.classList.add("oculto");
+      gatilho.textContent = "▲";
+      gatilho.setAttribute("aria-label", "Mostrar menu de navegação");
+    } else {
+      nav.classList.remove("oculto");
+      gatilho.textContent = "▼";
+      gatilho.setAttribute("aria-label", "Esconder menu de navegação");
+    }
+    posicionarGatilho();
+  }
+
+  aplicarEstado();
+
+  gatilho.addEventListener("click", function () {
+    oculto = !oculto;
+    window.localStorage.setItem("menu-oculto", oculto ? "1" : "0");
+    aplicarEstado();
+    /* Ao expandir, reposicionar apos a transicao terminar. */
+    if (!oculto) { setTimeout(posicionarGatilho, 250); }
+  });
 }
 
-function montarCardMini(atual) {
+function montarCardMini(atual, nav) {
   var botao = document.createElement("button");
   botao.type = "button";
   botao.className = "card-menu";
   botao.id = "card-mini";
   botao.appendChild(desenharIcone(ICONE_MINI));
-  var texto = document.createElement("span");
-  botao.appendChild(texto);
+  var textoEl = document.createElement("span");
+  textoEl.textContent = "Versão Mini";
+  botao.appendChild(textoEl);
 
   function dizer() {
     var ligado = typeof criarArmazenamento === "function" &&
       criarArmazenamento(window.localStorage).ler().ajustes.modo === "mini";
     botao.setAttribute("aria-pressed", ligado ? "true" : "false");
-    texto.textContent = ligado ? "Mini ligado" : "Mini desligado";
     botao.setAttribute("aria-label",
-      "Modo Mini, Enseadinha, para crianças. Agora está " + (ligado ? "ligado" : "desligado") + ". Toque para trocar.");
+      "Versão Mini (Enseadinha). Agora está " + (ligado ? "ativada" : "desativada") + ". Toque para trocar.");
   }
 
   botao.addEventListener("click", function () {
     var ligado = botao.getAttribute("aria-pressed") === "true";
     guardarAjuste("modo", ligado ? "adulto" : "mini");
     dizer();
+    /* Atualizar visibilidade dos itens adulto no menu imediatamente. */
+    if (nav) {
+      if (ligado) {
+        nav.classList.remove("menu-modo-mini");
+      } else {
+        nav.classList.add("menu-modo-mini");
+      }
+    }
     /* A tela Me ajuda a achar muda de conteudo com o modo: recarrega. */
     if (atual === "achar.html" || atual === "ajuda.html") { window.location.reload(); }
   });

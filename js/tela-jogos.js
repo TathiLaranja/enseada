@@ -29,32 +29,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /* Jogo da memória. */
+    /* Pequenos Tesouros: jogo da memoria com as fichas redondas. Cada partida usa
+       fichas de uma colecao so. Sem cronometro: duas fichas diferentes ficam
+       viradas ate a proxima ser tocada. */
     const areaMemoria = document.getElementById('grid-memoria');
     const recadoMemoria = document.getElementById('recado-memoria');
-    let jogo = novoJogo(Math.random);
+    const temasMemoria = document.getElementById('temas-memoria');
+    let tema = FICHAS_TEMAS[0].id;
+    let jogo = null;
+
+    function novaPartida() {
+        const ids = sortearItens(fichasDoTema(tema), FICHAS_PARES_POR_PARTIDA, Math.random);
+        jogo = novoJogo(Math.random, ids);
+        desenharMemoria();
+    }
+
+    function desenharTemas() {
+        temasMemoria.textContent = '';
+        FICHAS_TEMAS.forEach(t => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'botao-simples';
+            b.textContent = t.nome;
+            b.setAttribute('aria-pressed', t.id === tema ? 'true' : 'false');
+            b.addEventListener('click', () => {
+                tema = t.id;
+                desenharTemas();
+                novaPartida();
+            });
+            temasMemoria.appendChild(b);
+        });
+        const atual = FICHAS_TEMAS.filter(t => t.id === tema)[0];
+        document.getElementById('tema-atual-memoria').textContent = 'Coleção agora: ' + atual.nome + '.';
+    }
 
     function desenharMemoria() {
         areaMemoria.textContent = '';
-        jogo.cartas.forEach((palavra, i) => {
+        jogo.cartas.forEach((id, i) => {
+            const ficha = fichaPorId(id);
             const achada = jogo.achadas.indexOf(i) !== -1;
             const aberta = jogo.viradas.indexOf(i) !== -1;
             const botao = document.createElement('button');
             botao.type = 'button';
-            botao.className = 'carta';
+            botao.className = 'ficha';
 
-            if (achada) {
-                botao.setAttribute('data-estado', 'achada');
-                botao.textContent = palavra + ' (par)';
-                botao.setAttribute('aria-label', palavra + ', par achado');
-                botao.disabled = true;
-            } else if (aberta) {
-                botao.setAttribute('data-estado', 'aberta');
-                botao.textContent = palavra;
-                botao.setAttribute('aria-label', palavra + ', carta virada');
+            if (achada || aberta) {
+                botao.setAttribute('data-estado', achada ? 'achada' : 'aberta');
+                const estilo = fichaEstilo(ficha);
+                botao.style.backgroundImage = estilo.backgroundImage;
+                botao.style.backgroundSize = estilo.backgroundSize;
+                botao.style.backgroundPosition = estilo.backgroundPosition;
+                botao.setAttribute('aria-label', ficha.nome + (achada ? ', par achado' : ', ficha virada'));
+                botao.disabled = achada;
             } else {
-                botao.textContent = 'Virar';
-                botao.setAttribute('aria-label', 'Carta fechada, tocar para virar');
+                botao.setAttribute('data-estado', 'fechada');
+                botao.setAttribute('aria-label', 'Ficha fechada, tocar para virar');
             }
 
             botao.addEventListener('click', () => {
@@ -69,16 +98,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (terminou(jogo)) {
             recadoMemoria.textContent = 'Todos os pares foram achados.';
         } else if (jogo.viradas.length === 2) {
-            recadoMemoria.textContent = 'Não são iguais. Toque em outra carta quando quiser.';
+            recadoMemoria.textContent = 'Não são iguais. Toque em outra ficha quando quiser.';
         } else {
             recadoMemoria.textContent = '';
         }
     }
 
-    document.getElementById('reiniciar-memoria').addEventListener('click', () => {
-        jogo = novoJogo(Math.random);
-        desenharMemoria();
-    });
+    document.getElementById('reiniciar-memoria').addEventListener('click', novaPartida);
 
-    desenharMemoria();
+    desenharTemas();
+    novaPartida();
+
+    /* Modo Mini: esconder Sudoku e Palavras Cruzadas (so para criancas). */
+    var modoMini = typeof criarArmazenamento === "function" &&
+      criarArmazenamento(window.localStorage).ler().ajustes.modo === "mini";
+    if (modoMini) {
+      ["aba-sudoku", "aba-palavras"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) { el.hidden = true; el.setAttribute("aria-selected", "false"); el.classList.remove("ativa"); }
+      });
+      ["painel-sudoku", "painel-palavras"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) { el.hidden = true; el.classList.remove("ativo"); el.classList.add("oculto"); }
+      });
+    }
 });

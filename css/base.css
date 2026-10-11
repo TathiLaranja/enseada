@@ -868,3 +868,147 @@ input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; out
   cursor: pointer;
 }
 .adesivo-da-gaveta img { width: 44px; height: 44px; }
+
+/* Pequenos Tesouros: fichas redondas, quatro por fileira. */
+.fichas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ficha {
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  border: 3px solid var(--contorno);
+  border-radius: 50%;
+  background-color: var(--pessego);
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* Costas da ficha: um anel dentro do circulo, sem desenho para nao dar pista. */
+.ficha[data-estado="fechada"] {
+  background-image: radial-gradient(circle, transparent 44%, var(--contorno) 45%, var(--contorno) 49%, transparent 50%);
+}
+
+.ficha[data-estado="aberta"] { border-color: var(--texto); border-width: 4px; }
+
+.ficha[data-estado="achada"] {
+  border-color: var(--texto);
+  border-width: 5px;
+  box-shadow: 0 0 0 3px var(--destaque);
+  cursor: default;
+}
+
+/* Quebra-cabeca Cantinho Tranquilo: quadro no alto, bandeja com as pecas soltas embaixo. */
+.mesa-quebra {
+  position: relative;
+  width: 100%;
+  margin-bottom: 12px;
+  touch-action: pan-y;
+}
+
+.quadro-quebra {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+  border: 2px dashed var(--contorno);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.quadro-quebra::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--imagem);
+  background-size: 100% 100%;
+  opacity: 0.18;
+}
+
+.bandeja-quebra {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border: 2px dashed var(--contorno);
+  border-radius: var(--raio);
+  box-sizing: border-box;
+}
+
+.peca-quebra {
+  position: absolute;
+  background-repeat: no-repeat;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.38);
+  outline: 1px solid rgba(255, 255, 255, 0.65);
+  outline-offset: -1px;
+  border-radius: 3px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  z-index: 2;
+}
+
+.peca-quebra.arrastando { cursor: grabbing; z-index: 9; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45); }
+
+.peca-quebra.encaixada {
+  box-shadow: none;
+  outline: none;
+  border-radius: 0;
+  cursor: default;
+  touch-action: auto;
+  z-index: 1;
+}
+
+.mesa-quebra.completa .bandeja-quebra { display: none; }
+
+/* Botao de recolher/expandir o menu de navegacao. Fica centrado acima da barra. */
+.menu-gatilho-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 11;
+  background: var(--fundo);
+  border: 2px solid var(--contorno);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 5px 22px 3px;
+  font-family: inherit;
+  font-size: 0.78em;
+  line-height: 1;
+  color: var(--texto);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Menu recolhido: desliza para baixo e nao intercepta toques. */
+.menu-rodape.oculto {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+/* Transicao suave so para quem nao pediu movimento reduzido. */
+@media (prefers-reduced-motion: no-preference) {
+  .menu-rodape {
+    transition: transform 0.22s ease-out !important;
+  }
+  .menu-gatilho-btn {
+    transition: bottom 0.22s ease-out !important;
+  }
+}
+
+/* Modo Mini: itens exclusivos de adulto ficam ocultos. */
+.menu-rodape.menu-modo-mini [data-adulto="true"] {
+  display: none;
+}
+
+/* Seletor de imagem do quebra-cabeca: fundo com preview da imagem escolhida. */
+.botao-imagem-quebra {
+  background-size: cover;
+  background-position: center;
+  color: var(--texto);
+  text-shadow: 0 0 4px var(--fundo), 0 0 4px var(--fundo);
+}
