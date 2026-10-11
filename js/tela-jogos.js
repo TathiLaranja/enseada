@@ -35,18 +35,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const areaMemoria = document.getElementById('grid-memoria');
     const recadoMemoria = document.getElementById('recado-memoria');
     const temasMemoria = document.getElementById('temas-memoria');
-    let tema = FICHAS_TEMAS[0].id;
+
+    /* Modo Mini: mostrar so temas infantis; adulto: mostrar so temas adultos. */
+    var _modoMiniMem = typeof criarArmazenamento === "function" &&
+      criarArmazenamento(window.localStorage).ler().ajustes.modo === "mini";
+    var _temasVisiveis = FICHAS_TEMAS.filter(function (t) {
+      return _modoMiniMem ? !!t.mini : !t.mini;
+    });
+    let tema = _temasVisiveis.length > 0 ? _temasVisiveis[0].id : FICHAS_TEMAS[0].id;
     let jogo = null;
 
     function novaPartida() {
-        const ids = sortearItens(fichasDoTema(tema), FICHAS_PARES_POR_PARTIDA, Math.random);
+        const temaObj = FICHAS_TEMAS.filter(function (t) { return t.id === tema; })[0];
+        const pares = temaObj && temaObj.pares ? temaObj.pares : FICHAS_PARES_POR_PARTIDA;
+        const ids = sortearItens(fichasDoTema(tema), pares, Math.random);
         jogo = novoJogo(Math.random, ids);
         desenharMemoria();
     }
 
     function desenharTemas() {
         temasMemoria.textContent = '';
-        FICHAS_TEMAS.forEach(t => {
+        _temasVisiveis.forEach(t => {
             const b = document.createElement('button');
             b.type = 'button';
             b.className = 'botao-simples';

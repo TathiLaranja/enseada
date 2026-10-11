@@ -8,7 +8,7 @@
 
    Trocar VERSAO a cada publicação faz o aparelho buscar os arquivos novos. */
 
-var VERSAO = "enseada-v19";
+var VERSAO = "enseada-v20";
 
 var ARQUIVOS = [
   "./",
@@ -62,6 +62,8 @@ var ARQUIVOS = [
   "fontes/AtkinsonHyperlegible-Regular.woff2",
   "fontes/AtkinsonHyperlegible-Bold.woff2",
   "assets/icon.png",
+  "public/images/jm-frutas.jpg",
+  "public/images/jm-bichinhos.jpg",
   "public/images/quebra-cabeca.jpg",
   "public/images/qc-gatinho.jpg",
   "public/images/qc-estrela.jpg",
