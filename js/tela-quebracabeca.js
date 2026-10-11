@@ -1,74 +1,64 @@
 /* Enseada - a tela do quebra-cabeca "Cantinho Tranquilo".
    Regras em js/quebracabeca.js. Aqui so desenha a mesa e escuta o toque.
    A peca se arrasta com o dedo, o mouse ou as setas; perto do lugar certo ela
-   encaixa. Sem cronometro, sem pontos, sem aviso de erro. A pessoa escolhe
-   entre 5 imagens (paisagens calmas) e 3 niveis de dificuldade.
-   No Modo Mini, so o nivel facil (12 pecas) fica disponivel. */
+   encaixa. Cada imagem ja vem com um nivel fixo. Sem cronometro, sem pontos,
+   sem aviso de erro. No Modo Mini, so as imagens do nivel facil ficam disponiveis. */
 
 (function () {
-  /* Cinco imagens/fundos calmos. Os gradientes sao locais, sem rede. */
+  /* Cinco imagens, cada uma com nivel embutido. Os gradientes sao fallback local. */
   var IMAGENS = [
-    { id: "mar",        nome: "Mar ao entardecer",  bg: "url(public/images/quebra-cabeca.jpg)" },
-    { id: "praia",      nome: "Praia clara",         bg: "linear-gradient(160deg,#E8C5A0 0%,#F2DDB5 25%,#95C5A8 50%,#7AB5C0 75%,#5A95B0 100%)" },
-    { id: "campo",      nome: "Campo verde",         bg: "linear-gradient(to bottom,#C0D4E0 0%,#D8E8D0 35%,#A8C8A0 55%,#90B898 100%)" },
-    { id: "nevoa",      nome: "Névoa suave",         bg: "linear-gradient(150deg,#D0D8E8 0%,#C8D0E0 30%,#B8C8D8 55%,#D0C8B8 80%,#C8B8A8 100%)" },
-    { id: "entardecer", nome: "Entardecer lilás",    bg: "linear-gradient(to bottom,#D8C0D0 0%,#B8B0C8 30%,#98B0C8 60%,#88A8B8 100%)" }
+    { id: "mar",     nome: "Mar ao entardecer",      bg: "url(public/images/quebra-cabeca.jpg)", nivelId: "chegar"    },
+    { id: "gatinho", nome: "Gatinho aconchegante",   bg: "url(public/images/qc-gatinho.jpg)",   nivelId: "chegar"    },
+    { id: "estrela", nome: "Praia com estrela do mar",bg: "url(public/images/qc-estrela.jpg)",  nivelId: "explorar"  },
+    { id: "varanda", nome: "Varanda com vasos",       bg: "url(public/images/qc-varanda.jpg)",  nivelId: "permanecer"},
+    { id: "conchas", nome: "Conchas na areia",        bg: "url(public/images/qc-conchas.jpg)",  nivelId: "permanecer"}
   ];
 
   var mesa = document.getElementById("mesa-quebra");
   var recado = document.getElementById("recado-quebra");
-  var elNiveis = document.getElementById("niveis-quebra");
   var elImagens = document.getElementById("imagens-quebra");
 
-  /* Modo Mini: so o nivel facil fica disponivel. */
+  /* Modo Mini: so as imagens do nivel facil ficam disponiveis. */
   var modoMini = typeof criarArmazenamento === "function" &&
     criarArmazenamento(window.localStorage).ler().ajustes.modo === "mini";
 
-  var nivelId = QC_NIVEIS[0].id;
   var imagemIdx = 0;
   var estado = null;
   var escolhida = null;
 
   function imagemAtual() { return IMAGENS[imagemIdx] || IMAGENS[0]; }
   function bgAtual() { return imagemAtual().bg; }
+  function nivelAtual() { return qcNivel(imagemAtual().nivelId); }
 
-  /* ---------- seletores ---------- */
+  /* ---------- seletor de imagens ---------- */
+
+  function imagensDisponiveis() {
+    return modoMini ? IMAGENS.filter(function (img) { return img.nivelId === "chegar"; }) : IMAGENS;
+  }
 
   function desenharImagens() {
     elImagens.textContent = "";
-    IMAGENS.forEach(function (img, i) {
+    var lista = imagensDisponiveis();
+    lista.forEach(function (img, i) {
+      var idxReal = IMAGENS.indexOf(img);
+      var n = qcNivel(img.nivelId);
       var b = document.createElement("button");
       b.type = "button";
       b.className = "botao-simples botao-imagem-quebra";
-      b.textContent = img.nome;
-      b.setAttribute("aria-pressed", i === imagemIdx ? "true" : "false");
+      b.textContent = img.nome + " · " + (n.colunas * n.linhas) + " peças";
+      b.setAttribute("aria-pressed", idxReal === imagemIdx ? "true" : "false");
       b.style.backgroundImage = img.bg;
-      b.addEventListener("click", function () { imagemIdx = i; desenharImagens(); recomecar(); });
+      b.addEventListener("click", function () { imagemIdx = idxReal; desenharImagens(); recomecar(); });
       elImagens.appendChild(b);
     });
+    var img = imagemAtual();
+    var n = nivelAtual();
     document.getElementById("imagem-atual-quebra").textContent =
-      "Imagem agora: " + imagemAtual().nome + ".";
-  }
-
-  function desenharNiveis() {
-    elNiveis.textContent = "";
-    var niveis = modoMini ? [QC_NIVEIS[0]] : QC_NIVEIS;
-    niveis.forEach(function (n) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "botao-simples";
-      b.textContent = n.nome + " · " + (n.colunas * n.linhas) + " peças";
-      b.setAttribute("aria-pressed", n.id === nivelId ? "true" : "false");
-      b.addEventListener("click", function () { nivelId = n.id; desenharNiveis(); recomecar(); });
-      elNiveis.appendChild(b);
-    });
-    var n = qcNivel(nivelId);
-    document.getElementById("nivel-atual-quebra").textContent =
-      "Nível agora: " + n.nome + ", " + (n.colunas * n.linhas) + " peças.";
+      "Agora: " + img.nome + " · " + (n.colunas * n.linhas) + " peças (" + n.nome + ").";
   }
 
   function recomecar() {
-    estado = qcNovo(nivelId, Math.random);
+    estado = qcNovo(imagemAtual().nivelId, Math.random);
     escolhida = null;
     recado.textContent = "";
     desenhar();
@@ -165,8 +155,6 @@
     el.addEventListener("pointerdown", function (e) {
       e.preventDefault();
       el.setPointerCapture(e.pointerId);
-      /* Nao se troca o elemento de lugar no meio do arrasto: isso solta o dedo.
-         A peca fica por cima pela classe "arrastando"; a ordem muda ao soltar. */
       var p = estado.pecas.filter(function (q) { return q.id === id; })[0];
       var pt = pontoNaMesa(e);
       arrastando = { dx: pt.x - p.x, dy: pt.y - p.y };
@@ -232,6 +220,5 @@
   document.getElementById("reiniciar-quebra").addEventListener("click", recomecar);
 
   desenharImagens();
-  desenharNiveis();
   recomecar();
 }());
