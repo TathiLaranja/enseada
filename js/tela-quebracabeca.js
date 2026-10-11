@@ -169,14 +169,14 @@
       acompanhar();
     });
 
-    function soltar(e) {
+    function soltar() {
       if (!arrastando) { return; }
-      var caixa = mesa.getBoundingClientRect();
-      var pt = { x: (e.clientX - caixa.left) / caixa.width, y: (e.clientY - caixa.top) / caixa.width };
-      var x = pt.x - arrastando.dx, y = pt.y - arrastando.dy;
+      /* Usa a posicao da peca ja calculada pelo ultimo pointermove, evitando
+         erro de coordenadas quando a pagina rolou durante o arrasto. */
+      var p = estado.pecas.filter(function (q) { return q.id === id; })[0];
       arrastando = null;
       el.classList.remove("arrastando");
-      estado = qcTrazerParaFrente(qcSoltar(estado, id, x, y), id);
+      estado = qcTrazerParaFrente(qcSoltar(estado, id, p.x, p.y), id);
       desenhar();
     }
     el.addEventListener("pointerup", soltar);

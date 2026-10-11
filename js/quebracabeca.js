@@ -15,8 +15,9 @@ var QC_NIVEIS = [
 var QC_BANDEJA_TOPO = 1.06;
 var QC_BANDEJA_ALTURA = 0.7;
 var QC_MESA_ALTURA = QC_BANDEJA_TOPO + QC_BANDEJA_ALTURA + 0.02;
-/* A peca encaixa quando fica a menos de 35% do seu tamanho do lugar certo. */
-var QC_IMA = 0.35;
+/* A peca encaixa quando fica a menos de 48% do seu tamanho do lugar certo.
+   48% e o maximo sem que zonas de peca adjacentes se sobreponham. */
+var QC_IMA = 0.48;
 
 function qcNivel(id) {
   return QC_NIVEIS.filter(function (n) { return n.id === id; })[0] || QC_NIVEIS[0];
