@@ -821,6 +821,30 @@ body.com-abertura.menu-recolhido .pagina {
 
 .botao-secundario:disabled { opacity: 0.55; cursor: default; }
 
+/* Paleta: nomes curtos em 3 colunas, nomes longos em 2 colunas */
+.grupo-paleta-curtos { grid-template-columns: repeat(3, 1fr); }
+.grupo-paleta-longos { grid-template-columns: repeat(2, 1fr); }
+
+/* Acoes compactas: uma linha com os 4 botoes sem quebra */
+.grupo-acoes-compacto { flex-wrap: nowrap; }
+.grupo-acoes-compacto .botao-secundario,
+.grupo-acoes-compacto .botao-primario {
+  flex: 1;
+  min-height: 44px;
+  padding: 8px 4px;
+  font-size: 0.88em;
+  margin: 0;
+  text-align: center;
+}
+
+/* Botao de largura total (Compartilhar desenho) */
+.botao-bloco {
+  display: block;
+  width: 100%;
+  margin-right: 0;
+  text-align: center;
+}
+
 /* Fotos */
 .grade-fotos {
   display: grid;
