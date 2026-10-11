@@ -1,95 +1,113 @@
-/* Teste do jogo da memória. Node puro: node teste/memoria.test.js */
+/* Teste do jogo da memoria. Node puro: node teste/memoria.test.js */
 
 const assert = require("node:assert");
+const memoria = require("../js/memoria.js");
 let passaram = 0;
 const falhas = [];
+
 function teste(nome, corpo) {
   try { corpo(); passaram++; } catch (erro) { falhas.push(nome + "\n   " + erro.message); }
 }
-function fim(nomeDoTeste) {
+
+function fim() {
   if (falhas.length > 0) {
     console.log("FALHOU " + falhas.length + " de " + (passaram + falhas.length));
-    falhas.forEach(function (f) { console.log(" - " + f); });
+    falhas.forEach(function (falha) { console.log(" - " + falha); });
   } else {
-    console.log("Passaram " + passaram + " testes de " + nomeDoTeste + ".");
+    console.log("Passaram " + passaram + " testes do jogo da memoria.");
   }
   process.exit(falhas.length > 0 ? 1 : 0);
 }
-const m = require("../js/memoria.js");
 
 const semSorteio = function () { return 0; };
 
-function posicoesDe(jogo, palavra) {
-  return jogo.cartas.map(function (p, i) { return p === palavra ? i : -1; })
-    .filter(function (i) { return i !== -1; });
+function posicoesDe(jogo, id) {
+  return jogo.cartas.map(function (ficha, indice) {
+    return ficha.id === id ? indice : -1;
+  }).filter(function (indice) { return indice !== -1; });
 }
 
-teste("o jogo tem cada palavra exatamente duas vezes", function () {
-  const jogo = m.novoJogo(Math.random);
-  m.PALAVRAS_DO_JOGO.forEach(function (p) {
-    assert.strictEqual(posicoesDe(jogo, p).length, 2);
+teste("existem 24 fichas diferentes, organizadas em três coleções", function () {
+  assert.strictEqual(memoria.FICHAS_MEMORIA.length, 24);
+  assert.strictEqual(new Set(memoria.FICHAS_MEMORIA.map(function (ficha) {
+    return ficha.id;
+  })).size, 24);
+  assert.deepStrictEqual(memoria.COLECOES_MEMORIA.map(function (colecao) {
+    return memoria.FICHAS_MEMORIA.filter(function (ficha) {
+      return ficha.colecao === colecao.id;
+    }).length;
+  }), [8, 8, 8]);
+});
+
+teste("cada coleção começa com oito pares e fica embaralhada sem alterar as fichas", function () {
+  memoria.COLECOES_MEMORIA.forEach(function (colecao) {
+    const jogo = memoria.novoJogo(semSorteio, colecao.id);
+    assert.strictEqual(jogo.cartas.length, 16);
+    memoria.FICHAS_MEMORIA.filter(function (ficha) {
+      return ficha.colecao === colecao.id;
+    }).forEach(function (ficha) {
+      assert.strictEqual(posicoesDe(jogo, ficha.id).length, 2);
+    });
   });
-  assert.strictEqual(jogo.cartas.length, m.PALAVRAS_DO_JOGO.length * 2);
+  assert.strictEqual(memoria.FICHAS_MEMORIA.length, 24);
 });
 
-teste("embaralhar não altera a lista original", function () {
-  const original = [1, 2, 3, 4];
-  m.embaralhar(original, Math.random);
-  assert.deepStrictEqual(original, [1, 2, 3, 4]);
+teste("duas fichas iguais formam um par sem alterar o jogo anterior", function () {
+  const inicial = memoria.novoJogo(semSorteio);
+  const posicoes = posicoesDe(inicial, inicial.cartas[0].id);
+  const uma = memoria.tocar(inicial, posicoes[0]);
+  const duas = memoria.tocar(uma, posicoes[1]);
+  assert.deepStrictEqual(duas.achadas.slice().sort(), posicoes.slice().sort());
+  assert.deepStrictEqual(duas.viradas, []);
+  assert.deepStrictEqual(inicial.achadas, []);
 });
 
-teste("duas cartas iguais ficam achadas", function () {
-  let jogo = m.novoJogo(semSorteio);
-  const par = posicoesDe(jogo, "Mar");
-  jogo = m.tocar(jogo, par[0]);
-  jogo = m.tocar(jogo, par[1]);
-  assert.deepStrictEqual(jogo.achadas.slice().sort(), par.slice().sort());
-  assert.deepStrictEqual(jogo.viradas, []);
+teste("fichas diferentes continuam viradas até a próxima escolha", function () {
+  const jogo = memoria.novoJogo(semSorteio);
+  const a = jogo.cartas.findIndex(function (ficha) { return ficha.id !== jogo.cartas[0].id; });
+  const viradas = memoria.tocar(memoria.tocar(jogo, 0), a);
+  assert.deepStrictEqual(viradas.viradas, [0, a]);
+  assert.deepStrictEqual(viradas.achadas, []);
 });
 
-teste("duas cartas diferentes ficam viradas, sem fechar sozinhas", function () {
-  let jogo = m.novoJogo(semSorteio);
-  const a = posicoesDe(jogo, "Mar")[0];
-  const b = posicoesDe(jogo, "Sol")[0];
-  jogo = m.tocar(jogo, a);
-  jogo = m.tocar(jogo, b);
-  assert.deepStrictEqual(jogo.viradas, [a, b]);
-  assert.deepStrictEqual(jogo.achadas, []);
-});
-
-teste("o toque seguinte fecha as duas erradas e abre a nova", function () {
-  let jogo = m.novoJogo(semSorteio);
-  const a = posicoesDe(jogo, "Mar")[0];
-  const b = posicoesDe(jogo, "Sol")[0];
-  const c = posicoesDe(jogo, "Lua")[0];
-  jogo = m.tocar(m.tocar(jogo, a), b);
-  jogo = m.tocar(jogo, c);
-  assert.deepStrictEqual(jogo.viradas, [c]);
-});
-
-teste("não existe derrota: errar nunca tira carta achada", function () {
-  let jogo = m.novoJogo(semSorteio);
-  const par = posicoesDe(jogo, "Mar");
-  jogo = m.tocar(m.tocar(jogo, par[0]), par[1]);
-  jogo = m.tocar(jogo, posicoesDe(jogo, "Sol")[0]);
-  jogo = m.tocar(jogo, posicoesDe(jogo, "Lua")[0]);
-  assert.strictEqual(jogo.achadas.length, 2);
-});
-
-teste("tocar em carta achada ou fora do jogo não muda nada", function () {
-  let jogo = m.novoJogo(semSorteio);
-  const par = posicoesDe(jogo, "Mar");
-  jogo = m.tocar(m.tocar(jogo, par[0]), par[1]);
-  assert.strictEqual(m.tocar(jogo, par[0]), jogo);
-  assert.strictEqual(m.tocar(jogo, 99), jogo);
-});
-
-teste("achar todos os pares termina o jogo", function () {
-  let jogo = m.novoJogo(Math.random);
-  m.PALAVRAS_DO_JOGO.forEach(function (p) {
-    posicoesDe(jogo, p).forEach(function (i) { jogo = m.tocar(jogo, i); });
+teste("a próxima escolha fecha as duas diferentes e abre a nova", function () {
+  let jogo = memoria.novoJogo(semSorteio);
+  const primeira = 0;
+  const segunda = jogo.cartas.findIndex(function (ficha) {
+    return ficha.id !== jogo.cartas[primeira].id;
   });
-  assert.strictEqual(m.terminou(jogo), true);
+  jogo = memoria.tocar(memoria.tocar(jogo, primeira), segunda);
+  jogo = memoria.tocar(jogo, jogo.cartas.findIndex(function (ficha, indice) {
+    return indice !== primeira && indice !== segunda;
+  }));
+  assert.strictEqual(jogo.viradas.length, 1);
 });
 
-fim("jogo da memória");
+teste("toques inválidos, repetidos ou em par encontrado não mudam o estado", function () {
+  let jogo = memoria.novoJogo(semSorteio);
+  assert.strictEqual(memoria.tocar(jogo, -1), jogo);
+  assert.strictEqual(memoria.tocar(jogo, 1.5), jogo);
+  const par = posicoesDe(jogo, jogo.cartas[0].id);
+  jogo = memoria.tocar(memoria.tocar(jogo, par[0]), par[1]);
+  assert.strictEqual(memoria.tocar(jogo, par[0]), jogo);
+});
+
+teste("encontrar todos os pares conclui a rodada", function () {
+  let jogo = memoria.novoJogo(semSorteio, "bosque");
+  memoria.FICHAS_MEMORIA.filter(function (ficha) {
+    return ficha.colecao === "bosque";
+  }).forEach(function (ficha) {
+    posicoesDe(jogo, ficha.id).forEach(function (indice) {
+      jogo = memoria.tocar(jogo, indice);
+    });
+  });
+  assert.strictEqual(memoria.terminou(jogo), true);
+});
+
+teste("coleção desconhecida é informada como erro", function () {
+  assert.throws(function () {
+    memoria.novoJogo(semSorteio, "inventada");
+  }, RangeError);
+});
+
+fim();

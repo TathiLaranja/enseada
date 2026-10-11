@@ -123,18 +123,55 @@ a { color: var(--texto); }
 }
 
 /* Menu fixo de baixo: cards grandes, cinco por fileira, dois toques de altura. */
-.menu-rodape {
+.menu-envoltorio {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.menu-rodape {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
   background: var(--fundo);
   border-top: 2px solid var(--contorno);
   padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
-  z-index: 10;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: transform 240ms ease !important;
+}
+
+.menu-alternar {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 44px;
+  height: 36px;
+  padding: 0;
+  transform: translate(-50%, -100%);
+  border: 2px solid var(--contorno);
+  border-bottom: 0;
+  border-radius: var(--raio) var(--raio) 0 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.menu-envoltorio.recolhido .menu-rodape {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+body.menu-recolhido .pagina {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
 
 .card-menu {
@@ -308,6 +345,7 @@ textarea {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .menu-rodape { transition: none !important; }
 }
 
 [hidden] { display: none !important; }
@@ -335,25 +373,43 @@ textarea {
   padding: 12px 14px;
 }
 
-/* Jogo da memoria: tres colunas, carta grande. */
+/* Memoria: as fichas ficam em grade e revelam o recorte da folha local. */
 .cartas {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 20px;
 }
 
 .carta {
   font-family: inherit;
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: 700;
-  min-height: 72px;
+  min-height: 0;
+  aspect-ratio: 1;
   border: 2px solid var(--contorno);
   border-radius: var(--raio);
   background: transparent;
   color: var(--texto);
   cursor: pointer;
   padding: 8px;
+}
+
+.carta[data-estado="aberta"],
+.carta[data-estado="achada"] {
+  display: grid;
+  place-items: center;
+  padding: 5px;
+}
+
+.ficha-icone {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-image: url("../imagem2.png.jpeg");
+  background-size: 500% 500%;
+  background-repeat: no-repeat;
 }
 
 .carta[data-estado="aberta"] {
@@ -365,6 +421,74 @@ textarea {
   border-color: var(--texto);
   border-width: 4px;
   cursor: default;
+}
+
+.colecoes-memoria,
+.niveis-quebra-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.colecoes-memoria .botao-secundario[aria-pressed="true"],
+.niveis-quebra-cabeca .botao-secundario[aria-pressed="true"] {
+  border-width: 4px;
+  font-weight: 700;
+}
+
+.tabuleiro-quebra-cabeca {
+  display: grid;
+  width: min(100%, 34rem);
+  aspect-ratio: 1;
+  border: 2px solid var(--contorno);
+  border-radius: var(--raio);
+  overflow: hidden;
+  margin-bottom: 14px;
+  background: var(--fundo);
+}
+
+.casa-quebra {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid var(--contorno);
+  border-radius: 0;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.casa-quebra.encaixada {
+  border: 3px solid var(--contorno);
+  cursor: default;
+}
+
+.pecas-quebra-cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 70px;
+  margin-bottom: 14px;
+}
+
+.peca-quebra {
+  flex: 0 0 19%;
+  max-width: 19%;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border: 2px solid var(--contorno);
+  border-radius: 4px;
+  background-color: var(--fundo);
+  background-repeat: no-repeat;
+  cursor: grab;
+  touch-action: none;
+}
+
+.peca-quebra[data-selecionada="sim"] {
+  border: 4px solid var(--contorno);
 }
 
 /* Minha rede */
@@ -616,8 +740,11 @@ textarea {
 .abertura-lista { margin: 0 0 24px; padding-left: 20px; }
 .abertura-lista li { margin-bottom: 10px; }
 
-body.com-abertura .menu-rodape { display: none; }
+body.com-abertura .menu-envoltorio { display: none; }
 body.com-abertura .pagina {
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+}
+body.com-abertura.menu-recolhido .pagina {
   padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 }
 

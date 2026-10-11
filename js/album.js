@@ -137,6 +137,13 @@ function albumMover(album, paginaId, itemId, x, y) {
   });
 }
 
+/* Ajusta a inclinacao de uma polaroid, limitada a oito graus para cada lado. */
+function albumGirarPolaroid(album, paginaId, itemId, giro) {
+  return albumTrocarItem(album, paginaId, itemId, function (q, tipo) {
+    return tipo === "polaroid" ? albumCom(q, { giro: albumLimitar(giro, -8, 8) }) : q;
+  });
+}
+
 /* Aumenta ou diminui um adesivo (passo de 4% da largura), mantendo dentro da pagina. */
 function albumRedimensionarAdesivo(album, paginaId, itemId, sentido) {
   return albumTrocarItem(album, paginaId, itemId, function (q, tipo) {
@@ -210,6 +217,7 @@ if (typeof module !== "undefined" && module.exports) {
     albumAdicionarAdesivo: albumAdicionarAdesivo,
     albumBuscar: albumBuscar,
     albumMover: albumMover,
+    albumGirarPolaroid: albumGirarPolaroid,
     albumRedimensionarAdesivo: albumRedimensionarAdesivo,
     albumAnotar: albumAnotar,
     albumTrazerParaFrente: albumTrazerParaFrente,
