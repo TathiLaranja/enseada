@@ -184,7 +184,10 @@
   document.getElementById("botao-nova").addEventListener("click", function () {
     abrirFormulario(null);
   });
-  document.getElementById("botao-guardar").addEventListener("click", guardar);
+  document.getElementById("botao-guardar").addEventListener("click", function () {
+    guardar();
+    if (navigator.vibrate) { navigator.vibrate([30]); }
+  });
   document.getElementById("botao-cancelar").addEventListener("click", function () {
     armazem.mudar(function (d) { d.rascunho = null; return d; });
     fecharFormulario();

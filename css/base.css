@@ -150,7 +150,8 @@ a { color: var(--texto); }
   top: 0;
   left: 50%;
   width: 44px;
-  height: 36px;
+  min-height: 44px;
+  height: auto;
   padding: 0;
   transform: translate(-50%, -100%);
   border: 2px solid var(--contorno);
@@ -507,7 +508,7 @@ textarea {
 .casa {
   font-family: inherit;
   font-size: 1.1em;
-  min-height: 38px;
+  min-height: 44px;
   aspect-ratio: 1;
   padding: 0;
   border: 1px solid var(--contorno);
@@ -1126,6 +1127,7 @@ input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; out
   border: 2px solid var(--contorno);
   border-bottom: none;
   border-radius: 8px 8px 0 0;
+  min-height: 44px;
   padding: 5px 22px 3px;
   font-family: inherit;
   font-size: 0.78em;

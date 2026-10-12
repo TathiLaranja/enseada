@@ -114,6 +114,7 @@ function montarMenu(caminho) {
     oculto = !oculto;
     window.localStorage.setItem("menu-oculto", oculto ? "1" : "0");
     aplicarEstado();
+    if (navigator.vibrate) { navigator.vibrate([30]); }
     /* Ao expandir, reposicionar apos a transicao terminar. */
     if (!oculto) { setTimeout(posicionarGatilho, 250); }
   });

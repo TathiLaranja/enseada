@@ -215,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnLimpar.setAttribute('data-confirmar', 'sim');
         btnLimpar.textContent = 'Limpar mesmo';
         recado.textContent = 'Isso apaga o desenho inteiro. Não dá para desfazer.';
+        if (navigator.vibrate) { navigator.vibrate([30]); }
     });
 
     /* Espessura do traço: três opções, cada uma com o nome escrito. */
@@ -254,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         guardarSemRecado();
         recado.textContent = 'Desfeito.';
         atualizarDesfazer();
+        if (navigator.vibrate) { navigator.vibrate([30]); }
     });
 
     btnRefazer.addEventListener('click', () => {
@@ -263,9 +265,13 @@ document.addEventListener('DOMContentLoaded', () => {
         guardarSemRecado();
         recado.textContent = 'Refeito.';
         atualizarDesfazer();
+        if (navigator.vibrate) { navigator.vibrate([30]); }
     });
 
-    btnSalvar.addEventListener('click', guardar);
+    btnSalvar.addEventListener('click', () => {
+        guardar();
+        if (navigator.vibrate) { navigator.vibrate([30]); }
+    });
 
     /* Compartilhar: a imagem sai do aparelho SÓ quando a pessoa toca aqui e
        escolhe para quem mandar na folha do próprio sistema (WhatsApp, e-mail,

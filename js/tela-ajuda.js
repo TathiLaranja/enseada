@@ -70,6 +70,7 @@
     document.body.removeChild(link);
     URL.revokeObjectURL(endereco);
     recado.textContent = "O arquivo foi para a pasta de downloads do aparelho.";
+    if (navigator.vibrate) { navigator.vibrate([30]); }
   });
 
   var botaoApagar = document.getElementById("botao-apagar");
@@ -88,6 +89,7 @@
     botaoApagar.setAttribute("data-confirmar", "sim");
     botaoApagar.textContent = "Apagar mesmo";
     recado.textContent = "Isso apaga as âncoras, o que você escreveu e desenhou, as fotos, as respostas do Modo Mini, a sua rede, os ajustes e o roteiro. Não dá para desfazer.";
+    if (navigator.vibrate) { navigator.vibrate([30]); }
   });
 
   dizerEscolhas();
