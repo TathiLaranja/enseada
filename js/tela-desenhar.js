@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /* Diâmetro base em pixels lógicos. perfect-freehand recebe pixels físicos
        (já multiplicados pelo devicePixelRatio), então a escala é aplicada
        antes de passar para a biblioteca. */
-    const LARGURA_TRACO   = { fino: 4,  medio: 8,  grosso: 16 };
+    const LARGURA_TRACO   = { fino: 2,  medio: 6,  grosso: 13 };
     const LARGURA_BORRACHA = { fino: 18, medio: 32, grosso: 54 };
     const NOME_DA_LARGURA  = { fino: 'fino', medio: 'médio', grosso: 'grosso' };
     const NOME_DA_FERRAMENTA = { borracha: 'Borracha' };
