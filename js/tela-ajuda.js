@@ -7,10 +7,20 @@
 
   var nomeDaFonte = { normal: "normal", grande: "grande", maior: "maior" };
 
+  /* Samsung TalkBack exige clear → delay → set para detectar a mutação.
+     Sem o intervalo de 50 ms, a região aria-live permanece muda. */
+  function anunciarLive(id, texto) {
+    var el = document.getElementById(id);
+    el.textContent = "";
+    setTimeout(function () { el.textContent = texto; }, 50);
+  }
+
   function dizerEscolhas() {
-    var ajustes = armazem.ler().ajustes;
-    document.getElementById("fonte-atual").textContent =
-      "Agora está: " + nomeDaFonte[ajustes.fonte] + ".";
+    var fonte = armazem.ler().ajustes.fonte;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-fonte-escolha]"), function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-fonte-escolha") === fonte ? "true" : "false");
+    });
+    anunciarLive("fonte-atual", "Tamanho: " + nomeDaFonte[fonte] + ".");
   }
 
   function dizerModo() {
@@ -19,8 +29,7 @@
       var esse = b.getAttribute("data-modo-escolha") === "mini";
       b.setAttribute("aria-pressed", esse === mini ? "true" : "false");
     });
-    document.getElementById("modo-atual").textContent =
-      "Agora está: " + (mini ? "Mini (Enseadinha)." : "Adulto.");
+    anunciarLive("modo-atual", "Agora está: " + (mini ? "Mini (Enseadinha)." : "Adulto."));
   }
 
   Array.prototype.forEach.call(document.querySelectorAll("[data-modo-escolha]"), function (b) {
@@ -38,8 +47,7 @@
     var baixo = armazem.ler().ajustes.tema === "baixo";
     botaoTema.setAttribute("aria-pressed", baixo ? "true" : "false");
     botaoTema.textContent = baixo ? "Desativar Modo Baixo Estímulo" : "Ativar Modo Baixo Estímulo";
-    document.getElementById("tema-atual").textContent =
-      "Agora está: " + (baixo ? "ligado." : "desligado.");
+    anunciarLive("tema-atual", "Agora está: " + (baixo ? "ligado." : "desligado."));
   }
 
   botaoTema.addEventListener("click", function () {
@@ -69,7 +77,7 @@
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(endereco);
-    recado.textContent = "O arquivo foi para a pasta de downloads do aparelho.";
+    anunciarLive("recado-dados", "O arquivo foi para a pasta de downloads do aparelho.");
     if (navigator.vibrate) { navigator.vibrate([30]); }
   });
 
@@ -79,7 +87,7 @@
       armazem.apagarTudo();
       botaoApagar.removeAttribute("data-confirmar");
       botaoApagar.textContent = "Apagar tudo";
-      recado.textContent = "Apagado. Não ficou nada neste aparelho.";
+      anunciarLive("recado-dados", "Apagado. Não ficou nada neste aparelho.");
       aplicarAjustes();
       dizerEscolhas();
       dizerTema();
@@ -88,7 +96,7 @@
     }
     botaoApagar.setAttribute("data-confirmar", "sim");
     botaoApagar.textContent = "Apagar mesmo";
-    recado.textContent = "Isso apaga as âncoras, o que você escreveu e desenhou, as fotos, as respostas do Modo Mini, a sua rede, os ajustes e o roteiro. Não dá para desfazer.";
+    anunciarLive("recado-dados", "Isso apaga as âncoras, o que você escreveu e desenhou, as fotos, as respostas do Modo Mini, a sua rede, os ajustes e o roteiro. Não dá para desfazer.");
     if (navigator.vibrate) { navigator.vibrate([30]); }
   });
 

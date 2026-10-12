@@ -33,31 +33,31 @@
   <p><a href="https://www.cvv.org.br">www.cvv.org.br</a> — também atende por chat e e-mail.</p>
 
   <h2>Tamanho da letra</h2>
-  <div class="botao-fileira">
-    <button type="button" class="botao-simples" data-fonte-escolha="normal">Normal</button>
-    <button type="button" class="botao-simples" data-fonte-escolha="grande">Grande</button>
-    <button type="button" class="botao-simples" data-fonte-escolha="maior">Maior</button>
+  <div class="botao-fileira" role="group" aria-label="Tamanho da letra">
+    <button type="button" class="botao-simples" data-fonte-escolha="normal" aria-pressed="false">Normal</button>
+    <button type="button" class="botao-simples" data-fonte-escolha="grande" aria-pressed="false">Grande</button>
+    <button type="button" class="botao-simples" data-fonte-escolha="maior" aria-pressed="false">Maior</button>
   </div>
-  <p class="explica" id="fonte-atual" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="explica" id="fonte-atual" role="status" aria-live="assertive" aria-atomic="true"> </p>
 
   <h2>Modo de uso</h2>
   <p class="explica">Adulto é o roteiro de sempre. Mini é a Enseadinha: perguntas curtas, com desenho, para crianças a partir de 3 anos, sem certo nem errado. Também dá para trocar no último botão do menu de baixo.</p>
-  <div class="botao-fileira">
-    <button type="button" class="botao-simples" data-modo-escolha="adulto" aria-pressed="true">Adulto</button>
+  <div class="botao-fileira" role="group" aria-label="Modo de uso">
+    <button type="button" class="botao-simples" data-modo-escolha="adulto" aria-pressed="false">Adulto</button>
     <button type="button" class="botao-simples" data-modo-escolha="mini" aria-pressed="false">Mini (Enseadinha)</button>
   </div>
-  <p class="explica" id="modo-atual" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="explica" id="modo-atual" role="status" aria-live="assertive" aria-atomic="true"> </p>
 
   <h2>Modo Baixo Estímulo</h2>
   <p class="explica">Deixa a tela escura e calma, sem branco forte. Você escolhe quando ligar e quando desligar.</p>
   <button type="button" class="botao-simples" id="botao-baixo-estimulo" aria-pressed="false">Ativar Modo Baixo Estímulo</button>
-  <p class="explica" id="tema-atual" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="explica" id="tema-atual" role="status" aria-live="assertive" aria-atomic="true"> </p>
 
   <h2>Seus dados</h2>
   <p class="explica">Tudo que você escreveu está guardado só neste aparelho. Nada sai daqui, e o Enseada não tem servidor para onde mandar.</p>
   <button type="button" class="botao-simples" id="botao-baixar">Baixar tudo que escrevi</button>
   <button type="button" class="botao-simples" id="botao-apagar">Apagar tudo</button>
-  <p class="explica" id="recado-dados" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="explica" id="recado-dados" role="status" aria-live="assertive" aria-atomic="true"> </p>
 
   <h2>Sobre o aplicativo</h2>
   <p>Funciona sem internet. Não tem conta, não tem login e não manda nada para lugar nenhum.</p>
