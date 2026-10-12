@@ -92,13 +92,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const contorno = PerfectFreehand.getStroke(pontosPx, {
             size:             tamanho,
-            thinning:         t.apagar ? 0 : 0.45,
+            /* thinning:0 + simulatePressure:false → espessura uniforme.
+               Com simulação de pressão ativa, movimento rápido gerava
+               pressão quase zero, tornando o traço invisível (picotado).
+               Linha uniforme é mais confiável e combina com o estilo calmo
+               do app. */
+            thinning:         0,
             smoothing:        0.5,
-            streamline:       0.5,
-            simulatePressure: true,
+            streamline:       0.3,
+            simulatePressure: false,
             last:             !emProgresso,
-            start: { cap: true, taper: t.apagar ? 0 : tamanho },
-            end:   { cap: true, taper: t.apagar ? 0 : tamanho }
+            /* taper:0 no início evita que trechos rápidos fiquem finos
+               demais logo após o toque (especialmente em telas retina). */
+            start: { cap: true, taper: 0 },
+            end:   { cap: true, taper: 0 }
         });
 
         if (!contorno.length) return;
@@ -166,9 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!atual) return;
         /* getCoalescedEvents captura todos os pontos intermediários entre
            disparos de evento — sem isso o traço fica picotado quando o
-           dedo se move rápido entre dois frames do navegador. */
-        var evs = typeof evento.getCoalescedEvents === 'function'
-            ? evento.getCoalescedEvents() : [evento];
+           dedo se move rápido entre dois frames do navegador.
+           Guarda contra retorno de array vazio: nesse caso usa o evento
+           primário, que nunca pode ser perdido. */
+        var coalescidos = typeof evento.getCoalescedEvents === 'function'
+            ? evento.getCoalescedEvents() : null;
+        var evs = (coalescidos && coalescidos.length > 0) ? coalescidos : [evento];
         evs.forEach(function(ev) { atual.pontos.push(ponto(ev)); });
         /* requestAnimationFrame garante no máximo um redesenho por frame,
            evitando travamentos quando pointermove dispara mais rápido
