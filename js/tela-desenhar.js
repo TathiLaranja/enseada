@@ -2,7 +2,12 @@
    O desenho é guardado como traços (pontos de 0 a 1 e o NOME da cor, não o
    código), pela porta única js/armazenamento.js. Assim ele se ajusta ao
    tamanho da tela e ganha as cores do tema ligado, claro ou Baixo Estímulo.
-   As cores são as três do próprio tema: nenhuma cor fora da identidade. */
+   As cores são as três do próprio tema: nenhuma cor fora da identidade.
+
+   O traço usa perfect-freehand (js/perfect-freehand.min.js, local) para
+   suavização e variação orgânica de espessura. Cada traço é preenchido como
+   polígono em vez de riscado com stroke(), o que elimina o serrilhado no
+   mobile e simula variação de pressão/velocidade. */
 
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('canvas-desenho');
@@ -10,24 +15,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
 
     const LIMITE_DE_PONTOS = 20000;
-    /* Tres espessuras, em pixels de tela. A borracha e mais larga que o traco. */
-    const LARGURA_TRACO = { fino: 2.5, medio: 5, grosso: 10 };
-    const LARGURA_BORRACHA = { fino: 14, medio: 28, grosso: 48 };
-    const NOME_DA_LARGURA = { fino: 'fino', medio: 'médio', grosso: 'grosso' };
+    /* Diâmetro base em pixels lógicos. perfect-freehand recebe pixels físicos
+       (já multiplicados pelo devicePixelRatio), então a escala é aplicada
+       antes de passar para a biblioteca. */
+    const LARGURA_TRACO   = { fino: 4,  medio: 8,  grosso: 16 };
+    const LARGURA_BORRACHA = { fino: 18, medio: 32, grosso: 54 };
+    const NOME_DA_LARGURA  = { fino: 'fino', medio: 'médio', grosso: 'grosso' };
     const NOME_DA_FERRAMENTA = { borracha: 'Borracha' };
     PALETA_DESENHO.forEach(c => { NOME_DA_FERRAMENTA[c.nome] = c.rotulo; });
 
     const armazem = criarArmazenamento(window.localStorage);
-    const recado = document.getElementById('recado-desenho');
+    const recado  = document.getElementById('recado-desenho');
     const btnLimpar = document.getElementById('btn-limpar');
     const btnSalvar = document.getElementById('btn-salvar');
     const botoesCor = document.querySelectorAll('.botao-cor');
 
-    let tracos = armazem.ler().desenho;
+    let tracos  = armazem.ler().desenho;
     let ferramenta = 'texto';
-    let largura = 'medio';
-    let refeitos = [];
-    let atual = null;
+    let largura    = 'medio';
+    let refeitos   = [];
+    let atual      = null;   /* traço em andamento (último em `tracos`) */
 
     function totalDePontos() {
         return tracos.reduce((soma, t) => soma + t.pontos.length, 0);
@@ -52,37 +59,66 @@ document.addEventListener('DOMContentLoaded', () => {
         if (nome !== 'borracha' && amostra) amostra.style.background = corDoTema(nome);
     });
 
-    function desenharTraco(t) {
-        const escala = window.devicePixelRatio || 1;
-        const cor = corDoTema(t.cor);
-        ctx.globalCompositeOperation = t.apagar ? 'destination-out' : 'source-over';
-        ctx.strokeStyle = cor;
-        ctx.lineWidth = (t.apagar ? LARGURA_BORRACHA : LARGURA_TRACO)[t.largura || 'medio'] * escala;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
+    /* Preenche o contorno gerado pelo perfect-freehand usando curvas quadráticas
+       pelos pontos médios, o que deixa a borda do polígono suave. */
+    function preencherContorno(pts) {
+        if (!pts.length) return;
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        for (let i = 1; i < pts.length - 1; i++) {
+            const mx = (pts[i][0] + pts[i + 1][0]) / 2;
+            const my = (pts[i][1] + pts[i + 1][1]) / 2;
+            ctx.quadraticCurveTo(pts[i][0], pts[i][1], mx, my);
+        }
+        ctx.lineTo(pts[pts.length - 1][0], pts[pts.length - 1][1]);
+        ctx.closePath();
+        ctx.fill();
+    }
 
+    /* emProgresso = true enquanto o dedo/mouse ainda não soltou:
+       passa last:false para o perfect-freehand não fechar a ponta. */
+    function desenharTraco(t, emProgresso) {
+        if (!t.pontos.length) return;
+        const escala = window.devicePixelRatio || 1;
         const w = canvas.width;
         const h = canvas.height;
-        ctx.beginPath();
-        ctx.moveTo(t.pontos[0][0] * w, t.pontos[0][1] * h);
-        if (t.pontos.length === 1) {
-            ctx.lineTo(t.pontos[0][0] * w + 0.01, t.pontos[0][1] * h);
-        }
-        for (let i = 1; i < t.pontos.length; i++) {
-            ctx.lineTo(t.pontos[i][0] * w, t.pontos[i][1] * h);
-        }
-        ctx.stroke();
+        const cor = corDoTema(t.cor);
+
+        /* Converte pontos normalizados [0–1] para pixels físicos do canvas. */
+        const pontosPx = t.pontos.map(p => [p[0] * w, p[1] * h]);
+
+        const tamanho = (t.apagar ? LARGURA_BORRACHA : LARGURA_TRACO)[t.largura || 'medio'] * escala;
+
+        const contorno = PerfectFreehand.getStroke(pontosPx, {
+            size:             tamanho,
+            thinning:         t.apagar ? 0 : 0.45,
+            smoothing:        0.5,
+            streamline:       0.5,
+            simulatePressure: true,
+            last:             !emProgresso,
+            start: { cap: true, taper: t.apagar ? 0 : tamanho },
+            end:   { cap: true, taper: t.apagar ? 0 : tamanho }
+        });
+
+        if (!contorno.length) return;
+
+        ctx.globalCompositeOperation = t.apagar ? 'destination-out' : 'source-over';
+        ctx.fillStyle = cor;
+        preencherContorno(contorno);
         ctx.globalCompositeOperation = 'source-over';
     }
 
     function redesenhar() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        tracos.forEach(desenharTraco);
+        tracos.forEach((t, i) => {
+            const emProgresso = atual !== null && i === tracos.length - 1;
+            desenharTraco(t, emProgresso);
+        });
     }
 
     function ajustarTamanho() {
         const escala = window.devicePixelRatio || 1;
-        canvas.width = Math.max(1, Math.round(canvas.clientWidth * escala));
+        canvas.width  = Math.max(1, Math.round(canvas.clientWidth  * escala));
         canvas.height = Math.max(1, Math.round(canvas.clientHeight * escala));
         redesenhar();
     }
@@ -105,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function ponto(evento) {
         const caixa = canvas.getBoundingClientRect();
         const x = (evento.clientX - caixa.left) / caixa.width;
-        const y = (evento.clientY - caixa.top) / caixa.height;
+        const y = (evento.clientY - caixa.top)  / caixa.height;
         const limitar = v => Math.round(Math.min(1, Math.max(0, v)) * 10000) / 10000;
         return [limitar(x), limitar(y)];
     }
@@ -115,13 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.setPointerCapture(evento.pointerId);
         atual = {
             apagar: ferramenta === 'borracha',
-            cor: ferramenta === 'borracha' ? 'texto' : ferramenta,
-            largura: largura,
+            cor:    ferramenta === 'borracha' ? 'texto' : ferramenta,
+            largura,
             pontos: [ponto(evento)]
         };
         tracos.push(atual);
         refeitos = [];
-        desenharTraco(atual);
+        redesenhar();
         desfazerConfirmacao();
     });
 
@@ -134,10 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function soltar() {
         if (!atual) return;
         atual = null;
+        redesenhar();   /* redesenha com last:true para fechar as pontas */
         guardar();
         atualizarDesfazer();
     }
-    canvas.addEventListener('pointerup', soltar);
+    canvas.addEventListener('pointerup',     soltar);
     canvas.addEventListener('pointercancel', soltar);
 
     function dizerFerramenta() {
@@ -180,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recado.textContent = 'Isso apaga o desenho inteiro. Não dá para desfazer.';
     });
 
-    /* Espessura do traco: tres opcoes, cada uma com o nome escrito. */
+    /* Espessura do traço: três opções, cada uma com o nome escrito. */
     const botoesLargura = document.querySelectorAll('.botao-espessura');
     botoesLargura.forEach(b => {
         b.addEventListener('click', () => {
@@ -195,13 +232,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /* Desfazer e refazer: tiram e devolvem o ultimo traco (ou borracha). */
+    /* Desfazer e refazer: tiram e devolvem o último traço (ou borracha). */
     const btnDesfazer = document.getElementById('btn-desfazer');
-    const btnRefazer = document.getElementById('btn-refazer');
+    const btnRefazer  = document.getElementById('btn-refazer');
 
     function atualizarDesfazer() {
         btnDesfazer.disabled = tracos.length === 0;
-        btnRefazer.disabled = refeitos.length === 0;
+        btnRefazer.disabled  = refeitos.length === 0;
     }
 
     function guardarSemRecado() {
@@ -230,17 +267,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnSalvar.addEventListener('click', guardar);
 
-    /* Compartilhar: a imagem sai do aparelho SO quando a pessoa toca aqui e
-       escolhe para quem mandar na folha do proprio sistema (WhatsApp, e-mail,
-       etc.). O Enseada nao envia nada e nao guarda nada sobre isso. Se o
-       aparelho nao compartilha arquivos, o desenho vai para a pasta de
-       downloads e a pessoa manda por la. */
+    /* Compartilhar: a imagem sai do aparelho SÓ quando a pessoa toca aqui e
+       escolhe para quem mandar na folha do próprio sistema (WhatsApp, e-mail,
+       etc.). O Enseada não envia nada e não guarda nada sobre isso. Se o
+       aparelho não compartilha arquivos, o desenho vai para a pasta de
+       downloads e a pessoa manda por lá. */
     const NOME_DO_ARQUIVO = 'desenho-enseada.png';
 
     function imagemDoDesenho() {
-        /* O canvas e transparente; a imagem leva o fundo do tema ligado. */
+        /* O canvas é transparente; a imagem leva o fundo do tema ligado. */
         const folha = document.createElement('canvas');
-        folha.width = canvas.width;
+        folha.width  = canvas.width;
         folha.height = canvas.height;
         const c2 = folha.getContext('2d');
         c2.fillStyle = lerVariavel('--fundo') || '#FAF8F5';
@@ -252,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function baixar(blob) {
         const endereco = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.href = endereco;
+        link.href     = endereco;
         link.download = NOME_DO_ARQUIVO;
         document.body.appendChild(link);
         link.click();
@@ -271,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const arquivo = new File([blob], NOME_DO_ARQUIVO, { type: 'image/png' });
-        const dados = { files: [arquivo], title: 'Meu desenho' };
+        const dados   = { files: [arquivo], title: 'Meu desenho' };
 
         if (navigator.share && navigator.canShare && navigator.canShare(dados)) {
             try {
