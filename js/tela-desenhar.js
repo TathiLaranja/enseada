@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let largura    = 'medio';
     let refeitos   = [];
     let atual      = null;   /* traço em andamento (último em `tracos`) */
+    let rafPendente = null;  /* ID do requestAnimationFrame agendado */
 
     function totalDePontos() {
         return tracos.reduce((soma, t) => soma + t.pontos.length, 0);
@@ -163,12 +164,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     canvas.addEventListener('pointermove', evento => {
         if (!atual) return;
-        atual.pontos.push(ponto(evento));
-        redesenhar();
+        /* getCoalescedEvents captura todos os pontos intermediários entre
+           disparos de evento — sem isso o traço fica picotado quando o
+           dedo se move rápido entre dois frames do navegador. */
+        var evs = typeof evento.getCoalescedEvents === 'function'
+            ? evento.getCoalescedEvents() : [evento];
+        evs.forEach(function(ev) { atual.pontos.push(ponto(ev)); });
+        /* requestAnimationFrame garante no máximo um redesenho por frame,
+           evitando travamentos quando pointermove dispara mais rápido
+           que a taxa de atualização da tela. */
+        if (!rafPendente) {
+            rafPendente = requestAnimationFrame(function() {
+                rafPendente = null;
+                redesenhar();
+            });
+        }
     });
 
     function soltar() {
         if (!atual) return;
+        /* Cancela RAF pendente antes do redesenho final com last:true. */
+        if (rafPendente) { cancelAnimationFrame(rafPendente); rafPendente = null; }
         atual = null;
         redesenhar();   /* redesenha com last:true para fechar as pontas */
         guardar();
