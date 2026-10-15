@@ -111,9 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!contorno.length) return;
 
         ctx.globalCompositeOperation = t.apagar ? 'destination-out' : 'source-over';
+        ctx.globalAlpha = t.apagar ? 1 : 0.80;
         ctx.fillStyle = cor;
         preencherContorno(contorno);
         ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = 1;
     }
 
     function redesenhar() {

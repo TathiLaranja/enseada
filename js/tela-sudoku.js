@@ -7,6 +7,13 @@
   var jogo = null;
   var escolhida = -1;
   var confirmando = false;
+  var dificuldade = 38;
+
+  var DIFICULDADES_SUDOKU = [
+    { id: "facil",   nome: "Fácil",   vazias: 30 },
+    { id: "medio",   nome: "Médio",   vazias: 38 },
+    { id: "dificil", nome: "Difícil", vazias: 45 }
+  ];
 
   var grade = document.getElementById("grid-sudoku");
   var teclado = document.getElementById("teclado-sudoku");
@@ -15,7 +22,7 @@
   var botaoNovo = document.getElementById("reiniciar-sudoku");
 
   function comecar() {
-    jogo = sudokuNovo(Math.random);
+    jogo = sudokuNovo(Math.random, dificuldade);
     escolhida = -1;
     confirmando = false;
     botaoNovo.textContent = "Novo Sudoku";
@@ -127,5 +134,29 @@
     recado.textContent = "Isso troca este sudoku por outro. O que você preencheu aqui se perde.";
   });
 
+  function desenharDificuldades() {
+    var areaDif = document.getElementById("dificuldade-sudoku");
+    if (!areaDif) return;
+    areaDif.textContent = "";
+    DIFICULDADES_SUDOKU.forEach(function(d) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "botao-simples";
+      b.textContent = d.nome;
+      b.setAttribute("aria-pressed", d.vazias === dificuldade ? "true" : "false");
+      b.addEventListener("click", function() {
+        dificuldade = d.vazias;
+        desenharDificuldades();
+        var atual = document.getElementById("dificuldade-atual-sudoku");
+        if (atual) { atual.textContent = "Dificuldade: " + d.nome + "."; }
+        confirmando = false;
+        botaoNovo.textContent = "Novo Sudoku";
+        comecar();
+      });
+      areaDif.appendChild(b);
+    });
+  }
+
+  desenharDificuldades();
   comecar();
 }());

@@ -8,6 +8,41 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!area) return;
     const recado = document.getElementById('recado-cruzadas');
     let jogo = null;
+    let direcaoAtiva = 'h';
+
+    function entradasDaCelula(r, c) {
+        return jogo.entradas.filter(function(e) {
+            if (e.direcao === 'h') {
+                return e.linha === r && c >= e.coluna && c < e.coluna + e.resposta.length;
+            }
+            return e.coluna === c && r >= e.linha && r < e.linha + e.resposta.length;
+        });
+    }
+
+    function palavraErrada(r, c, dir) {
+        var entrada = entradasDaCelula(r, c).filter(function(e) { return e.direcao === dir; })[0];
+        if (!entrada) return null;
+        var cheio = true;
+        for (var i = 0; i < entrada.resposta.length; i++) {
+            var er = dir === 'v' ? entrada.linha + i : entrada.linha;
+            var ec = dir === 'h' ? entrada.coluna + i : entrada.coluna;
+            if (!jogo.atual[er][ec]) { cheio = false; break; }
+        }
+        if (!cheio) return null;
+        for (i = 0; i < entrada.resposta.length; i++) {
+            er = dir === 'v' ? entrada.linha + i : entrada.linha;
+            ec = dir === 'h' ? entrada.coluna + i : entrada.coluna;
+            if (jogo.atual[er][ec] !== entrada.resposta[i]) return entrada.numero;
+        }
+        return null;
+    }
+
+    function avancarFoco(r, c, dir) {
+        var nr = dir === 'v' ? r + 1 : r;
+        var nc = dir === 'h' ? c + 1 : c;
+        var alvo = area.querySelector('[data-casa="' + nr + ',' + nc + '"]');
+        if (alvo) { alvo.focus(); }
+    }
 
     function comecar() {
         jogo = cruzadasNovo(Math.random);
@@ -55,11 +90,27 @@ document.addEventListener('DOMContentLoaded', () => {
         campo.setAttribute('aria-label',
             'Linha ' + (r + 1) + ', coluna ' + (c + 1) + (numero ? ', número ' + numero : ''));
 
+        campo.addEventListener('focus', function() {
+            var dirs = entradasDaCelula(r, c).map(function(e) { return e.direcao; });
+            if (dirs.length === 1) { direcaoAtiva = dirs[0]; }
+            else if (dirs.length > 1 && dirs.indexOf(direcaoAtiva) === -1) { direcaoAtiva = dirs[0]; }
+        });
+
         campo.addEventListener('input', () => {
             const letra = cruzadasLerDigitacao(jogo.atual[r][c], campo.value);
             jogo = cruzadasColocar(jogo, r, c, letra);
             campo.value = jogo.atual[r][c];
-            recado.textContent = '';
+            if (letra) {
+                const numErrada = palavraErrada(r, c, direcaoAtiva);
+                if (numErrada !== null) {
+                    recado.textContent = 'Palavra ' + numErrada + ' completa, mas tem uma letra errada.';
+                } else {
+                    recado.textContent = '';
+                }
+                avancarFoco(r, c, direcaoAtiva);
+            } else {
+                recado.textContent = '';
+            }
         });
 
         if (numero) {
