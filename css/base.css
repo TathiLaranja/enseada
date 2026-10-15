@@ -496,10 +496,15 @@ textarea {
 .item .rotulo { color: var(--fraco); }
 
 /* Sudoku calmo: nove colunas, borda mais grossa entre os quadrados de 3x3. */
+/* A moldura e feita de padding colorido, nao de border: assim a borda de 1px
+   da ultima coluna encosta na moldura em vez de aparecer como risco separado.
+   2px de padding + 1px da casa = 3px de moldura nos quatro lados. */
 .sudoku {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  padding: 3px;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  width: 100%;
+  max-width: 100%;
+  padding: 2px;
   background: var(--contorno);
   border-radius: var(--raio);
   overflow: hidden;
@@ -509,11 +514,16 @@ textarea {
 .casa {
   font-family: inherit;
   font-size: 1.1em;
-  min-height: 44px;
+  /* min-width/min-height em 0: as nove colunas cabem na largura da tela.
+     Com min-height de 44px a grade ficava mais larga que o celular e a nona
+     coluna era cortada pelo overflow, virando uma tira fina na direita. */
+  min-width: 0;
+  min-height: 0;
   aspect-ratio: 1;
   padding: 0;
   border: 1px solid var(--contorno);
-  background: transparent;
+  /* Fundo proprio: sem ele a cor do container vaza pelas casas vazias. */
+  background: var(--fundo);
   color: var(--texto);
   cursor: pointer;
 }
