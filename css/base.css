@@ -499,7 +499,8 @@ textarea {
 .sudoku {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  border: 3px solid var(--contorno);
+  padding: 3px;
+  background: var(--contorno);
   border-radius: var(--raio);
   overflow: hidden;
   margin-bottom: 14px;
@@ -526,12 +527,6 @@ textarea {
 
 .casa[data-borda-direita="sim"] { border-right: 3px solid var(--contorno); }
 .casa[data-borda-baixo="sim"]   { border-bottom: 3px solid var(--contorno); }
-
-/* Remove a borda redundante das celulas que tocam o contorno do container. */
-.casa:nth-child(-n+9)      { border-top: none; }
-.casa:nth-child(9n+1)      { border-left: none; }
-.casa:nth-child(9n)        { border-right: none; }
-.casa:nth-last-child(-n+9) { border-bottom: none; }
 
 /* A casa escolhida ganha contorno grosso por dentro; o foco do teclado e outro. */
 .casa[aria-pressed="true"] {
