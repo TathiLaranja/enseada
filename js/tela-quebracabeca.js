@@ -27,7 +27,15 @@
   var escolhida = null;
 
   function imagemAtual() { return IMAGENS[imagemIdx] || IMAGENS[0]; }
-  function bgAtual() { return imagemAtual().bg; }
+
+  /* O caminho vira absoluto aqui. bgAtual() alimenta a var(--imagem) do quadro,
+     que e lida por css/base.css: com caminho relativo o navegador procura a
+     imagem a partir da pasta css/ (css/public/images/...), nao acha, e o quadro
+     fica sem o desenho apagado que mostra onde cada peca vai. */
+  function bgAtual() {
+    var caminho = imagemAtual().bg.replace(/^url\(\s*/, "").replace(/\s*\)$/, "").replace(/^["']|["']$/g, "");
+    return 'url("' + new URL(caminho, document.baseURI).href + '")';
+  }
   function nivelAtual() { return qcNivel(imagemAtual().nivelId); }
 
   /* ---------- seletor de imagens ---------- */
