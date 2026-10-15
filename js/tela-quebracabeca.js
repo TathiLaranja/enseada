@@ -53,9 +53,21 @@
       var b = document.createElement("button");
       b.type = "button";
       b.className = "botao-simples botao-imagem-quebra";
-      b.textContent = img.nome + " · " + (n.colunas * n.linhas) + " peças";
       b.setAttribute("aria-pressed", idxReal === imagemIdx ? "true" : "false");
-      b.style.backgroundImage = img.bg;
+
+      /* A foto fica numa miniatura ao lado, nunca atras do texto: sobre a foto
+         o nome mudava de contraste a cada imagem e ficava dificil de ler. */
+      var mini = document.createElement("span");
+      mini.className = "mini-imagem-quebra";
+      mini.setAttribute("aria-hidden", "true");
+      mini.style.backgroundImage = img.bg;
+
+      var nome = document.createElement("span");
+      nome.className = "nome-imagem-quebra";
+      nome.textContent = img.nome + " · " + (n.colunas * n.linhas) + " peças";
+
+      b.appendChild(mini);
+      b.appendChild(nome);
       b.addEventListener("click", function () { imagemIdx = idxReal; desenharImagens(); recomecar(); });
       elImagens.appendChild(b);
     });

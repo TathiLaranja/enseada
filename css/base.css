@@ -1151,10 +1151,29 @@ input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; out
   display: none;
 }
 
-/* Seletor de imagem do quebra-cabeca: fundo com preview da imagem escolhida. */
+/* Seletor de imagem do quebra-cabeca: miniatura ao lado do nome, um por fileira.
+   O nome nunca fica por cima da foto: sobre a foto o contraste mudava a cada
+   imagem e o texto ficava dificil de ler. Aqui ele fica no fundo liso do botao,
+   com o contraste cheio do tema, e a foto so acompanha, do lado.
+   Sem cor propria neste bloco: assim o botao escolhido continua pegando o
+   texto-no-bloco da regra de aria-pressed. */
 .botao-imagem-quebra {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 100%;
+}
+
+.mini-imagem-quebra {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid var(--contorno);
   background-size: cover;
   background-position: center;
-  color: var(--texto);
-  text-shadow: 0 0 4px var(--fundo), 0 0 4px var(--fundo);
 }
+
+/* Alinhado a esquerda: quando o nome quebra em duas linhas, centralizado fica
+   mais dificil de achar onde a linha comeca. */
+.nome-imagem-quebra { min-width: 0; text-align: left; }
