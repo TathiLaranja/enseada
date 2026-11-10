@@ -34,14 +34,26 @@ teste("caminho vazio ou barra final é a tela Agora", function () {
 teste("o menu pode ser recolhido sem bloquear a tela e respeita movimento reduzido", function () {
   const js = fs.readFileSync("js/menu.js", "utf8");
   const css = fs.readFileSync("css/base.css", "utf8");
-  assert.ok(js.indexOf('className = "menu-envoltorio"') !== -1);
-  assert.ok(js.indexOf('className = "menu-alternar"') !== -1);
-  assert.ok(js.indexOf('nav.inert = recolhido') !== -1);
-  assert.ok(js.indexOf('"Mostrar navegação"') !== -1);
-  assert.ok(css.indexOf(".menu-envoltorio.recolhido .menu-rodape") !== -1);
-  assert.ok(css.indexOf("pointer-events: none") !== -1);
-  assert.ok(css.indexOf("transition: transform 240ms ease") !== -1);
-  assert.ok(css.indexOf("@media (prefers-reduced-motion: reduce)") !== -1);
+  /* O botao que recolhe e a barra de cards. */
+  assert.ok(js.indexOf('className = "menu-gatilho-btn"') !== -1);
+  assert.ok(js.indexOf('className = "menu-rodape"') !== -1);
+  /* Recolher esconde a barra, guarda a escolha e diz o estado em palavras. */
+  assert.ok(js.indexOf('nav.classList.add("oculto")') !== -1);
+  assert.ok(js.indexOf('nav.classList.remove("oculto")') !== -1);
+  assert.ok(js.indexOf('localStorage.setItem("menu-oculto"') !== -1);
+  assert.ok(js.indexOf('"Mostrar menu de navegação"') !== -1);
+  assert.ok(js.indexOf('"Esconder menu de navegação"') !== -1);
+  /* Barra recolhida nao bloqueia a tela: some e nao recebe toque. */
+  const regraRecolhido = css.match(/\.menu-rodape\.oculto\s*\{([^}]*)\}/);
+  assert.ok(regraRecolhido, "falta a regra .menu-rodape.oculto");
+  assert.ok(regraRecolhido[1].indexOf("pointer-events: none") !== -1, "menu recolhido ainda recebe toque");
+  assert.ok(regraRecolhido[1].indexOf("translateY(100%)") !== -1, "menu recolhido não desce");
+  assert.ok(/\.oculto\s*\{\s*display:\s*none\s*!important;/.test(css));
+  /* A transicao so existe para quem nao pediu movimento reduzido. */
+  const abertura = css.indexOf("@media (prefers-reduced-motion: no-preference)");
+  assert.ok(abertura !== -1);
+  const transicao = css.indexOf("transition: transform 0.22s ease-out");
+  assert.ok(transicao > abertura, "a transição do menu tem de ficar dentro do bloco no-preference");
 });
 
 teste("toda tela existe, carrega o menu e o service worker guarda o arquivo", function () {
