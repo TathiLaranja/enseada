@@ -21,8 +21,12 @@ Esta rede tem conta, tem login e tem servidor, porque pessoa falar com pessoa
 exige isso. Não é o Enseada mudando de ideia: é um segundo produto, com outro
 nome, construído sobre o primeiro.
 
-A diferença que a sustenta cabe numa frase: **aqui a pessoa escolhe tudo que
-ela vê, e nada escolhe por ela.**
+Para que serve, em uma frase: **para a pessoa não se sentir sozinha, e ver
+que outra gente passa pelo mesmo que ela.** Não é para mostrar vida, não é
+para juntar público, não é para passar o tempo.
+
+A diferença que a sustenta cabe noutra frase: **aqui a pessoa escolhe tudo
+que ela vê, e nada escolhe por ela.**
 
 ---
 
@@ -106,7 +110,29 @@ Três coisas, e todas são coisas que a pessoa faz dentro do próprio app:
 | Desenho | Fica, até ela apagar | A tela Desenhar |
 | Foto | **24 horas, sempre** | A tela Fotos e o álbum de retratos |
 
-Nada de vídeo, nada de áudio, nada de reel.
+Nada de vídeo e nada de áudio tocando dentro do app.
+
+### Música: o link, e só o link
+
+Dá para dizer o que está ouvindo. A pessoa cola o endereço da música
+(Spotify, Deezer, YouTube, Apple Music, Bandcamp) e escreve com as palavras
+dela o que é: artista e nome.
+
+O app **não** põe o tocador na tela, **não** toca nada e **não** busca nada
+no site da música. Aparece o texto que ela escreveu e um botão que abre no
+aplicativo de música dela, fora da rede.
+
+Três motivos, todos do mesmo princípio:
+
+- O tocador embutido é um rastreador do Spotify ou do Google dentro do app, e
+  isso está proibido na lista do que não existe.
+- O tocador toca sozinho e não segue nenhuma regra de acessibilidade da casa.
+- Buscar o nome da música no site deles seria uma requisição externa por cada
+  publicação. A pessoa escrever o nome custa dois segundos e mantém a rede
+  sem tráfego para fora.
+
+Só endereço dessas casas conhecidas é aceito. Campo de link livre vira, em
+uma semana, porta de golpe e de propaganda.
 
 ### Por que a foto some em 24 horas
 
@@ -249,13 +275,12 @@ fechado.
 
 O que o projeto precisa ter, desde o primeiro dia:
 
-- **Denunciar visível em tudo** — texto, desenho e foto — com resposta em
-  prazo escrito.
+- **Denunciar visível em tudo** — texto, desenho, foto e música — com
+  resposta em prazo escrito.
 - **Bloquear e silenciar**, sem a outra pessoa saber.
 - **Filtro automático** de palavra de risco no texto e de nudez na imagem,
   que manda para fila humana — nunca que decide sozinho o banimento.
-- **Fila humana de verdade**, com uma pessoa responsável e hora paga para
-  isso.
+- **Fila humana de verdade**, com gente responsável olhando.
 - **Tela de emergência** com quem ligar, que o Enseada já tem na Ajuda.
 
 A foto que some em 24 horas **não** facilita a moderação, facilita o
@@ -267,38 +292,71 @@ decisões junto:
   mesmo depois das 24 horas. Isso vai escrito nas regras e na política de
   privacidade.
 
-Isso custa por mês e não escala sozinho. É maior que o custo de servidor, e
-cresce com o número de pessoas.
+### Moderação sem dinheiro
 
-**Sem orçamento de moderação, não lançar.** Lançar sem isso é publicar um
-canal de incentivo com o nome dela em cima, e a responsabilidade legal é de
-quem publicou.
+O filtro automático sai de graça, e nem toca no servidor:
 
-Uma saída honesta para começar pequeno: **a rede abre fechada**, por convite,
-com um número de pessoas que uma pessoa consegue moderar. Cresce quando
-houver com que pagar para crescer.
+- **Palavra de risco no texto**: uma lista de palavras conferida numa Edge
+  Function. Custo zero.
+- **Nudez na imagem**: um modelo aberto que roda **no próprio navegador** da
+  pessoa, antes de a foto subir. Se acusar, a foto nem sai do aparelho. Custo
+  zero e nada trafegado.
+
+O filtro de navegador se engana e dá para burlar com um app modificado, então
+ele pega descuido, não quem quer fazer mal de propósito. É por isso que a
+fila humana existe.
+
+A fila humana é a única parte que não tem versão grátis comprada. A versão
+grátis dela é **gente**: você, no começo, e depois algumas pessoas de
+confiança da própria rede, com um botão de esconder na hora e sem poder de
+banir sozinhas.
+
+Isso só funciona com uma condição, e ela é a regra de ouro do projeto:
+
+> **A rede cresce até onde as pessoas que moderam de graça dão conta, e para
+> ali.**
+
+Não é limitação temporária: é como ela fica. Entrada por convite, e quando a
+fila de denúncia atrasar, fecha convite novo até desatolar. Rede pequena que
+dá conta vale mais que rede grande sem ninguém olhando — e, para o que ela
+serve (não se sentir sozinha), pequena já resolve.
 
 ---
 
 ## Legal, antes da primeira linha de código
 
+A base é a mesma do Cruzar Vagas, que já foi montada assim: política de
+privacidade, termos, direito de baixar os próprios dados e função de excluir
+a conta de verdade. Não se começa do zero, se copia a estrutura e se ajusta
+ao que muda aqui.
+
+| Item | No Cruzar Vagas | O que muda nesta rede |
+| --- | --- | --- |
+| Política de privacidade e termos | Já existem | Acrescentar conteúdo escrito por gente e a foto de 24 horas |
+| Excluir a conta | Função `excluir-conta` pronta | Igual, apagando também o que a pessoa publicou |
+| Baixar os próprios dados | Pendente lá também | Fazer uma vez e usar nos dois |
+| Encarregado de dados (DPO) | A nomear | O mesmo nome serve para os dois produtos |
+
+O que é novo e não existe no Cruzar Vagas:
+
 - **LGPD art. 11.** Texto sobre a própria saúde mental é dado pessoal
   sensível, mesmo sem nome junto. Exige base legal específica e consentimento
-  destacado, não enterrado nos termos.
+  destacado, não enterrado nos termos — a tela de regras resolve isso, se for
+  escrita direito.
 - **Idade.** A rede é 18+. Isso a separa de vez do Enseadinha e evita o ECA e
   o art. 14, que exigem consentimento de quem tem a guarda.
-- **Encarregado de dados (DPO)** nomeado e publicado no site.
-- **Termos de uso e política de privacidade** escritos por advogado, com a
-  lista do que não existe dentro deles.
-- **Posicionamento.** Continua não sendo serviço de saúde. Isso fica mais
-  difícil de sustentar quando pessoas aconselham pessoas, e por isso o aviso
-  tem de aparecer na própria sala, não só no rodapé.
+- **Foto denunciada guardada depois das 24 horas.** Tem de estar escrito, com
+  prazo de descarte.
+- **Posicionamento.** Continua não sendo serviço de saúde, e isso fica mais
+  difícil de sustentar quando pessoas aconselham pessoas: o aviso aparece na
+  própria sala, não só no rodapé.
 - **Lojas.** Apple e Google exigem, para conteúdo escrito por usuário:
   filtro, denúncia, bloqueio e contato do responsável. Sem os quatro o app é
   recusado.
 
 A conversa com advogado que já estava pendente no Enseada passa a ser o
-primeiro item do cronograma, não o último.
+primeiro item do cronograma, não o último — e serve para os três produtos de
+uma vez.
 
 ---
 
@@ -307,41 +365,70 @@ primeiro item do cronograma, não o último.
 A vantagem escondida: o back que esta rede precisa é **exatamente o que o
 Cruzar Vagas e o Claquete Box já usam.** Não é tecnologia nova para aprender.
 
-| Camada | O que usar | De onde vem |
+| Camada | O que usar | Plano grátis dá conta? |
 | --- | --- | --- |
-| Frente | HTML, CSS e JS puro, PWA | Enseada, igual |
-| Hospedagem da frente | Cloudflare Pages | Cruzar Vagas e Claquete Box |
-| Conta e login | Supabase Auth | Cruzar Vagas |
-| Banco | Postgres do Supabase, com RLS por linha | Cruzar Vagas |
-| Regras de servidor | Edge Functions | Cruzar Vagas, que tem 14 |
-| Segredos | Secrets do Supabase, nunca em arquivo | Regra que ela já segue |
+| Frente | HTML, CSS e JS puro, PWA | Sim |
+| Hospedagem da frente | Cloudflare Pages | Sim, com banda sem teto |
+| Conta e login | Supabase Auth | Sim, para rede pequena |
+| Banco | Postgres do Supabase, com RLS por linha | Sim, até o teto de espaço do plano |
+| Regras de servidor | Edge Functions do Supabase | Sim |
+| Foto de 24 horas | Cloudflare R2 | Sim, e a saída de dado não é cobrada |
+| Apagar foto vencida | Tarefa marcada no próprio banco | Sim |
+| Filtro de nudez | Modelo aberto rodando no navegador | Sim, não usa servidor |
+| Segredos | Secrets do Supabase, nunca em arquivo | Sim |
 
 O banco cabe em cinco tabelas: pessoas, salas, textos, denúncias e bloqueios.
 A RLS faz o trabalho pesado de privacidade dentro do próprio banco, que é
-onde ela já sabe mexer.
+onde você já sabe mexer.
 
-Duas regras técnicas que vêm do Enseada e continuam valendo: **sem framework**
-e **sem CDN** — a fonte e tudo o mais servidos de dentro do projeto.
+Três decisões técnicas que seguram a conta em zero:
+
+- **A foto é reduzida no próprio celular antes de subir**, com o código que o
+  Enseada já tem. Foto de 900 px em JPEG dá dezenas de KB, não megabytes.
+- **A foto vive 24 horas.** O espaço guardado nunca cresce: no pior dia, é um
+  dia de fotos.
+- **Texto e desenho são leves.** Desenho é vetor ou PNG pequeno, não vídeo.
+
+E as regras do Enseada continuam: **sem framework** e **sem CDN** — a fonte e
+tudo o mais servidos de dentro do projeto.
+
+**O que conferir antes de começar:** os tetos de plano grátis mudam de ano
+para ano. Os números do Supabase e da Cloudflare têm de ser conferidos no
+dia, e é deles que sai o tamanho máximo da rede.
 
 ---
 
-## Dinheiro
+## Custo zero, de verdade
 
-Sem anúncio, alguém paga. Não há terceira opção, e fingir que há é como as
-redes gratuitas acabaram vendendo gente.
+A rede tem de ser de graça para quem usa **e** para quem mantém. Isso é
+possível, com uma condição escrita com todas as letras.
 
-O modelo que combina com o resto é o que ela já usa no Cruzar Vagas:
-**assinatura baixa, sem fidelidade, com um plano gratuito de verdade.** Quem
-não pode pagar usa inteiro — numa rede para pessoas com deficiência, cobrar
-de todo mundo seria cobrar justamente de quem tem menos renda.
+O que sai de graça, hoje, nos planos gratuitos que você já usa:
 
-O que não pode ser vendido, em hipótese nenhuma: lugar no que a pessoa vê,
-destaque, selo de verificação e dado de ninguém. Assinar dá mais sala, mais
-texto guardado ou um apelido reservado — nunca mais alcance.
+| Custo | Como fica em zero |
+| --- | --- |
+| Hospedagem | Cloudflare Pages, plano grátis |
+| Banco e login | Supabase, plano grátis |
+| Foto | R2 da Cloudflare, e some em 24 horas |
+| Filtro de nudez | Roda no navegador da pessoa |
+| Filtro de palavra | Lista conferida numa Edge Function |
+| Domínio | O único gasto de verdade: uns R$ 40 por ano, ou um subdomínio de um que você já tem |
 
-E a conta de chegada vale ser feita antes: servidor é barato, moderação não.
-O número de assinantes que paga uma pessoa moderando é o número que decide se
-o produto existe.
+O que **não** sai de graça em dinheiro nenhum é a fila humana de denúncia.
+Ela sai de graça em tempo, e tempo também acaba. Daí a condição:
+
+> **O tamanho da rede é o tamanho que as pessoas que moderam de graça dão
+> conta.**
+
+Isso significa, na prática: entrada por convite, nenhum crescimento buscado,
+nenhuma divulgação paga, e convite fechado sempre que a fila atrasar. Uma
+rede de algumas centenas de pessoas cabe em plano grátis e numa pessoa
+moderando. Uma de dezenas de milhares não cabe em nenhum dos dois, e tentar é
+como os outros apps do tipo quebraram.
+
+O que **nunca** pode pagar a conta, se um dia ela precisar ser paga: anúncio,
+dado de ninguém, lugar no que a pessoa vê, destaque e selo. Se chegar nesse
+ponto, a saída honesta é doação ou assinatura de quem puder — nunca anúncio.
 
 ---
 
