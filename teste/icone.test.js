@@ -118,8 +118,10 @@ teste("o ícone maskable é quadrado cheio, sem cantos transparentes", function 
 
 teste("o app pede para o celular não apagar os dados guardados", function () {
   const js = fs.readFileSync("js/registra-sw.js", "utf8");
-  assert.ok(js.indexOf("navigator.storage.persist") !== -1,
-    "sem o pedido, iOS e Android podem limpar o álbum sozinhos");
+  assert.ok(js.indexOf("navigator.storage.persist()") !== -1,
+    "sem CHAMAR o pedido, iOS e Android podem limpar o álbum sozinhos");
+  assert.ok(js.indexOf("navigator.storage.persisted()") !== -1,
+    "tem de perguntar antes, para não repetir o pedido a cada abertura");
   assert.ok(js.indexOf("navigator.storage &&") !== -1,
     "o pedido tem de ser protegido: navegador antigo não pode quebrar o app");
   /* todas as telas carregam registra-sw.js, senão o pedido não vale em todas */
