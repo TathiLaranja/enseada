@@ -110,7 +110,7 @@ teste("não há pontuação, tempo nem derrota no código", function () {
   const semComentario = (f) => fs.readFileSync(f, "utf8")
     .replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
   const js = semComentario("js/palavrapar.js") + semComentario("js/tela-palavrapar.js");
-  [/pontos?\b/i, /placar/i, /perdeu/i, /derrota/i, /cronometro/i, /cronômetro/i, /setInterval/]
+  [/\bpontos?\b/i, /pontua[cç][aã]o/i, /placar/i, /perdeu/i, /derrota/i, /cronometro/i, /cronômetro/i, /setInterval/]
     .forEach(p => assert.ok(!p.test(js), "voltou a ter " + p));
 });
 
