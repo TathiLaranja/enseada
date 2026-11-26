@@ -60,7 +60,6 @@ function montarMenu(caminho) {
   var gatilho = document.createElement("button");
   gatilho.type = "button";
   gatilho.className = "menu-gatilho-btn";
-  document.body.appendChild(gatilho);
 
   var nav = document.createElement("nav");
   nav.className = "menu-rodape";
@@ -86,7 +85,16 @@ function montarMenu(caminho) {
   });
 
   nav.appendChild(montarCardMini(atual, nav));
-  document.body.appendChild(nav);
+
+  /* A barra vai dentro do envoltorio, que e quem tem position: fixed no CSS.
+     Sem ele a barra ficava em position: relative e descia com o documento:
+     no Album, pagina longa, ela parava a 1608px do topo numa tela de 900,
+     fora da vista, e o botao de recolher sobrava solto no meio do conteudo. */
+  var envoltorio = document.createElement("div");
+  envoltorio.className = "menu-envoltorio";
+  envoltorio.appendChild(nav);
+  envoltorio.appendChild(gatilho);
+  document.body.appendChild(envoltorio);
 
   /* Gatilho: recolher e expandir o menu, com estado persistido. */
   var oculto = window.localStorage.getItem("menu-oculto") === "1";
@@ -109,6 +117,11 @@ function montarMenu(caminho) {
   }
 
   aplicarEstado();
+  /* Remede depois que fonte e icones assentam: medido cedo demais,
+     nav.offsetHeight vem menor e o botao encavala na barra. */
+  requestAnimationFrame(posicionarGatilho);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(posicionarGatilho); }
+  window.addEventListener("resize", posicionarGatilho);
 
   gatilho.addEventListener("click", function () {
     oculto = !oculto;
