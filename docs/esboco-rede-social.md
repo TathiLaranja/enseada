@@ -11,8 +11,9 @@ outro produto, com outro nome.
 
 ## O que é
 
-Uma rede onde pessoas neurodivergentes, com deficiência e em sofrimento
-conversam sem serem geridas por um algoritmo. O Enseada entra como base
+Uma rede onde pessoas neurodivergentes e com deficiência mostram uma às
+outras **o que funcionou para elas se acalmarem**, sem serem geridas por um
+algoritmo. O Enseada entra como base
 pronta: a pilha técnica, o desenho, a paleta, a fonte, o modo baixo estímulo
 e a regra de não prender ninguém.
 
@@ -21,12 +22,20 @@ Esta rede tem conta, tem login e tem servidor, porque pessoa falar com pessoa
 exige isso. Não é o Enseada mudando de ideia: é um segundo produto, com outro
 nome, construído sobre o primeiro.
 
-Para que serve, em uma frase: **para a pessoa não se sentir sozinha, e ver
-que outra gente passa pelo mesmo que ela.** Não é para mostrar vida, não é
-para juntar público, não é para passar o tempo.
+Para que serve, em uma frase: **é o Enseada com companhia.** O Enseada é onde
+a pessoa guarda o que a acalma; aqui ela mostra isso para outras, e vê o que
+acalma as outras.
 
-A diferença que a sustenta cabe noutra frase: **aqui a pessoa escolhe tudo
-que ela vê, e nada escolhe por ela.**
+E para que **não** serve, que é igualmente importante: **não é lugar de
+desabafar dor.** Não é grupo de apoio, não é ouvidoria, não é diário de
+sofrimento. Quem precisa disso precisa de gente de verdade, e a tela de
+emergência diz onde encontrar.
+
+Duas frases decidem o resto do documento:
+
+> **Aqui a pessoa escolhe tudo que ela vê, e nada escolhe por ela.**
+>
+> **Aqui se mostra o que ajudou, não o que doeu.**
 
 ---
 
@@ -133,6 +142,31 @@ Três motivos, todos do mesmo princípio:
 
 Só endereço dessas casas conhecidas é aceito. Campo de link livre vira, em
 uma semana, porta de golpe e de propaganda.
+
+### O tom: o que vale e o que não é aqui
+
+O conteúdo é **o que acalmou você hoje**, concreto e seu. Não é conselho, não
+é frase de efeito e não é dor.
+
+| Vale | Não é aqui |
+| --- | --- |
+| "Lavar louça com a janela aberta me tirou do lugar hoje" | "Hoje foi horrível, não aguento mais" |
+| O desenho que ela fez para se acalmar | O desenho do que está doendo |
+| A foto do céu que ela parou para olhar | A foto do ferimento, do remédio, do hospital |
+| A música que ela pôs para se regular | A música como recado para alguém |
+| "Funciona para mim" | "Você tem que", "basta querer", "escolha ser feliz" |
+
+Duas linhas que não podem ser cruzadas, nos dois sentidos:
+
+- **Não é lugar de desabafar dor.** Quem precisa disso precisa de gente, e a
+  tela de emergência diz onde encontrar.
+- **Não é coach.** Nada de promessa, nada de receita, nada de "se você
+  quiser, você consegue". Isso é a regra de honestidade do Enseada valendo
+  aqui: oferecer, nunca prometer. Positividade forçada machuca pessoa
+  neurodivergente tanto quanto desabafo em cima de desabafo.
+
+O meio entre as duas é estreito de propósito, e tem nome: **a pessoa conta o
+que ela fez, não o que você deveria fazer.**
 
 ### Por que a foto some em 24 horas
 
@@ -264,14 +298,27 @@ A pessoa banida perde a conta e o que publicou sai do ar. Isso é dito na tela
 de regras, com essas palavras, antes de ela entrar — nada disso pode ser
 surpresa depois.
 
+### O que não é aqui, e não dá banimento
+
+Separado de propósito do banimento, porque não é falta: é lugar errado.
+
+Desabafo de dor, pedido de socorro, discussão, conselho de coach e frase de
+autoajuda saem do ar, e a pessoa recebe um recado curto, sem bronca, dizendo
+por que aquilo não fica e para onde ir — a tela de emergência, se for
+socorro.
+
+Nunca com a palavra "violação", nunca com advertência, nunca com punição.
+Quem estava mal e escreveu não pode sair dali se sentindo repreendida.
+
 ---
 
 ## Moderação: o maior custo
 
-Um lugar onde pessoas em sofrimento escrevem umas para as outras atrai, sem
-exceção, conteúdo que incentiva automutilação, jejum e suicídio. Não é
-hipótese: é o histórico de todo app desse tipo, e é o motivo de vários terem
-fechado.
+Mesmo sendo uma rede do que acalma, ela reúne gente que está em dia ruim — e
+todo lugar assim atrai conteúdo que incentiva automutilação, jejum e
+suicídio. Não é hipótese: é o histórico de todo app do tipo, e é o motivo de
+vários terem fechado. A regra do tom reduz muito isso, mas não dispensa
+moderação.
 
 O que o projeto precisa ter, desde o primeiro dia:
 
