@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/tema.css">
 <link rel="stylesheet" href="css/base.css">
 <script src="js/ancoras.js"></script>
+<script src="js/levar.js"></script>
 <script src="js/armazenamento.js"></script>
 <script src="js/ajustes.js"></script>
 </head>
@@ -56,6 +57,8 @@
   <h2>Seus dados</h2>
   <p class="explica">Tudo que você escreveu está guardado só neste aparelho. Nada sai daqui, e o Enseada não tem servidor para onde mandar.</p>
   <button type="button" class="botao-simples" id="botao-baixar">Baixar tudo que escrevi</button>
+  <button type="button" class="botao-simples" id="botao-trazer">Trazer âncoras de um arquivo</button>
+  <input type="file" id="entrada-trazer" accept="application/json,.json" hidden>
   <button type="button" class="botao-simples" id="botao-apagar">Apagar tudo</button>
   <p class="explica" id="recado-dados" role="status" aria-live="assertive" aria-atomic="true"> </p>
 

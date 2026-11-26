@@ -206,3 +206,51 @@
     abrirFormulario(null);
   }
 }());
+
+/* ---------- levar as ancoras para outra pessoa ----------
+   O pacote leva SO as ancoras: o que ela escreveu, as fotos e o album nunca
+   vao junto. Quem recebe traz pelo "Trazer ancoras de um arquivo", na Ajuda,
+   e isso so acrescenta na lista de la. Nada passa por servidor nenhum. */
+(function () {
+  var botao = document.getElementById("compartilhar-ancoras");
+  if (!botao) { return; }
+  var recado = document.getElementById("recado-compartilhar-ancoras");
+  var armazem = criarArmazenamento(window.localStorage);
+  var NOME = "ancoras-enseada.json";
+
+  function baixar(blob) {
+    var endereco = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    link.href = endereco;
+    link.download = NOME;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(endereco);
+  }
+
+  botao.addEventListener("click", function () {
+    var pacote = levarPacoteDeAncoras(armazem.ler().ancoras);
+    if (pacote.ancoras.length === 0) {
+      recado.textContent = "Você ainda não guardou nenhuma âncora.";
+      return;
+    }
+    var texto = JSON.stringify(pacote, null, 2);
+    var blob = new Blob([texto], { type: "application/json" });
+    var arquivo = new File([blob], NOME, { type: "application/json" });
+    var dados = { files: [arquivo], title: "Minhas âncoras" };
+    if (navigator.share && navigator.canShare && navigator.canShare(dados)) {
+      navigator.share(dados).then(function () {
+        recado.textContent = "";
+      }).catch(function (erro) {
+        /* A pessoa fechou a folha de compartilhar: nada foi enviado. */
+        recado.textContent = erro && erro.name === "AbortError"
+          ? "Nada foi enviado."
+          : "Não foi possível compartilhar. Tente de novo.";
+      });
+      return;
+    }
+    baixar(blob);
+    recado.textContent = "Este aparelho não compartilha direto. O arquivo foi para a pasta de downloads; mande por lá.";
+  });
+}());

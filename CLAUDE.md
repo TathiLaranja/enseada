@@ -152,6 +152,18 @@ Apagar. Mesmo desenho do Desenhar e do Álbum: `navigator.share` conferindo
 `canShare` antes, e sem Web Share cai no baixar. Folha em branco não gera
 arquivo. O texto é dela e tem de poder sair sem passar por servidor nenhum.
 
+## Levar e trazer âncoras (js/levar.js)
+
+É o mais perto de "rede" que o Enseada chega sem trair o que promete.
+Em Minhas âncoras, **Compartilhar minhas âncoras** gera um pacote que leva
+**só as âncoras** — sem o que ela escreveu, sem fotos, sem álbum e sem os ids
+do aparelho dela. Em Ajuda, **Trazer âncoras de um arquivo** aceita esse
+pacote ou o arquivo inteiro que a própria Ajuda baixa, e **só acrescenta**:
+nunca apaga, nunca sobrescreve, âncora repetida é ignorada (comparando sem
+espaço e sem caixa) e a trazida chega ativa, com id novo. Arquivo que não for
+reconhecido é recusado inteiro. Sem servidor, sem conta, sem nada guardado
+fora dos dois aparelhos.
+
 ## Som (js/som.js)
 
 O app passou a ter som, e ele obedece a três regras:

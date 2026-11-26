@@ -81,6 +81,47 @@
     if (navigator.vibrate) { navigator.vibrate([30]); }
   });
 
+  /* Trazer: o arquivo pode ser o pacote de ancoras de outra pessoa ou o
+     arquivo inteiro que esta mesma tela baixa. Trazer so ACRESCENTA ancora:
+     nunca apaga, nunca sobrescreve e nunca traz junto o que ela escreveu. */
+  var botaoTrazer = document.getElementById("botao-trazer");
+  var entradaTrazer = document.getElementById("entrada-trazer");
+
+  botaoTrazer.addEventListener("click", function () { entradaTrazer.click(); });
+
+  entradaTrazer.addEventListener("change", function () {
+    var arquivo = entradaTrazer.files && entradaTrazer.files[0];
+    entradaTrazer.value = "";
+    if (!arquivo) { return; }
+    var leitor = new FileReader();
+    leitor.onerror = function () {
+      anunciarLive("recado-dados", "Não foi possível abrir esse arquivo.");
+    };
+    leitor.onload = function () {
+      var lido = levarLer(String(leitor.result));
+      if (!lido) {
+        anunciarLive("recado-dados",
+          "Esse arquivo não é do Enseada, ou não tem âncora nenhuma dentro. Nada foi mudado.");
+        return;
+      }
+      var dados = armazem.ler();
+      var quantas = levarQuantasNovas(dados.ancoras, lido.ancoras);
+      if (quantas === 0) {
+        anunciarLive("recado-dados",
+          "Todas as âncoras desse arquivo você já tem. Nada foi mudado.");
+        return;
+      }
+      armazem.mudar(function (d) {
+        d.ancoras = levarJuntar(d.ancoras, lido.ancoras, novoId);
+        return d;
+      });
+      anunciarLive("recado-dados", quantas === 1
+        ? "Entrou 1 âncora nova. Nada foi apagado."
+        : "Entraram " + quantas + " âncoras novas. Nada foi apagado.");
+    };
+    leitor.readAsText(arquivo);
+  });
+
   var botaoApagar = document.getElementById("botao-apagar");
   botaoApagar.addEventListener("click", function () {
     if (botaoApagar.getAttribute("data-confirmar") === "sim") {
