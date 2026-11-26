@@ -20,6 +20,8 @@ const html = fs.readFileSync("desenhar.html", "utf8");
 const js = fs.readFileSync("js/tela-desenhar.js", "utf8");
 const htmlAlbum = fs.readFileSync("album.html", "utf8");
 const jsAlbum = fs.readFileSync("js/tela-album.js", "utf8");
+const htmlEscrever = fs.readFileSync("escrever.html", "utf8");
+const jsEscrever = fs.readFileSync("js/tela-escrever.js", "utf8");
 
 teste("o botão Compartilhar desenho fica ao lado de Guardar o desenho", function () {
   const i = html.indexOf('id="btn-salvar"');
@@ -30,9 +32,10 @@ teste("o botão Compartilhar desenho fica ao lado de Guardar o desenho", functio
 });
 
 teste("usa a API nativa e confere canShare antes de compartilhar", function () {
-  assert.ok(js.indexOf("navigator.canShare(") !== -1);
-  assert.ok(js.indexOf("navigator.share(") !== -1);
-  assert.ok(js.indexOf("navigator.canShare(") < js.indexOf("navigator.share("));
+  assert.ok(js.indexOf("navigator.canShare(") !== -1, "não confere canShare");
+  assert.ok(js.indexOf("navigator.share(") !== -1, "não chama share");
+  assert.ok(js.indexOf("navigator.canShare(") < js.indexOf("navigator.share("),
+    "tem de conferir ANTES de chamar");
 });
 
 teste("tem plano B para aparelho sem compartilhamento e não manda nada sozinho", function () {
@@ -52,7 +55,8 @@ teste("a página do álbum também tem Compartilhar, ao lado de Baixar", functio
 teste("o álbum confere canShare antes, e tem plano B para quem não compartilha", function () {
   assert.ok(jsAlbum.indexOf("navigator.canShare(") !== -1, "não confere canShare");
   assert.ok(jsAlbum.indexOf("navigator.share(") !== -1, "não chama share");
-  assert.ok(jsAlbum.indexOf("navigator.canShare(") < jsAlbum.indexOf("navigator.share("),
+  assert.ok(jsAlbum.indexOf("navigator.canShare(") !== -1 &&
+    jsAlbum.indexOf("navigator.canShare(") < jsAlbum.indexOf("navigator.share("),
     "tem de conferir ANTES de chamar");
   /* sem Web Share a imagem tem de ir para os downloads, senão o toque não faz nada */
   const depois = jsAlbum.slice(jsAlbum.indexOf("navigator.share("));
@@ -63,6 +67,23 @@ teste("compartilhar o álbum não manda nada sozinho e avisa quando a pessoa des
   assert.ok(!/fetch\(|XMLHttpRequest|sendBeacon/.test(jsAlbum), "o álbum não pode falar com servidor");
   assert.ok(jsAlbum.indexOf("AbortError") !== -1, "fechar a folha tem de dizer que nada foi enviado");
   assert.ok(jsAlbum.indexOf("Nada foi enviado.") !== -1);
+});
+
+teste("o que a pessoa escreve pode sair do app: compartilhar e baixar", function () {
+  assert.ok(htmlEscrever.indexOf('id="compartilhar-folha"') !== -1, "falta Compartilhar");
+  assert.ok(htmlEscrever.indexOf('id="baixar-folha"') !== -1, "falta Baixar");
+  /* os dois vêm antes de Apagar: apagar é o último recurso, não o vizinho */
+  assert.ok(htmlEscrever.indexOf('id="baixar-folha"') < htmlEscrever.indexOf('id="botao-apagar-folha"'));
+  assert.ok(jsEscrever.indexOf("navigator.canShare(") !== -1 &&
+    jsEscrever.indexOf("navigator.canShare(") < jsEscrever.indexOf("navigator.share("),
+    "tem de conferir canShare ANTES de chamar share");
+  const depois = jsEscrever.slice(jsEscrever.indexOf("navigator.share("));
+  assert.ok(depois.indexOf("baixar()") !== -1, "falta o plano B para quem não compartilha");
+  assert.ok(jsEscrever.indexOf("AbortError") !== -1 && jsEscrever.indexOf("Nada foi enviado.") !== -1,
+    "desistir tem de dizer que nada foi enviado");
+  assert.ok(!/fetch\(|XMLHttpRequest|sendBeacon/.test(jsEscrever),
+    "a tela Escrever não pode falar com servidor");
+  assert.ok(jsEscrever.indexOf("folha.value.trim()") !== -1, "folha em branco não gera arquivo");
 });
 
 fim("compartilhar");

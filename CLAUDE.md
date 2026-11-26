@@ -145,6 +145,13 @@ todo mundo. Somem no Modo Mini, porque dependem de ler e escrever.
 Os três primeiros usam o banco das Palavras Cruzadas. A Memória sonora
 reaproveita as regras da Memória de palavras (`js/palavrapar.js`).
 
+## O texto da pessoa sai do app
+
+A tela Escrever tem Compartilhar e Baixar como arquivo de texto, antes do
+Apagar. Mesmo desenho do Desenhar e do Álbum: `navigator.share` conferindo
+`canShare` antes, e sem Web Share cai no baixar. Folha em branco não gera
+arquivo. O texto é dela e tem de poder sair sem passar por servidor nenhum.
+
 ## Som (js/som.js)
 
 O app passou a ter som, e ele obedece a três regras:
