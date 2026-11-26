@@ -19,6 +19,7 @@
     <script src="js/sudoku.js"></script>
     <script src="js/tetris.js"></script>
     <script src="js/cruzadas.js"></script>
+    <script src="js/anagrama.js"></script>
 </head>
 <body>
     <header class="topo-pagina">
@@ -33,6 +34,7 @@
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-sudoku" id="aba-sudoku" class="botao-aba">Sudoku</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-tetris" id="aba-tetris" class="botao-aba">Tetris Calmo</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-palavras" id="aba-palavras" class="botao-aba">Palavras Cruzadas</button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="painel-anagrama" id="aba-anagrama" class="botao-aba">Anagrama</button>
         </nav>
 
         <section class="container-painel-jogos">
@@ -78,6 +80,23 @@
                 <button type="button" id="reiniciar-sudoku" class="botao-secundario">Novo Sudoku</button>
             </div>
 
+            <!-- Painel Anagrama -->
+            <div id="painel-anagrama" role="tabpanel" aria-labelledby="aba-anagrama" class="painel-jogo oculto" hidden>
+                <div class="cabecalho-jogo">
+                    <h2>Anagrama</h2>
+                    <p class="instrucao-suave">Uma palavra por vez, com as letras fora de ordem. Sem tempo, sem pontos e sem perder: errar não tira nada. Se travar, peça uma dica, que revela uma letra. O jogo é todo de texto e funciona inteiro com leitor de tela.</p>
+                </div>
+                <p class="anagrama-letras" id="letras-anagrama"></p>
+                <p class="explica" id="dica-anagrama"></p>
+                <p class="anagrama-pista" id="pista-anagrama"></p>
+                <label for="resposta-anagrama">Escreva a palavra</label>
+                <input type="text" id="resposta-anagrama" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false">
+                <p id="recado-anagrama" role="status"></p>
+                <button type="button" id="conferir-anagrama" class="botao-primario">Conferir</button>
+                <button type="button" id="dica-anagrama-botao" class="botao-secundario">Pedir uma dica</button>
+                <button type="button" id="outra-anagrama" class="botao-secundario">Outra palavra</button>
+            </div>
+
             <!-- Painel Tetris Calmo -->
             <div id="painel-tetris" role="tabpanel" aria-labelledby="aba-tetris" class="painel-jogo oculto" hidden>
                 <div class="cabecalho-jogo">
@@ -118,6 +137,7 @@
     <script src="js/tela-sudoku.js"></script>
     <script src="js/tela-tetris.js"></script>
     <script src="js/tela-cruzadas.js"></script>
+    <script src="js/tela-anagrama.js"></script>
     <script src="js/menu.js"></script>
     <script src="js/registra-sw.js"></script>
 </body>

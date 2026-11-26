@@ -118,15 +118,16 @@ document.addEventListener('DOMContentLoaded', () => {
     desenharTemas();
     novaPartida();
 
-    /* Modo Mini: esconder Sudoku e Palavras Cruzadas (so para criancas). */
+    /* Modo Mini: esconder Sudoku, Palavras Cruzadas e Anagrama: dependem de ler
+       e escrever, e o Mini atende a partir dos 3 anos. */
     var modoMini = typeof criarArmazenamento === "function" &&
       criarArmazenamento(window.localStorage).ler().ajustes.modo === "mini";
     if (modoMini) {
-      ["aba-sudoku", "aba-palavras"].forEach(function (id) {
+      ["aba-sudoku", "aba-palavras", "aba-anagrama"].forEach(function (id) {
         var el = document.getElementById(id);
         if (el) { el.hidden = true; el.setAttribute("aria-selected", "false"); el.classList.remove("ativa"); }
       });
-      ["painel-sudoku", "painel-palavras"].forEach(function (id) {
+      ["painel-sudoku", "painel-palavras", "painel-anagrama"].forEach(function (id) {
         var el = document.getElementById(id);
         if (el) { el.hidden = true; el.classList.remove("ativo"); el.classList.add("oculto"); }
       });

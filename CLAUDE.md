@@ -130,6 +130,14 @@ Tem também Compartilhar, igual ao do Desenhar: `navigator.share` com o arquivo,
 conferindo `canShare` antes; sem Web Share, cai no baixar. A imagem só sai do
 aparelho quando a pessoa toca e escolhe para quem mandar.
 
+## Jogos para quem não enxerga
+
+Anagrama, Forca sem forca, Memória de palavras e Memória sonora são de texto
+e funcionam inteiros com leitor de tela, mas aparecem para todo mundo: não há
+aba separada "para cego". Som, quando houver, NUNCA carrega informação
+sozinho — sempre com o texto equivalente — e leva aviso de volume. Esses jogos
+somem no Modo Mini, porque dependem de ler e escrever.
+
 ## O que ainda falta
 
 - Ruído de fundo em Web Audio, com aviso de volume e limite.
