@@ -116,6 +116,9 @@ menina"). Polaroids e adesivos se arrastam por toque, mouse ou setas; adesivos
 ficam sempre por cima das polaroids e mudam de tamanho. Posição guardada como
 fração da página. Salva sozinho em `localStorage` (teto de 30 polaroids e 80
 adesivos; fotos de 640 px em JPEG) e baixa a página como PNG de 1200 x 1600.
+Tem também Compartilhar, igual ao do Desenhar: `navigator.share` com o arquivo,
+conferindo `canShare` antes; sem Web Share, cai no baixar. A imagem só sai do
+aparelho quando a pessoa toca e escolhe para quem mandar.
 
 ## O que ainda falta
 

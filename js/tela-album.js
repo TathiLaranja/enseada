@@ -556,7 +556,24 @@
     });
   }
 
-  document.getElementById("baixar-pagina").addEventListener("click", function () {
+  function nomeDoArquivo(pagina) {
+    return "album-pagina-" + (album.paginas.indexOf(pagina) + 1) + ".png";
+  }
+
+  function baixar(blob, nome) {
+    var endereco = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    link.href = endereco;
+    link.download = nome;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(endereco);
+  }
+
+  /* Prepara a imagem da pagina e entrega para `seguir`. Devolve null se a
+     pagina estiver em branco ou a imagem nao sair. */
+  function comAImagemDaPagina(seguir) {
     var pagina = paginaAtual();
     if (pagina.polaroids.length === 0 && pagina.adesivos.length === 0) {
       recado.textContent = "A página está em branco. Adicione uma foto ou um adesivo primeiro.";
@@ -565,17 +582,40 @@
     recado.textContent = "Preparando a imagem…";
     montarImagem(pagina).then(function (blob) {
       if (!blob) { recado.textContent = "Não foi possível preparar a imagem."; return; }
-      var endereco = URL.createObjectURL(blob);
-      var link = document.createElement("a");
-      link.href = endereco;
-      link.download = "album-pagina-" + (album.paginas.indexOf(pagina) + 1) + ".png";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(endereco);
-      recado.textContent = "A imagem foi para a pasta de downloads do aparelho.";
+      seguir(blob, nomeDoArquivo(pagina));
     }).catch(function () {
       recado.textContent = "Não foi possível preparar a imagem.";
+    });
+  }
+
+  document.getElementById("baixar-pagina").addEventListener("click", function () {
+    comAImagemDaPagina(function (blob, nome) {
+      baixar(blob, nome);
+      recado.textContent = "A imagem foi para a pasta de downloads do aparelho.";
+    });
+  });
+
+  /* Compartilhar: a imagem sai do aparelho SO quando a pessoa toca aqui e
+     escolhe para quem mandar na folha do proprio sistema. O Enseada nao
+     envia nada e nao guarda nada sobre isso. Se o aparelho nao compartilha
+     arquivos, a pagina vai para a pasta de downloads e ela manda por la. */
+  document.getElementById("compartilhar-pagina").addEventListener("click", function () {
+    comAImagemDaPagina(function (blob, nome) {
+      var arquivo = new File([blob], nome, { type: "image/png" });
+      var dados = { files: [arquivo], title: "Minha página do álbum" };
+      if (navigator.share && navigator.canShare && navigator.canShare(dados)) {
+        navigator.share(dados).then(function () {
+          recado.textContent = "";
+        }).catch(function (erro) {
+          /* A pessoa fechou a folha de compartilhar: nada foi enviado. */
+          recado.textContent = erro && erro.name === "AbortError"
+            ? "Nada foi enviado."
+            : "Não foi possível compartilhar. Tente de novo.";
+        });
+        return;
+      }
+      baixar(blob, nome);
+      recado.textContent = "Este aparelho não compartilha direto. A imagem foi para a pasta de downloads; mande por lá.";
     });
   });
 
