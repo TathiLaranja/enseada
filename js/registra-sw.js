@@ -8,3 +8,15 @@ if ("serviceWorker" in navigator) {
     });
   });
 }
+
+/* Pede ao navegador para NÃO apagar o que está guardado quando o aparelho
+   ficar sem espaço. Sem este pedido, iOS e Android podem limpar o
+   localStorage do app sozinhos, e aí some álbum, âncoras e tudo.
+   É um pedido local: não sai nada do aparelho e não precisa de permissão
+   nenhuma da pessoa. Se o navegador não tiver, o app segue igual. */
+if (navigator.storage && navigator.storage.persist) {
+  navigator.storage.persisted().then(function (ja) {
+    if (!ja) { return navigator.storage.persist(); }
+    return true;
+  }).catch(function () { /* navegador antigo: nada a fazer e nada a avisar */ });
+}

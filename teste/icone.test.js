@@ -116,4 +116,18 @@ teste("o ícone maskable é quadrado cheio, sem cantos transparentes", function 
   assert.strictEqual(hex(ler(1, 1)), "#E8B9A8");
 });
 
+teste("o app pede para o celular não apagar os dados guardados", function () {
+  const js = fs.readFileSync("js/registra-sw.js", "utf8");
+  assert.ok(js.indexOf("navigator.storage.persist") !== -1,
+    "sem o pedido, iOS e Android podem limpar o álbum sozinhos");
+  assert.ok(js.indexOf("navigator.storage &&") !== -1,
+    "o pedido tem de ser protegido: navegador antigo não pode quebrar o app");
+  /* todas as telas carregam registra-sw.js, senão o pedido não vale em todas */
+  const telas = fs.readdirSync(".").filter(function (f) { return /\.html$/.test(f); });
+  telas.forEach(function (t) {
+    assert.ok(fs.readFileSync(t, "utf8").indexOf("registra-sw.js") !== -1,
+      t + " não carrega registra-sw.js");
+  });
+});
+
 fim("icone");
