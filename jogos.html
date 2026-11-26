@@ -20,6 +20,7 @@
     <script src="js/tetris.js"></script>
     <script src="js/cruzadas.js"></script>
     <script src="js/anagrama.js"></script>
+    <script src="js/forca.js"></script>
 </head>
 <body>
     <header class="topo-pagina">
@@ -35,6 +36,7 @@
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-tetris" id="aba-tetris" class="botao-aba">Tetris Calmo</button>
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-palavras" id="aba-palavras" class="botao-aba">Palavras Cruzadas</button>
                 <button type="button" role="tab" aria-selected="false" aria-controls="painel-anagrama" id="aba-anagrama" class="botao-aba">Anagrama</button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="painel-forca" id="aba-forca" class="botao-aba">Forca sem forca</button>
         </nav>
 
         <section class="container-painel-jogos">
@@ -78,6 +80,21 @@
                 <p id="recado-sudoku" role="status"></p>
                 <button type="button" id="dica-sudoku" class="botao-secundario">Pedir uma dica</button>
                 <button type="button" id="reiniciar-sudoku" class="botao-secundario">Novo Sudoku</button>
+            </div>
+
+            <!-- Painel Forca sem forca -->
+            <div id="painel-forca" role="tabpanel" aria-labelledby="aba-forca" class="painel-jogo oculto" hidden>
+                <div class="cabecalho-jogo">
+                    <h2>Forca sem forca</h2>
+                    <p class="instrucao-suave">É a forca de sempre, menos a forca: não tem boneco, não tem contagem de erro e não tem perder. Chute letras até descobrir a palavra, no seu tempo. Se travar, peça uma dica. Funciona inteiro com leitor de tela.</p>
+                </div>
+                <p class="forca-pista" id="pista-forca"></p>
+                <p class="explica" id="dica-forca"></p>
+                <p class="explica" id="tentadas-forca"></p>
+                <div class="teclado-forca" id="teclado-forca" role="group" aria-label="Letras para chutar"></div>
+                <p id="recado-forca" role="status"></p>
+                <button type="button" id="dica-forca-botao" class="botao-secundario">Pedir uma dica</button>
+                <button type="button" id="outra-forca" class="botao-secundario">Outra palavra</button>
             </div>
 
             <!-- Painel Anagrama -->
@@ -138,6 +155,7 @@
     <script src="js/tela-tetris.js"></script>
     <script src="js/tela-cruzadas.js"></script>
     <script src="js/tela-anagrama.js"></script>
+    <script src="js/tela-forca.js"></script>
     <script src="js/menu.js"></script>
     <script src="js/registra-sw.js"></script>
 </body>
