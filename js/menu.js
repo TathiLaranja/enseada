@@ -100,7 +100,15 @@ function montarMenu(caminho) {
   var oculto = window.localStorage.getItem("menu-oculto") === "1";
 
   function posicionarGatilho() {
+    var alturaBotao = gatilho.offsetHeight || 44;
     gatilho.style.bottom = oculto ? "0" : (nav.offsetHeight + "px");
+    /* A pagina precisa saber quanto o menu ocupa para nao ficar com o fim do
+       conteudo embaixo dele. Antes o CSS chutava 150px fixos, e o menu aberto
+       mede 187: os ultimos 37px de cada tela ficavam tapados. Quem mede agora
+       e o proprio menu, entao fonte maior e Modo Mini continuam certos. */
+    var altura = oculto ? alturaBotao : (nav.offsetHeight + alturaBotao);
+    document.body.style.setProperty("--altura-menu", altura + "px");
+    document.body.classList.toggle("menu-recolhido", oculto);
   }
 
   function aplicarEstado() {

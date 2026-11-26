@@ -23,7 +23,7 @@ body {
   margin: 0 auto;
   padding-inline: 20px;
   /* Embaixo sobra espaco para o menu fixo nao cobrir o fim da tela. */
-  padding-block: calc(18px + env(safe-area-inset-top, 0px)) calc(150px + env(safe-area-inset-bottom, 0px));
+  padding-block: calc(18px + env(safe-area-inset-top, 0px)) calc(var(--altura-menu, 187px) + 14px + env(safe-area-inset-bottom, 0px));
 }
 
 /* Cabecalho: so o nome da tela e a saida. Nada mais. */
@@ -171,9 +171,9 @@ a { color: var(--texto); }
   pointer-events: none;
 }
 
-body.menu-recolhido .pagina {
-  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
-}
+/* O espaco embaixo sai de --altura-menu, que o menu.js mede e publica.
+   A regra antiga fixava 64px aqui e 150px acima, numeros que nao batiam
+   com o menu de verdade. */
 
 .card-menu {
   display: flex;
@@ -564,7 +564,7 @@ textarea {
 }
 
 .conteudo-principal {
-  padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(var(--altura-menu, 187px) + 14px + env(safe-area-inset-bottom, 0px));
 }
 
 .link-voltar {
