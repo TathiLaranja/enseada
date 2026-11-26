@@ -61,16 +61,62 @@ teste("mover leva a polaroid ao lugar pedido e nunca a deixa sair da página", f
   assert.ok(Math.abs(al.paginas[0].polaroids[0].y - (1 - a.POLAROID_ALTURA)) < 1e-9);
 });
 
-teste("a inclinação das polaroides pode ser ajustada e fica limitada a oito graus", function () {
+teste("a inclinação das polaroides pode ser ajustada e fica limitada a trinta graus", function () {
   let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
   al = a.albumGirarPolaroid(al, "p0", "q1", 4);
   assert.strictEqual(al.paginas[0].polaroids[0].giro, 4);
-  al = a.albumGirarPolaroid(al, "p0", "q1", 20);
-  assert.strictEqual(al.paginas[0].polaroids[0].giro, 8);
-  al = a.albumGirarPolaroid(al, "p0", "q1", -20);
-  assert.strictEqual(al.paginas[0].polaroids[0].giro, -8);
+  al = a.albumGirarPolaroid(al, "p0", "q1", 25);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, 25);
+  al = a.albumGirarPolaroid(al, "p0", "q1", 90);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, 30);
+  al = a.albumGirarPolaroid(al, "p0", "q1", -90);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, -30);
   al = a.albumGirarPolaroid(al, "p0", "q1", 0);
   assert.strictEqual(al.paginas[0].polaroids[0].giro, 0);
+});
+
+teste("a polaroide aumenta e diminui, e o passo para nos dois extremos", function () {
+  let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
+  assert.strictEqual(al.paginas[0].polaroids[0].tam, a.POLAROID_TAMANHO_INICIAL);
+  al = a.albumRedimensionarPolaroid(al, "p0", "q1", -1);
+  assert.ok(al.paginas[0].polaroids[0].tam < a.POLAROID_TAMANHO_INICIAL);
+  for (let i = 0; i < 40; i++) { al = a.albumRedimensionarPolaroid(al, "p0", "q1", -1); }
+  assert.strictEqual(al.paginas[0].polaroids[0].tam, a.POLAROID_TAMANHO_MINIMO);
+  for (let i = 0; i < 80; i++) { al = a.albumRedimensionarPolaroid(al, "p0", "q1", 1); }
+  assert.strictEqual(al.paginas[0].polaroids[0].tam, a.POLAROID_TAMANHO_MAXIMO);
+});
+
+teste("polaroide grande não sai da página: ao crescer, o lugar recua", function () {
+  let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
+  al = a.albumMover(al, "p0", "q1", 1, 1);
+  for (let i = 0; i < 20; i++) { al = a.albumRedimensionarPolaroid(al, "p0", "q1", 1); }
+  const q = al.paginas[0].polaroids[0];
+  assert.ok(q.x + q.tam <= 1 + 1e-9, "passou da direita: " + (q.x + q.tam));
+  assert.ok(q.y + a.albumAlturaDaPolaroid(q.tam) <= 1 + 1e-9, "passou de baixo");
+});
+
+teste("polaroide pequena pode chegar mais perto da beirada que uma grande", function () {
+  let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
+  al = a.albumMover(al, "p0", "q1", 1, 0);
+  const grande = al.paginas[0].polaroids[0].x;
+  for (let i = 0; i < 3; i++) { al = a.albumRedimensionarPolaroid(al, "p0", "q1", -1); }
+  al = a.albumMover(al, "p0", "q1", 1, 0);
+  assert.ok(al.paginas[0].polaroids[0].x > grande + 1e-9, "o limite não acompanhou o tamanho");
+});
+
+teste("enquadrar escolhe a parte da foto que aparece, e o recorte acompanha", function () {
+  let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
+  assert.strictEqual(al.paginas[0].polaroids[0].fx, 0.5);
+  al = a.albumEnquadrar(al, "p0", "q1", 0, 1);
+  assert.strictEqual(al.paginas[0].polaroids[0].fx, 0);
+  assert.strictEqual(al.paginas[0].polaroids[0].fy, 1);
+  al = a.albumEnquadrar(al, "p0", "q1", -3, 7);
+  assert.strictEqual(al.paginas[0].polaroids[0].fx, 0);
+  assert.strictEqual(al.paginas[0].polaroids[0].fy, 1);
+  /* foto deitada de 400 por 200: o quadrado de 200 anda 200 px na horizontal */
+  assert.strictEqual(a.albumRecorteQuadrado(400, 200, 0, 0.5).x, 0);
+  assert.strictEqual(a.albumRecorteQuadrado(400, 200, 1, 0.5).x, 200);
+  assert.strictEqual(a.albumRecorteQuadrado(400, 200).x, 100);
 });
 
 teste("a anotação é opcional e tem tamanho máximo", function () {
@@ -117,7 +163,29 @@ teste("o armazenamento guarda o álbum e recoloca tudo dentro da página", funct
   assert.deepStrictEqual(n.paginas.map(function (p) { return p.id; }), ["p0", "p2"]);
   const q = n.paginas[0].polaroids;
   assert.strictEqual(q.length, 1);
-  assert.ok(q[0].x === 0 && q[0].y <= 1 - a.POLAROID_ALTURA + 1e-9 && q[0].giro === 8);
+  assert.ok(q[0].x === 0 && q[0].y <= 1 - a.POLAROID_ALTURA + 1e-9 && q[0].giro === 30);
+  /* polaroide antiga, gravada antes de existir tamanho e enquadramento */
+  assert.strictEqual(q[0].tam, a.POLAROID_TAMANHO_INICIAL);
+  assert.strictEqual(q[0].fx, 0.5);
+  assert.strictEqual(q[0].fy, 0.5);
+});
+
+teste("o armazenamento guarda o tamanho e o enquadramento da polaroide", function () {
+  const dentro = g.normalizar({ album: { paginas: [{ id: "p0", polaroids: [
+    { id: "q1", foto: FOTO, tam: a.POLAROID_TAMANHO_MINIMO, x: 0.7, y: 0.1, fx: 0.2, fy: 0.9 }
+  ] }] } }).album.paginas[0].polaroids[0];
+  assert.strictEqual(dentro.tam, a.POLAROID_TAMANHO_MINIMO);
+  assert.strictEqual(dentro.fx, 0.2);
+  assert.strictEqual(dentro.fy, 0.9);
+  /* pequena em x = 0.7 cabe, porque o limite segue o tamanho dela */
+  assert.strictEqual(dentro.x, 0.7);
+  const fora = g.normalizar({ album: { paginas: [{ id: "p0", polaroids: [
+    { id: "q1", foto: FOTO, tam: 99, x: 9, y: 9, fx: -5, fy: 5 }
+  ] }] } }).album.paginas[0].polaroids[0];
+  assert.strictEqual(fora.tam, a.POLAROID_TAMANHO_MAXIMO);
+  assert.ok(Math.abs(fora.x - (1 - a.POLAROID_TAMANHO_MAXIMO)) < 1e-9);
+  assert.strictEqual(fora.fx, 0);
+  assert.strictEqual(fora.fy, 1);
 });
 
 teste("os limites do armazenamento batem com as medidas da polaroid", function () {
@@ -264,6 +332,25 @@ teste("a imagem baixada leva fita, adesivos e o marfim da página", function () 
   const js = fs.readFileSync("js/tela-album.js", "utf8");
   assert.ok(js.indexOf("desenharFita(") !== -1 && js.indexOf("pagina.adesivos.forEach") !== -1);
   assert.ok(js.indexOf("c.fillStyle = COR_DA_PAGINA") !== -1);
+});
+
+teste("as primeiras fotos de uma página não caem umas em cima das outras", function () {
+  let al = a.albumNovo(contador());
+  const n = Math.floor(1 / a.POLAROID_TAMANHO_INICIAL) *
+    Math.floor(1 / a.albumAlturaDaPolaroid(a.POLAROID_TAMANHO_INICIAL));
+  assert.ok(n >= 4, "deveria haver pelo menos quatro vagas, e há " + n);
+  for (let i = 0; i < n; i++) { al = a.albumAdicionarPolaroid(al, "p0", "q" + i, FOTO, 0); }
+  const qs = al.paginas[0].polaroids;
+  const alt = a.albumAlturaDaPolaroid(a.POLAROID_TAMANHO_INICIAL);
+  for (let i = 0; i < qs.length; i++) {
+    assert.ok(qs[i].x >= 0 && qs[i].x + qs[i].tam <= 1 + 1e-9, "foto " + i + " saiu de lado");
+    assert.ok(qs[i].y >= 0 && qs[i].y + alt <= 1 + 1e-9, "foto " + i + " saiu para baixo");
+    for (let j = i + 1; j < qs.length; j++) {
+      const encosta = qs[i].x < qs[j].x + qs[j].tam - 1e-9 && qs[j].x < qs[i].x + qs[i].tam - 1e-9 &&
+                      qs[i].y < qs[j].y + alt - 1e-9 && qs[j].y < qs[i].y + alt - 1e-9;
+      assert.ok(!encosta, "as fotos " + i + " e " + j + " nasceram uma em cima da outra");
+    }
+  }
 });
 
 fim("álbum");

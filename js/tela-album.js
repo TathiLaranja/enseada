@@ -19,6 +19,7 @@
   var btnEndireitar = document.getElementById("endireitar-polaroid");
   var btnMenor = document.getElementById("adesivo-menor");
   var btnMaior = document.getElementById("adesivo-maior");
+  var btnEnquadrar = document.getElementById("enquadrar-foto");
 
   var LADO_DA_FOTO = 640;
   var QUALIDADE = 0.7;
@@ -38,6 +39,9 @@
   var paginaId = album.paginas[0].id;
   var escolhida = null;
   var tirando = false;
+  /* Enquanto ligado, arrastar e as setas movem a foto DENTRO da moldura,
+     em vez de mover o cartao pela pagina. Uma coisa de cada vez. */
+  var enquadrando = false;
 
   function guardar() {
     var dados = armazem.ler();
@@ -86,7 +90,14 @@
   });
 
   /* ---------- mural ---------- */
+  function desligarEnquadrar() {
+    enquadrando = false;
+    btnEnquadrar.setAttribute("aria-pressed", "false");
+    btnEnquadrar.textContent = "Ajustar a foto dentro";
+  }
+
   function escolher(id) {
+    if (id !== escolhida) { desligarEnquadrar(); }
     escolhida = id;
     tirando = false;
     btnTirar.textContent = "Tirar da página";
@@ -96,8 +107,10 @@
     btnInclinarEsquerda.disabled = !achado || achado.tipo !== "polaroid";
     btnInclinarDireita.disabled = !achado || achado.tipo !== "polaroid";
     btnEndireitar.disabled = !achado || achado.tipo !== "polaroid";
-    btnMenor.disabled = !achado || achado.tipo !== "adesivo";
-    btnMaior.disabled = !achado || achado.tipo !== "adesivo";
+    btnMenor.disabled = !achado;
+    btnMaior.disabled = !achado;
+    btnEnquadrar.disabled = !achado || achado.tipo !== "polaroid";
+    if (btnEnquadrar.disabled) { desligarEnquadrar(); }
     Array.prototype.forEach.call(mural.children, function (c) {
       var esta = c.getAttribute("data-id") === id;
       c.classList.toggle("escolhida", esta);
@@ -109,8 +122,20 @@
     el.style.left = (q.x * 100) + "%";
     el.style.top = (q.y * 100) + "%";
     el.style.transform = "rotate(" + q.giro + "deg)";
-    if (tipo === "adesivo") { el.style.width = (q.tam * 100) + "%"; }
+    el.style.width = ((typeof q.tam === "number" ? q.tam : POLAROID_TAMANHO_INICIAL) * 100) + "%";
+    if (tipo === "polaroid") {
+      var foto = el.querySelector(".polaroid-foto");
+      /* object-position usa a mesma conta do recorte da imagem baixada. */
+      if (foto) {
+        foto.style.objectPosition =
+          (num(q.fx) * 100) + "% " + (num(q.fy) * 100) + "%";
+      }
+      var fita = el.querySelector(".fita");
+      if (fita) { fita.style.transform = "translateX(-50%) rotate(" + (-q.giro * 1.5 - 2) + "deg)"; }
+    }
   }
+
+  function num(v) { return typeof v === "number" && isFinite(v) ? v : 0.5; }
 
   function criarPolaroid(q) {
     var el = document.createElement("div");
@@ -120,7 +145,6 @@
     el.setAttribute("aria-pressed", "false");
     el.setAttribute("data-id", q.id);
     el.setAttribute("aria-label", "Polaroid" + (q.nota ? ": " + q.nota : "") + ". Toque para escolher; arraste ou use as setas para mover.");
-    aplicarPosicao(el, q, "polaroid");
 
     var foto = document.createElement("img");
     foto.className = "polaroid-foto";
@@ -152,6 +176,7 @@
     nota.addEventListener("pointerdown", function (e) { e.stopPropagation(); escolher(q.id); });
     el.appendChild(nota);
 
+    aplicarPosicao(el, q, "polaroid");
     ligarArrasto(el, q.id, "polaroid");
     return el;
   }
@@ -188,12 +213,23 @@
       escolher(id);
       el.setPointerCapture(e.pointerId);
       var atual = buscar(id);
-      arrastando = { px: e.clientX, py: e.clientY, x: atual.x, y: atual.y };
+      arrastando = { px: e.clientX, py: e.clientY, x: atual.x, y: atual.y,
+        fx: num(atual.fx), fy: num(atual.fy) };
       el.classList.add("arrastando");
     });
 
     el.addEventListener("pointermove", function (e) {
       if (!arrastando) { return; }
+      if (enquadrando && tipo === "polaroid" && id === escolhida) {
+        /* A foto acompanha o dedo: andar para a direita mostra o que estava
+           escondido do lado esquerdo. */
+        var cartao = el.getBoundingClientRect();
+        album = albumEnquadrar(album, paginaId, id,
+          arrastando.fx - (e.clientX - arrastando.px) / cartao.width,
+          arrastando.fy - (e.clientY - arrastando.py) / cartao.height);
+        aplicarPosicao(el, buscar(id), tipo);
+        return;
+      }
       var caixa = mural.getBoundingClientRect();
       album = albumMover(album, paginaId, id,
         arrastando.x + (e.clientX - arrastando.px) / caixa.width,
@@ -213,14 +249,21 @@
     /* Teclado: setas movem o item; Shift anda mais; Enter escolhe. */
     el.addEventListener("keydown", function (e) {
       if (e.target !== el) { return; }
-      var passo = e.shiftKey ? 0.08 : 0.02;
+      var ajustando = enquadrando && tipo === "polaroid" && id === escolhida;
+      var passo = ajustando ? (e.shiftKey ? 0.2 : 0.06) : (e.shiftKey ? 0.08 : 0.02);
       var dx = e.key === "ArrowLeft" ? -passo : e.key === "ArrowRight" ? passo : 0;
       var dy = e.key === "ArrowUp" ? -passo : e.key === "ArrowDown" ? passo : 0;
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); escolher(id); return; }
       if (!dx && !dy) { return; }
       e.preventDefault();
-      escolher(id);
       var atual = buscar(id);
+      if (ajustando) {
+        album = albumEnquadrar(album, paginaId, id, num(atual.fx) + dx, num(atual.fy) + dy);
+        aplicarPosicao(el, buscar(id), tipo);
+        if (!guardar()) { dizerFalha(); }
+        return;
+      }
+      escolher(id);
       album = albumMover(album, paginaId, id, atual.x + dx, atual.y + dy);
       aplicarPosicao(el, buscar(id), tipo);
       if (!guardar()) { dizerFalha(); }
@@ -273,7 +316,7 @@
     if (!escolhida) { return; }
     var polaroid = buscar(escolhida);
     if (!polaroid) { return; }
-    album = albumGirarPolaroid(album, paginaId, escolhida, polaroid.giro + sentido * 2);
+    album = albumGirarPolaroid(album, paginaId, escolhida, polaroid.giro + sentido * 5);
     if (!guardar()) { dizerFalha(); }
     desenhar();
   }
@@ -288,12 +331,29 @@
 
   function mudarTamanho(sentido) {
     if (!escolhida) { return; }
-    album = albumRedimensionarAdesivo(album, paginaId, escolhida, sentido);
+    var achado = albumBuscar(paginaAtual(), escolhida);
+    if (!achado) { return; }
+    album = achado.tipo === "polaroid"
+      ? albumRedimensionarPolaroid(album, paginaId, escolhida, sentido)
+      : albumRedimensionarAdesivo(album, paginaId, escolhida, sentido);
     if (!guardar()) { dizerFalha(); }
     desenhar();
   }
   btnMenor.addEventListener("click", function () { mudarTamanho(-1); });
   btnMaior.addEventListener("click", function () { mudarTamanho(1); });
+
+  btnEnquadrar.addEventListener("click", function () {
+    if (!escolhida || !buscar(escolhida)) { return; }
+    if (enquadrando) {
+      desligarEnquadrar();
+      recado.textContent = "Voltou a mover a polaroid pela página.";
+      return;
+    }
+    enquadrando = true;
+    btnEnquadrar.setAttribute("aria-pressed", "true");
+    btnEnquadrar.textContent = "Pronto, voltar a mover";
+    recado.textContent = "Arraste a foto, ou use as setas, para escolher a parte que aparece.";
+  });
 
   /* ---------- gaveta de adesivos ---------- */
   var gaveta = document.getElementById("gaveta-adesivos");
@@ -448,7 +508,7 @@
 
       pagina.polaroids.forEach(function (q, i) {
         var img = imagens[i];
-        var cl = POLAROID_LARGURA * L;
+        var cl = (typeof q.tam === "number" ? q.tam : POLAROID_TAMANHO_INICIAL) * L;
         var al = cl * POLAROID_PROPORCAO;
         var margem = 0.06 * cl;
         var lado = 0.88 * cl;
@@ -464,7 +524,7 @@
         c.strokeStyle = "#D8D3C8";
         c.lineWidth = 2;
         c.strokeRect(-cl / 2, -al / 2, cl, al);
-        var r = albumRecorteQuadrado(img.naturalWidth, img.naturalHeight);
+        var r = albumRecorteQuadrado(img.naturalWidth, img.naturalHeight, q.fx, q.fy);
         c.drawImage(img, r.x, r.y, r.lado, r.lado, -cl / 2 + margem, -al / 2 + margem, lado, lado);
         if (q.nota) {
           var topo = -al / 2 + margem + lado;

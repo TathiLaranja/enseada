@@ -8,7 +8,7 @@
 
    Trocar VERSAO a cada publicação faz o aparelho buscar os arquivos novos. */
 
-var VERSAO = "enseada-v34";
+var VERSAO = "enseada-v35";
 
 var ARQUIVOS = [
   "./",

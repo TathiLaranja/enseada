@@ -160,13 +160,20 @@ function normalizar(bruto) {
         return q && typeof q === "object" && typeof q.id === "string" && /^[a-z0-9]{1,24}$/.test(q.id) &&
           typeof q.foto === "string" && /^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(q.foto);
       }).slice(0, restantes).map(function (q) {
+        /* O tamanho e da propria polaroid, entao o lugar e preso pelo tamanho
+           dela, nao por um valor fixo: polaroid pequena chega mais na beirada. */
+        var tamP = limitar(numero(q.tam, 0.42), 0.24, 0.7);
+        var altP = tamP * 1.16 / (4 / 3);
         return {
           id: q.id,
           foto: q.foto,
           nota: typeof q.nota === "string" ? q.nota.slice(0, 40) : "",
-          x: limitar(numero(q.x, 0.3), 0, 0.58),
-          y: limitar(numero(q.y, 0.3), 0, 0.6346),
-          giro: limitar(numero(q.giro, 0), -8, 8),
+          tam: tamP,
+          x: limitar(numero(q.x, 0.3), 0, 1 - tamP),
+          y: limitar(numero(q.y, 0.3), 0, 1 - altP),
+          giro: limitar(numero(q.giro, 0), -30, 30),
+          fx: limitar(numero(q.fx, 0.5), 0, 1),
+          fy: limitar(numero(q.fy, 0.5), 0, 1),
           fita: limitar(Math.floor(numero(q.fita, 0)), 0, 3)
         };
       });

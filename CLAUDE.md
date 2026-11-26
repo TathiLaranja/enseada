@@ -106,7 +106,11 @@ Aberto pela tela Fotos (o card Fotos do menu fica marcado nas duas). Começa com
 3 páginas e a pessoa acrescenta quantas quiser. A página é uma folha em Marfim
 `#FAF8F5` fixo (igual nos dois temas e na imagem baixada). Cada foto vira uma
 polaroid (foto quadrada + moldura + anotação opcional) presa com uma fita
-adesiva de um dos quatro tons da paleta. Há uma gaveta de 14 adesivos em vetor
+adesiva de um dos quatro tons da paleta. A polaroid tem tamanho próprio
+(de 24% a 70% da largura da página, passo de 6%), inclina até 30° para cada
+lado e a foto se enquadra dentro da moldura (`fx` e `fy`, 0,5 é o meio, a
+mesma conta do `object-position` e do recorte da imagem baixada). Foto nova
+nasce numa vaga livre, calculada pelo tamanho dela, para não empilhar. Há uma gaveta de 14 adesivos em vetor
 (natureza, bichinhos, brinquedos e veículos, sem cor "de menino" ou "de
 menina"). Polaroids e adesivos se arrastam por toque, mouse ou setas; adesivos
 ficam sempre por cima das polaroids e mudam de tamanho. Posição guardada como

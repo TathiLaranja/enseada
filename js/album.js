@@ -12,10 +12,17 @@ var ALBUM_MAXIMO_DE_ADESIVOS = 80;
 var ALBUM_TAMANHO_DA_NOTA = 40;
 var ALBUM_CORES_DA_FITA = ["#E8B9A8", "#B8B0C8", "#A5B09A", "#9EBBC0"];
 
-/* Pagina em pe, 3 para 4. A polaroid ocupa 42% da largura; o cartao tem
-   1.16 vezes a largura de altura (foto quadrada + espaco branco embaixo).
+/* Pagina em pe, 3 para 4. A polaroid nasce com 42% da largura e a pessoa
+   aumenta ou diminui; o cartao tem 1.16 vezes a sua largura de altura (foto
+   quadrada + espaco branco embaixo).
    O adesivo e quadrado: ocupa `tam` da largura e 0.75 * tam da altura. */
 var POLAROID_LARGURA = 0.42;
+var POLAROID_TAMANHO_INICIAL = 0.42;
+var POLAROID_TAMANHO_MINIMO = 0.24;
+var POLAROID_TAMANHO_MAXIMO = 0.7;
+var POLAROID_PASSO = 0.06;
+/* Inclinacao: 30 graus para cada lado. Oito era tao pouco que nao se via. */
+var POLAROID_GIRO_MAXIMO = 30;
 var POLAROID_PROPORCAO = 1.16;
 var PAGINA_PROPORCAO = 4 / 3;
 var POLAROID_ALTURA = POLAROID_LARGURA * POLAROID_PROPORCAO / PAGINA_PROPORCAO;
@@ -64,22 +71,44 @@ function albumPodeAdicionarAdesivo(album) {
   return albumTotalDeAdesivos(album) < ALBUM_MAXIMO_DE_ADESIVOS;
 }
 
+/* Altura de uma polaroid de largura `tam`, como fracao da altura da pagina. */
+function albumAlturaDaPolaroid(tam) {
+  return tam * POLAROID_PROPORCAO / PAGINA_PROPORCAO;
+}
+
 /* Altura de um adesivo de lado `tam`, como fracao da altura da pagina. */
 function albumAlturaDoAdesivo(tam) {
   return tam / PAGINA_PROPORCAO;
 }
 
-/* Foto nova no meio da pagina, com um desvio por polaroid para nao cairem uma em cima da outra. */
+/* Lugar de uma foto nova: seis posicoes que nao se encostam (duas colunas por
+   tres linhas), com uma inclinacao de bagunca pequena. Depois da sexta volta
+   ao comeco, deslocado, para empilhar de proposito como num album de verdade.
+   Antes eram quatro posicoes muito juntas e tudo caia num monte so. */
+function albumLugarDaPolaroid(n, tam) {
+  var alt = albumAlturaDaPolaroid(tam);
+  var colunas = Math.max(1, Math.floor(1 / tam));
+  var linhas = Math.max(1, Math.floor(1 / alt));
+  var vagas = colunas * linhas;
+  var volta = Math.floor(n / vagas);
+  var vaga = n % vagas;
+  var sobraX = (1 - colunas * tam) / (colunas + 1);
+  var sobraY = (1 - linhas * alt) / (linhas + 1);
+  var x = sobraX + (vaga % colunas) * (tam + sobraX) + volta * 0.035;
+  var y = sobraY + Math.floor(vaga / colunas) * (alt + sobraY) + volta * 0.03;
+  return { x: albumLimitar(x, 0, 1 - tam), y: albumLimitar(y, 0, 1 - alt) };
+}
+
+/* Foto nova numa vaga livre da pagina. */
 function albumAdicionarPolaroid(album, paginaId, id, foto, giro, fita) {
   if (!albumPodeAdicionar(album)) { return album; }
   return albumCopiar(album, function (p) {
     if (p.id !== paginaId) { return p; }
-    var n = p.polaroids.length;
-    var x = albumLimitar((1 - POLAROID_LARGURA) / 2 + ((n % 4) - 1.5) * 0.06, 0, 1 - POLAROID_LARGURA);
-    var y = albumLimitar((1 - POLAROID_ALTURA) / 2 + ((n % 4) - 1.5) * 0.05, 0, 1 - POLAROID_ALTURA);
+    var tam = POLAROID_TAMANHO_INICIAL;
+    var lugar = albumLugarDaPolaroid(p.polaroids.length, tam);
     return albumPagina(p, p.polaroids.concat([{
-      id: id, foto: foto, nota: "", x: x, y: y,
-      giro: albumLimitar(giro || 0, -8, 8),
+      id: id, foto: foto, nota: "", x: lugar.x, y: lugar.y, tam: tam, fx: 0.5, fy: 0.5,
+      giro: albumLimitar(giro || 0, -POLAROID_GIRO_MAXIMO, POLAROID_GIRO_MAXIMO),
       fita: Math.min(ALBUM_CORES_DA_FITA.length - 1, Math.max(0, Math.floor(fita || 0)))
     }]), p.adesivos);
   });
@@ -131,16 +160,45 @@ function albumCom(q, mudancas) {
 /* Move a polaroid ou o adesivo, sem deixar sair da pagina. */
 function albumMover(album, paginaId, itemId, x, y) {
   return albumTrocarItem(album, paginaId, itemId, function (q, tipo) {
-    var largura = tipo === "adesivo" ? q.tam : POLAROID_LARGURA;
-    var altura = tipo === "adesivo" ? albumAlturaDoAdesivo(q.tam) : POLAROID_ALTURA;
+    var tam = typeof q.tam === "number" ? q.tam : POLAROID_TAMANHO_INICIAL;
+    var largura = tam;
+    var altura = tipo === "adesivo" ? albumAlturaDoAdesivo(tam) : albumAlturaDaPolaroid(tam);
     return albumCom(q, { x: albumLimitar(x, 0, 1 - largura), y: albumLimitar(y, 0, 1 - altura) });
   });
 }
 
-/* Ajusta a inclinacao de uma polaroid, limitada a oito graus para cada lado. */
+/* Ajusta a inclinacao de uma polaroid, limitada a trinta graus para cada lado. */
 function albumGirarPolaroid(album, paginaId, itemId, giro) {
   return albumTrocarItem(album, paginaId, itemId, function (q, tipo) {
-    return tipo === "polaroid" ? albumCom(q, { giro: albumLimitar(giro, -8, 8) }) : q;
+    return tipo === "polaroid"
+      ? albumCom(q, { giro: albumLimitar(giro, -POLAROID_GIRO_MAXIMO, POLAROID_GIRO_MAXIMO) })
+      : q;
+  });
+}
+
+/* Aumenta ou diminui uma polaroid (passo de 6% da largura da pagina),
+   mantendo o cartao inteiro dentro da pagina. */
+function albumRedimensionarPolaroid(album, paginaId, itemId, sentido) {
+  return albumTrocarItem(album, paginaId, itemId, function (q, tipo) {
+    if (tipo !== "polaroid") { return q; }
+    var agora = typeof q.tam === "number" ? q.tam : POLAROID_TAMANHO_INICIAL;
+    var tam = albumLimitar(Math.round((agora + sentido * POLAROID_PASSO) * 100) / 100,
+      POLAROID_TAMANHO_MINIMO, POLAROID_TAMANHO_MAXIMO);
+    return albumCom(q, {
+      tam: tam,
+      x: albumLimitar(q.x, 0, 1 - tam),
+      y: albumLimitar(q.y, 0, 1 - albumAlturaDaPolaroid(tam))
+    });
+  });
+}
+
+/* Enquadra: escolhe que parte da foto aparece no quadrado da moldura.
+   0.5 e 0.5 e o meio, que era o unico recorte possivel antes. */
+function albumEnquadrar(album, paginaId, itemId, fx, fy) {
+  return albumTrocarItem(album, paginaId, itemId, function (q, tipo) {
+    return tipo === "polaroid"
+      ? albumCom(q, { fx: albumLimitar(fx, 0, 1), fy: albumLimitar(fy, 0, 1) })
+      : q;
   });
 }
 
@@ -187,10 +245,13 @@ function albumTirar(album, paginaId, itemId) {
   });
 }
 
-/* Recorte quadrado no centro da foto: o mesmo que o CSS object-fit: cover faz. */
-function albumRecorteQuadrado(largura, altura) {
+/* Recorte quadrado da foto, na mesma conta que o CSS object-fit: cover com
+   object-position faz. Sem fx e fy, recorta no meio, como antes. */
+function albumRecorteQuadrado(largura, altura, fx, fy) {
   var lado = Math.min(largura, altura);
-  return { x: (largura - lado) / 2, y: (altura - lado) / 2, lado: lado };
+  var ex = typeof fx === "number" && isFinite(fx) ? albumLimitar(fx, 0, 1) : 0.5;
+  var ey = typeof fy === "number" && isFinite(fy) ? albumLimitar(fy, 0, 1) : 0.5;
+  return { x: (largura - lado) * ex, y: (altura - lado) * ey, lado: lado };
 }
 
 if (typeof module !== "undefined" && module.exports) {
@@ -203,6 +264,14 @@ if (typeof module !== "undefined" && module.exports) {
     POLAROID_LARGURA: POLAROID_LARGURA,
     POLAROID_PROPORCAO: POLAROID_PROPORCAO,
     POLAROID_ALTURA: POLAROID_ALTURA,
+    POLAROID_TAMANHO_INICIAL: POLAROID_TAMANHO_INICIAL,
+    POLAROID_TAMANHO_MINIMO: POLAROID_TAMANHO_MINIMO,
+    POLAROID_TAMANHO_MAXIMO: POLAROID_TAMANHO_MAXIMO,
+    POLAROID_GIRO_MAXIMO: POLAROID_GIRO_MAXIMO,
+    albumAlturaDaPolaroid: albumAlturaDaPolaroid,
+    albumLugarDaPolaroid: albumLugarDaPolaroid,
+    albumRedimensionarPolaroid: albumRedimensionarPolaroid,
+    albumEnquadrar: albumEnquadrar,
     ADESIVO_TAMANHO_INICIAL: ADESIVO_TAMANHO_INICIAL,
     ADESIVO_TAMANHO_MINIMO: ADESIVO_TAMANHO_MINIMO,
     ADESIVO_TAMANHO_MAXIMO: ADESIVO_TAMANHO_MAXIMO,
