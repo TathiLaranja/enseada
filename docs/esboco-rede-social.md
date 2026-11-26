@@ -96,27 +96,44 @@ coisa nova, e o padrão é **uma vez por dia**, não tempo real.
 
 ---
 
-## O que se publica: só texto
+## O que se publica
 
-Texto curto, com teto de caracteres. Sem foto, sem vídeo, sem áudio, sem
-reel, sem story.
+Três coisas, e todas são coisas que a pessoa faz dentro do próprio app:
 
-Parece pouco. É a decisão mais forte do projeto, por quatro motivos de uma
-vez:
+| O que | Quanto tempo fica | De onde sai |
+| --- | --- | --- |
+| Texto | Fica, até ela apagar | A tela Escrever: um poema, um recado, o que ela quiser |
+| Desenho | Fica, até ela apagar | A tela Desenhar |
+| Foto | **24 horas, sempre** | A tela Fotos e o álbum de retratos |
 
-- **Acessibilidade sai de graça.** Texto é o único formato que leitor de tela
-  lê, que dá para aumentar, que funciona em linha braille e que não precisa
-  de legenda nem de descrição. Toda rede quebra justamente onde o conteúdo é
-  imagem sem descrição e vídeo sem legenda.
-- **Acaba a comparação por aparência.** Ninguém posta rosto, corpo, casa,
-  viagem. Não há o que invejar.
-- **A moderação fica possível para uma pessoa só.** Moderar imagem e vídeo
-  exige equipe e ferramenta cara. Texto curto dá para ler.
-- **O custo de servidor despenca.** Texto não tem armazenamento nem banda que
-  pesem.
+Nada de vídeo, nada de áudio, nada de reel.
 
-Quem quiser mostrar um desenho ou uma foto usa o Enseada, que já baixa e
-compartilha pelo próprio celular, fora da rede.
+### Por que a foto some em 24 horas
+
+Não é moda de story: é proteção, e muda o comportamento de quem publica e de
+quem vê.
+
+- **Não vira acervo.** Nada do rosto, do corpo ou da casa de ninguém fica
+  guardado para sempre num servidor.
+- **Não vira fórum de comentário.** O que some em um dia não acumula
+  discussão em cima.
+- **Não vira comparação.** Sem histórico de fotos, não há perfil bonito para
+  competir com.
+- **Reduz o que pode vazar.** O que não está guardado não vaza.
+
+A diferença para o story do Instagram está no que NÃO vem junto: aqui não há
+quem viu, nem quantos viram, nem responder na foto. Ela some e pronto.
+
+### Descrição escrita é obrigatória
+
+Foto e desenho **não publicam sem uma descrição escrita.** Não é campo
+opcional, não é sugestão: o botão de publicar fica desligado até ela escrever.
+
+É o que separa esta rede de todas as outras na acessibilidade. Em qualquer
+rede comum, imagem sem descrição é parede para quem não enxerga, e a
+descrição é sempre opcional, então quase ninguém escreve. Aqui é regra do
+produto. Isso dá um pouco mais de trabalho para publicar, e esse é o preço de
+uma rede onde pessoa cega consegue participar de verdade.
 
 ---
 
@@ -178,12 +195,48 @@ alguma voltar, o produto virou o que ele existe para não ser.
 4. Sequência de dias, medalha, nível, troféu.
 5. Notificação cuja função é trazer a pessoa de volta.
 6. Recomendação de conteúdo, de sala ou de gente.
-7. Story, conteúdo que expira, "online agora", "visto às", "digitando".
+7. "Online agora", "visto às", "digitando", quem viu a sua foto.
 8. Anúncio e qualquer rastreador de terceiro.
 9. Impulsionar, destacar ou pagar para aparecer mais.
+10. Vídeo, áudio e reel.
 
 A lista entra nos termos de uso, não só na cabeça de quem programa: vira
 promessa que dá para cobrar.
+
+A foto que some em 24 horas não entra nesta lista, e a diferença importa: ela
+some para proteger quem publicou, não para criar pressa em quem vê. Sem
+contador de visualização e sem resposta na foto, não sobra nada do mecanismo
+do story.
+
+---
+
+## As regras, lidas e aceitas antes de entrar
+
+Antes da primeira tela da rede, uma tela de regras. Não uma caixinha no
+rodapé: a tela inteira, em texto simples, que precisa ser rolada até o fim
+para o botão "Li e concordo" ligar. As regras ficam depois no menu, sempre, e
+quem quiser relê sem procurar.
+
+A tela diz, nesta ordem: **o que esta rede é**, **o que ela não é** e **o que
+dá banimento.**
+
+### O que dá banimento imediato
+
+Vale igual para foto, desenho e texto. Não tem aviso, não tem segunda
+chance, não tem advertência:
+
+1. Nudez e qualquer conteúdo sexual.
+2. Morte, ferimento, sangue, corpo machucado.
+3. Automutilação, jejum, suicídio — mostrar, ensinar ou incentivar.
+4. Ataque a uma pessoa ou a um grupo: ofensa, ameaça, perseguição,
+   capacitismo, racismo, LGBTfobia.
+5. Foto de outra pessoa sem que ela saiba.
+6. Dado de contato de alguém, inclusive o próprio, exposto para desconhecido.
+7. Venda, propaganda e corrente.
+
+A pessoa banida perde a conta e o que publicou sai do ar. Isso é dito na tela
+de regras, com essas palavras, antes de ela entrar — nada disso pode ser
+surpresa depois.
 
 ---
 
@@ -196,13 +249,23 @@ fechado.
 
 O que o projeto precisa ter, desde o primeiro dia:
 
-- **Denunciar visível em todo texto**, com resposta em prazo escrito.
+- **Denunciar visível em tudo** — texto, desenho e foto — com resposta em
+  prazo escrito.
 - **Bloquear e silenciar**, sem a outra pessoa saber.
-- **Filtro automático de palavras de risco**, que manda para fila humana —
-  nunca que decide sozinho.
+- **Filtro automático** de palavra de risco no texto e de nudez na imagem,
+  que manda para fila humana — nunca que decide sozinho o banimento.
 - **Fila humana de verdade**, com uma pessoa responsável e hora paga para
   isso.
 - **Tela de emergência** com quem ligar, que o Enseada já tem na Ajuda.
+
+A foto que some em 24 horas **não** facilita a moderação, facilita o
+contrário: dá um dia para agir e depois a prova sumiu. Por isso, duas
+decisões junto:
+
+- A foto passa pelo filtro automático **antes** de aparecer para alguém.
+- Foto denunciada **fica guardada** fora da rede até a denúncia ser decidida,
+  mesmo depois das 24 horas. Isso vai escrito nas regras e na política de
+  privacidade.
 
 Isso custa por mês e não escala sozinho. É maior que o custo de servidor, e
 cresce com o número de pessoas.
