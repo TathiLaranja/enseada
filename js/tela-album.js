@@ -203,6 +203,18 @@
     return el;
   }
 
+  /* A pinca e o giro valem na PAGINA inteira, nao so dentro do cartao. Antes
+     os dois dedos tinham de cair dentro da mesma polaroid, e num celular a
+     polaroid e estreita: um dedo escapava para fora ou caia no campo da
+     anotacao e o gesto simplesmente nao acontecia. */
+  var gestoDeDoisDedos = null;
+  var dedosNoMural = {};
+
+  function doisDedos() {
+    var ids = Object.keys(dedosNoMural);
+    return ids.length >= 2 ? [dedosNoMural[ids[0]], dedosNoMural[ids[1]]] : null;
+  }
+
   function medirEntre(a, b) {
     var dx = b.x - a.x, dy = b.y - a.y;
     return { dist: Math.sqrt(dx * dx + dy * dy), ang: Math.atan2(dy, dx) * 180 / Math.PI };
@@ -213,13 +225,6 @@
      celular nao precisar de uma pilha de botoes ocupando a tela. */
   function ligarArrasto(el, id, tipo) {
     var arrastando = null;
-    var ponteiros = {};
-    var gesto = null;
-
-    function doisDedos() {
-      var ids = Object.keys(ponteiros);
-      return ids.length >= 2 ? [ponteiros[ids[0]], ponteiros[ids[1]]] : null;
-    }
 
     el.addEventListener("pointerdown", function (e) {
       if (e.target.tagName === "INPUT") { return; }
@@ -228,20 +233,6 @@
       /* Sem o try, um navegador que recuse a captura derruba o toque inteiro
          e a polaroid para de responder. A captura e conforto, nao requisito. */
       try { el.setPointerCapture(e.pointerId); } catch (erro) { /* segue sem captura */ }
-      ponteiros[e.pointerId] = { x: e.clientX, y: e.clientY };
-
-      var par = doisDedos();
-      if (par) {
-        /* O segundo dedo encerra o arrasto: ou move, ou redimensiona. */
-        arrastando = null;
-        el.classList.remove("arrastando");
-        var atual = buscar(id);
-        var m = medirEntre(par[0], par[1]);
-        gesto = { dist: m.dist, ang: m.ang, giro: atual.giro || 0,
-          tam: typeof atual.tam === "number" ? atual.tam : POLAROID_TAMANHO_INICIAL };
-        return;
-      }
-
       var item = buscar(id);
       arrastando = { px: e.clientX, py: e.clientY, x: item.x, y: item.y,
         fx: num(item.fx), fy: num(item.fy) };
@@ -249,17 +240,8 @@
     });
 
     el.addEventListener("pointermove", function (e) {
-      if (ponteiros[e.pointerId]) { ponteiros[e.pointerId] = { x: e.clientX, y: e.clientY }; }
-      var par = gesto ? doisDedos() : null;
-      if (par) {
-        var m = medirEntre(par[0], par[1]);
-        if (gesto.dist > 0) {
-          album = albumDefinirTamanho(album, paginaId, id, gesto.tam * (m.dist / gesto.dist));
-        }
-        album = albumGirar(album, paginaId, id, gesto.giro + albumAnguloCurto(m.ang - gesto.ang));
-        aplicarPosicao(el, buscar(id), tipo);
-        return;
-      }
+      /* Dois dedos na pagina mandam mais que um dedo no cartao. */
+      if (gestoDeDoisDedos) { arrastando = null; el.classList.remove("arrastando"); return; }
       if (!arrastando) { return; }
       if (enquadrando && tipo === "polaroid" && id === escolhida) {
         /* A foto acompanha o dedo: andar para a direita mostra o que estava
@@ -278,13 +260,7 @@
       aplicarPosicao(el, buscar(id), tipo);
     });
 
-    function soltar(e) {
-      if (e && typeof e.pointerId !== "undefined") { delete ponteiros[e.pointerId]; }
-      if (gesto && !doisDedos()) {
-        gesto = null;
-        if (!guardar()) { dizerFalha(); }
-        return;
-      }
+    function soltar() {
       if (!arrastando) { return; }
       arrastando = null;
       el.classList.remove("arrastando");
@@ -674,6 +650,51 @@
       recado.textContent = "Este aparelho não compartilha direto. A imagem foi para a pasta de downloads; mande por lá.";
     });
   });
+
+  mural.addEventListener("pointerdown", function (e) {
+    /* Dedo principal e o primeiro de uma sequencia: se sobrou algum dedo da
+       vez passada (um "soltar" que nunca chegou), a conta limpa aqui. Sem
+       isto, um dedo fantasma faz o app achar que ha dois para sempre e o
+       arrasto de um dedo nunca mais funciona. */
+    if (e.isPrimary) { dedosNoMural = {}; gestoDeDoisDedos = null; }
+    dedosNoMural[e.pointerId] = { x: e.clientX, y: e.clientY };
+    var par = doisDedos();
+    if (!par || !escolhida) { return; }
+    var achado = albumBuscar(paginaAtual(), escolhida);
+    if (!achado) { return; }
+    var m = medirEntre(par[0], par[1]);
+    gestoDeDoisDedos = {
+      id: escolhida, dist: m.dist, ang: m.ang, giro: achado.item.giro || 0,
+      tam: typeof achado.item.tam === "number" ? achado.item.tam : POLAROID_TAMANHO_INICIAL
+    };
+  });
+
+  mural.addEventListener("pointermove", function (e) {
+    if (dedosNoMural[e.pointerId]) { dedosNoMural[e.pointerId] = { x: e.clientX, y: e.clientY }; }
+    if (!gestoDeDoisDedos) { return; }
+    var par = doisDedos();
+    if (!par) { return; }
+    e.preventDefault();
+    var g = gestoDeDoisDedos;
+    var m = medirEntre(par[0], par[1]);
+    if (g.dist > 0) {
+      album = albumDefinirTamanho(album, paginaId, g.id, g.tam * (m.dist / g.dist));
+    }
+    album = albumGirar(album, paginaId, g.id, g.giro + albumAnguloCurto(m.ang - g.ang));
+    var achado = albumBuscar(paginaAtual(), g.id);
+    var el = mural.querySelector('[data-id="' + g.id + '"]');
+    if (el && achado) { aplicarPosicao(el, achado.item, achado.tipo); }
+  });
+
+  function soltarNoMural(e) {
+    delete dedosNoMural[e.pointerId];
+    if (gestoDeDoisDedos && !doisDedos()) {
+      gestoDeDoisDedos = null;
+      if (!guardar()) { dizerFalha(); }
+    }
+  }
+  mural.addEventListener("pointerup", soltarNoMural);
+  mural.addEventListener("pointercancel", soltarNoMural);
 
   desenhar();
 }());

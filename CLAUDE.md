@@ -116,7 +116,7 @@ menina"). Polaroids e adesivos se arrastam por toque, mouse ou setas; adesivos
 ficam sempre por cima das polaroids.
 
 **Tela de dedo e tela de mouse não têm os mesmos botões.** Em `pointer: coarse`
-dois dedos na mesma foto mudam o tamanho (pinça) e a inclinação (giro), e os
+dois dedos em QUALQUER lugar da página mudam o tamanho (pinça) e a inclinação (giro) do item escolhido — exigir os dois dedos dentro do cartão não funciona, a polaroide é estreita demais num celular, e os
 cinco botões de tamanho e inclinação somem — num celular eles comiam o espaço
 do álbum. Quem quiser os botões de volta tem o "Prefiro os botões". No mouse é
 o contrário: os botões aparecem e o aviso do dedo, não. O gatilho é o tipo de

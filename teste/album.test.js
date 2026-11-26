@@ -395,8 +395,16 @@ teste("na tela de dedo, dois dedos substituem os botões de tamanho e inclinaç�
   const html = fs.readFileSync("album.html", "utf8");
   assert.ok(js.indexOf("albumDefinirTamanho(") !== -1 && js.indexOf("albumGirar(") !== -1,
     "a pinça e o giro têm de chamar os ajustes diretos");
-  assert.ok(js.indexOf("albumAnguloCurto(m.ang - gesto.ang)") !== -1,
+  assert.ok(js.indexOf("albumAnguloCurto(m.ang - g.ang)") !== -1,
     "o giro de dois dedos tem de passar pelo caminho mais curto");
+  /* o gesto vale na PÁGINA inteira: numa polaroid estreita um dedo escapa */
+  assert.ok(js.indexOf('mural.addEventListener("pointerdown"') !== -1 &&
+    js.indexOf('mural.addEventListener("pointermove"') !== -1,
+    "o gesto tem de ouvir a página inteira, não só o cartão");
+  assert.ok(js.indexOf("e.isPrimary") !== -1,
+    "sem limpar no dedo principal, um dedo fantasma mata o arrasto para sempre");
+  assert.ok(js.indexOf('mural.addEventListener("pointercancel"') !== -1,
+    "toque cancelado tem de soltar o gesto");
   assert.ok(js.indexOf("setPointerCapture") !== -1 && js.indexOf("try {") !== -1,
     "a captura tem de estar protegida, senão um navegador que recuse derruba o toque");
   assert.ok(css.indexOf("@media (pointer: coarse)") !== -1, "falta a regra de tela de dedo");
