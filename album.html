@@ -27,8 +27,35 @@
 
   <p class="explica">Cada foto vira uma polaroid presa com fita, com espaço para uma anotação. Arraste as polaroids e os adesivos para montar a página do seu jeito. Tudo fica só neste aparelho.</p>
 
-  <div class="abas-paginas" id="abas-paginas" role="group" aria-label="Páginas do álbum"></div>
-  <button type="button" class="botao-simples" id="nova-pagina">Nova página</button>
+  <button type="button" class="botao" id="adicionar-foto">Adicionar uma foto a esta página</button>
+  <input type="file" id="entrada-foto" accept="image/*" hidden>
+
+  <button type="button" class="botao-simples" id="enquadrar-foto" aria-pressed="false" disabled>Ajustar a foto dentro</button>
+
+  <div class="album-colunas" id="acoes-foto">
+    <div class="album-coluna">
+      <button type="button" class="botao-simples" id="adesivo-menor" disabled>Diminuir</button>
+    </div>
+    <div class="album-coluna">
+      <button type="button" class="botao-simples" id="adesivo-maior" disabled>Aumentar</button>
+    </div>
+  </div>
+
+  <div class="album-colunas">
+    <div class="album-coluna">
+      <div class="abas-paginas" id="abas-paginas" role="group" aria-label="Páginas do álbum"></div>
+      <button type="button" class="botao-simples" id="nova-pagina">Nova página</button>
+    </div>
+    <div class="album-coluna" id="acoes-polaroid">
+      <button type="button" class="botao-simples" id="inclinar-esquerda" disabled>Inclinar à esquerda</button>
+      <button type="button" class="botao-simples" id="inclinar-direita" disabled>Inclinar à direita</button>
+      <button type="button" class="botao-simples" id="endireitar-polaroid" disabled>Endireitar</button>
+      <button type="button" class="botao-simples" id="trazer-frente" disabled>Trazer para a frente</button>
+      <button type="button" class="botao-simples" id="tirar-polaroid" disabled>Tirar da página</button>
+    </div>
+  </div>
+
+  <p class="explica" id="recado-album" role="status"></p>
 
   <div class="mural" id="mural" role="group" aria-label="Página do álbum"></div>
 
@@ -37,24 +64,6 @@
     <p class="explica">Toque num adesivo para pô-lo na página. Depois arraste para onde quiser.</p>
     <div class="gaveta-grade" id="gaveta-adesivos"></div>
   </details>
-
-  <p class="explica" id="recado-album" role="status"></p>
-
-  <div class="botao-fileira" id="acoes-polaroid">
-    <button type="button" class="botao-simples" id="inclinar-esquerda" disabled>Inclinar à esquerda</button>
-    <button type="button" class="botao-simples" id="inclinar-direita" disabled>Inclinar à direita</button>
-    <button type="button" class="botao-simples" id="endireitar-polaroid" disabled>Endireitar</button>
-    <button type="button" class="botao-simples" id="trazer-frente" disabled>Trazer para a frente</button>
-    <button type="button" class="botao-simples" id="tirar-polaroid" disabled>Tirar da página</button>
-  </div>
-  <div class="botao-fileira" id="acoes-adesivo">
-    <button type="button" class="botao-simples" id="adesivo-menor" disabled>Diminuir</button>
-    <button type="button" class="botao-simples" id="adesivo-maior" disabled>Aumentar</button>
-    <button type="button" class="botao-simples" id="enquadrar-foto" aria-pressed="false" disabled>Ajustar a foto dentro</button>
-  </div>
-
-  <button type="button" class="botao" id="adicionar-foto">Adicionar uma foto a esta página</button>
-  <input type="file" id="entrada-foto" accept="image/*" hidden>
 
   <button type="button" class="botao-simples" id="compartilhar-pagina">Compartilhar esta página</button>
   <button type="button" class="botao-simples" id="baixar-pagina">Baixar esta página como imagem</button>

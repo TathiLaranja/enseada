@@ -1178,3 +1178,43 @@ input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; out
 /* Alinhado a esquerda: quando o nome quebra em duas linhas, centralizado fica
    mais dificil de achar onde a linha comeca. */
 .nome-imagem-quebra { min-width: 0; text-align: left; }
+
+/* Album: duas colunas de botoes, paginas de um lado e acoes do outro.
+   Antes era tudo em fileiras largas que atravessavam a tela e os botoes de
+   pagina ficavam enormes. Em coluna estreita cabem mais e cansam menos. */
+.album-colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+
+.album-coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.album-coluna .abas-paginas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+/* Dentro da coluna o botao ocupa a largura toda e e mais baixo, mas nunca
+   abaixo de 44 px, que e o tamanho minimo para o dedo acertar. */
+.album-coluna .botao-aba,
+.album-coluna .botao-simples {
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 0;
+  padding: 8px 10px;
+  font-size: 0.94em;
+  text-align: center;
+  justify-content: center;
+}
+
+.album-coluna .botao-aba.ativa { padding: 6px 8px; }
