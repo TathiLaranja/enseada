@@ -21,6 +21,7 @@
     <script src="js/cruzadas.js"></script>
     <script src="js/anagrama.js"></script>
     <script src="js/forca.js"></script>
+    <script src="js/palavrapar.js"></script>
 </head>
 <body>
     <header class="topo-pagina">
@@ -37,6 +38,7 @@
             <button type="button" role="tab" aria-selected="false" aria-controls="painel-palavras" id="aba-palavras" class="botao-aba">Palavras Cruzadas</button>
                 <button type="button" role="tab" aria-selected="false" aria-controls="painel-anagrama" id="aba-anagrama" class="botao-aba">Anagrama</button>
                 <button type="button" role="tab" aria-selected="false" aria-controls="painel-forca" id="aba-forca" class="botao-aba">Forca sem forca</button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="painel-palavrapar" id="aba-palavrapar" class="botao-aba">Memória de palavras</button>
         </nav>
 
         <section class="container-painel-jogos">
@@ -80,6 +82,17 @@
                 <p id="recado-sudoku" role="status"></p>
                 <button type="button" id="dica-sudoku" class="botao-secundario">Pedir uma dica</button>
                 <button type="button" id="reiniciar-sudoku" class="botao-secundario">Novo Sudoku</button>
+            </div>
+
+            <!-- Painel Memória de palavras -->
+            <div id="painel-palavrapar" role="tabpanel" aria-labelledby="aba-palavrapar" class="painel-jogo oculto" hidden>
+                <div class="cabecalho-jogo">
+                    <h2>Memória de palavras</h2>
+                    <p class="instrucao-suave">Memória sem figura nenhuma: cada par é uma palavra e a frase que descreve ela. Vire duas cartas e veja se casam. Sem tempo, sem pontos e sem perder — errar não tira nada. Funciona inteiro com leitor de tela.</p>
+                </div>
+                <div class="grade-palavrapar" id="grade-palavrapar" role="group" aria-label="Cartas da memória de palavras"></div>
+                <p id="recado-palavrapar" role="status"></p>
+                <button type="button" id="outra-palavrapar" class="botao-secundario">Outro jogo</button>
             </div>
 
             <!-- Painel Forca sem forca -->
@@ -156,6 +169,7 @@
     <script src="js/tela-cruzadas.js"></script>
     <script src="js/tela-anagrama.js"></script>
     <script src="js/tela-forca.js"></script>
+    <script src="js/tela-palavrapar.js"></script>
     <script src="js/menu.js"></script>
     <script src="js/registra-sw.js"></script>
 </body>
