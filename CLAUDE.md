@@ -110,9 +110,10 @@ adesiva de um dos quatro tons da paleta. A polaroid tem tamanho próprio
 (de 24% a 70% da largura da página, passo de 6%), inclina até 30° para cada
 lado e a foto se enquadra dentro da moldura (`fx` e `fy`, 0,5 é o meio, a
 mesma conta do `object-position` e do recorte da imagem baixada). Foto nova
-nasce numa vaga livre, calculada pelo tamanho dela, para não empilhar. Há uma gaveta de 14 adesivos em vetor
-(natureza, bichinhos, brinquedos e veículos, sem cor "de menino" ou "de
-menina"). Polaroids e adesivos se arrastam por toque, mouse ou setas; adesivos
+nasce numa vaga livre, calculada pelo tamanho dela, para não empilhar. Há uma gaveta de 70 adesivos em vetor (bichos, plantas, céu,
+papelaria e casa), sem cor "de menino" ou "de menina", em traço de ilustração
+de caderno e não de desenho infantil: formas chapadas, cores da paleta e rosto
+só nos bichos. A gaveta rola dentro dela mesma, senão engole a página. Polaroids e adesivos se arrastam por toque, mouse ou setas; adesivos
 ficam sempre por cima das polaroids.
 
 **Tela de dedo e tela de mouse não têm os mesmos botões.** Em `pointer: coarse`

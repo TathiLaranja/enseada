@@ -439,4 +439,24 @@ teste("girar passando pela volta inteira não dá pulo de meia volta", function 
   });
 });
 
+teste("a gaveta tem adesivo que chegue, e cada um serve ao armazenamento", function () {
+  assert.ok(ad.ADESIVOS.length >= 60, "poucos adesivos: " + ad.ADESIVOS.length);
+  const ids = ad.ADESIVOS.map(function (d) { return d.id; });
+  ids.forEach(function (id, i) {
+    assert.ok(/^[a-z]{2,16}$/.test(id), "id que o armazenamento recusa: " + id);
+    assert.strictEqual(ids.indexOf(id), i, "id repetido: " + id);
+  });
+  ad.ADESIVOS.forEach(function (d) {
+    assert.ok(d.nome && d.nome.trim() !== "", "adesivo sem nome: " + d.id);
+    assert.ok(d.svg.indexOf("<svg") === 0 && d.svg.indexOf("</svg>") !== -1, "svg quebrado: " + d.id);
+    /* nada pode vir da rede */
+    assert.ok(!/https?:|xlink:href|<image/.test(d.svg), "adesivo busca coisa de fora: " + d.id);
+    assert.ok(ad.adesivoEndereco(d.id).indexOf("data:image/svg+xml") === 0);
+  });
+  /* os bichos que faltavam */
+  ["gato", "cachorro", "coala", "preguica", "abelha", "raposa"].forEach(function (id) {
+    assert.ok(ad.adesivoPorId(id), "falta o adesivo " + id);
+  });
+});
+
 fim("álbum");

@@ -1230,3 +1230,9 @@ input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; out
   #botoes-de-mouse { display: none; }
   #botoes-de-mouse.mostrando { display: grid; }
 }
+
+/* Com 70 adesivos a gaveta engoliria a pagina. Rola dentro dela mesma. */
+.gaveta-grade {
+  max-height: 46vh;
+  overflow-y: auto;
+}
