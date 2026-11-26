@@ -132,4 +132,20 @@ teste("o app pede para o celular não apagar os dados guardados", function () {
   });
 });
 
+teste("versão nova do app assume sozinha, sem a pessoa ter de limpar nada", function () {
+  const js = fs.readFileSync("js/registra-sw.js", "utf8");
+  const sw = fs.readFileSync("service-worker.js", "utf8");
+  assert.ok(js.indexOf("controllerchange") !== -1,
+    "sem isto a pessoa continua vendo o app velho e acha que a correção não saiu");
+  assert.ok(js.indexOf("window.location.reload()") !== -1, "ouvir a troca sem recarregar não adianta");
+  /* não pode recarregar na primeiríssima abertura, que ainda não tem controlador */
+  assert.ok(js.indexOf("navigator.serviceWorker.controller") < js.indexOf("controllerchange"),
+    "tem de guardar se já havia controlador ANTES de ouvir a troca");
+  assert.ok(js.indexOf("!jaTinhaControlador") !== -1, "falta a guarda da primeira abertura");
+  assert.ok(js.indexOf("recarregando = true") !== -1, "falta a trava contra recarregar em laço");
+  /* do outro lado, o service worker tem de assumir em vez de ficar esperando */
+  assert.ok(sw.indexOf("skipWaiting()") !== -1 && sw.indexOf("clients.claim()") !== -1,
+    "sem skipWaiting e claim a troca nunca acontece");
+});
+
 fim("icone");

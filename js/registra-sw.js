@@ -2,6 +2,20 @@
    Se o navegador não tiver, o app continua funcionando com internet. */
 
 if ("serviceWorker" in navigator) {
+  /* Guardado ANTES de registrar: na primeiríssima abertura não existe
+     controlador, e aí a troca é normal e não deve recarregar nada. */
+  var jaTinhaControlador = !!navigator.serviceWorker.controller;
+  var recarregando = false;
+
+  /* Quando uma versão nova assume, a página aberta ainda está com os arquivos
+     velhos na mão. Sem este recarregar, a pessoa continuava vendo o app
+     antigo e achando que a correção não tinha saído. Acontece uma vez só. */
+  navigator.serviceWorker.addEventListener("controllerchange", function () {
+    if (!jaTinhaControlador || recarregando) { return; }
+    recarregando = true;
+    window.location.reload();
+  });
+
   window.addEventListener("load", function () {
     navigator.serviceWorker.register("service-worker.js").catch(function () {
       /* Sem service worker o app ainda abre. Nada a avisar para a pessoa. */
