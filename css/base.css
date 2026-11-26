@@ -1218,3 +1218,15 @@ input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; out
 }
 
 .album-coluna .botao-aba.ativa { padding: 6px 8px; }
+
+/* Tela de dedo: a pinca e o giro de dois dedos fazem o que os botoes faziam,
+   e numa tela de celular esses botoes comiam o espaco do album. Quem quiser
+   os botoes de volta tem o "Prefiro os botoes". No mouse e o contrario: os
+   botoes aparecem e o aviso do dedo, nao. */
+.so-no-dedo { display: none; }
+
+@media (pointer: coarse) {
+  .so-no-dedo { display: block; }
+  #botoes-de-mouse { display: none; }
+  #botoes-de-mouse.mostrando { display: grid; }
+}

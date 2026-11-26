@@ -113,7 +113,16 @@ mesma conta do `object-position` e do recorte da imagem baixada). Foto nova
 nasce numa vaga livre, calculada pelo tamanho dela, para não empilhar. Há uma gaveta de 14 adesivos em vetor
 (natureza, bichinhos, brinquedos e veículos, sem cor "de menino" ou "de
 menina"). Polaroids e adesivos se arrastam por toque, mouse ou setas; adesivos
-ficam sempre por cima das polaroids e mudam de tamanho. Posição guardada como
+ficam sempre por cima das polaroids.
+
+**Tela de dedo e tela de mouse não têm os mesmos botões.** Em `pointer: coarse`
+dois dedos na mesma foto mudam o tamanho (pinça) e a inclinação (giro), e os
+cinco botões de tamanho e inclinação somem — num celular eles comiam o espaço
+do álbum. Quem quiser os botões de volta tem o "Prefiro os botões". No mouse é
+o contrário: os botões aparecem e o aviso do dedo, não. O gatilho é o tipo de
+tela, NUNCA app contra navegador: o navegador do celular também é tela de dedo.
+Trazer para a frente, Tirar da página, Ajustar a foto dentro, Adicionar foto,
+Compartilhar e Baixar aparecem sempre. Posição guardada como
 fração da página. Salva sozinho em `localStorage` (teto de 30 polaroids e 80
 adesivos; fotos de 640 px em JPEG) e baixa a página como PNG de 1200 x 1600.
 Tem também Compartilhar, igual ao do Desenhar: `navigator.share` com o arquivo,

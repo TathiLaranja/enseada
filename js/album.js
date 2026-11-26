@@ -176,20 +176,63 @@ function albumGirarPolaroid(album, paginaId, itemId, giro) {
   });
 }
 
-/* Aumenta ou diminui uma polaroid (passo de 6% da largura da pagina),
-   mantendo o cartao inteiro dentro da pagina. */
-function albumRedimensionarPolaroid(album, paginaId, itemId, sentido) {
+/* Limites de cada tipo, num lugar so: a pinca e os botoes tem de obedecer
+   exatamente o mesmo teto e o mesmo piso, senao um faz o que o outro proibe. */
+function albumLimitesDoTamanho(tipo) {
+  return tipo === "adesivo"
+    ? { minimo: ADESIVO_TAMANHO_MINIMO, maximo: ADESIVO_TAMANHO_MAXIMO }
+    : { minimo: POLAROID_TAMANHO_MINIMO, maximo: POLAROID_TAMANHO_MAXIMO };
+}
+
+function albumGiroMaximo(tipo) {
+  return tipo === "adesivo" ? 12 : POLAROID_GIRO_MAXIMO;
+}
+
+function albumAlturaDoItem(tipo, tam) {
+  return tipo === "adesivo" ? albumAlturaDoAdesivo(tam) : albumAlturaDaPolaroid(tam);
+}
+
+/* Põe o tamanho num valor qualquer (e o que a pinca de dois dedos usa),
+   sem deixar o item sair da pagina. Os botoes passam por aqui tambem. */
+function albumDefinirTamanho(album, paginaId, itemId, tamanho) {
   return albumTrocarItem(album, paginaId, itemId, function (q, tipo) {
-    if (tipo !== "polaroid") { return q; }
-    var agora = typeof q.tam === "number" ? q.tam : POLAROID_TAMANHO_INICIAL;
-    var tam = albumLimitar(Math.round((agora + sentido * POLAROID_PASSO) * 100) / 100,
-      POLAROID_TAMANHO_MINIMO, POLAROID_TAMANHO_MAXIMO);
+    var lim = albumLimitesDoTamanho(tipo);
+    var tam = albumLimitar(tamanho, lim.minimo, lim.maximo);
     return albumCom(q, {
       tam: tam,
       x: albumLimitar(q.x, 0, 1 - tam),
-      y: albumLimitar(q.y, 0, 1 - albumAlturaDaPolaroid(tam))
+      y: albumLimitar(q.y, 0, 1 - albumAlturaDoItem(tipo, tam))
     });
   });
+}
+
+/* Diferenca entre dois angulos pelo caminho mais curto. Sem isto, girar com
+   dois dedos passando de 179 para -179 graus daria um pulo de meia volta. */
+function albumAnguloCurto(d) {
+  /* Faixa de -180 (exclusivo) a 180 (inclusivo): a meia volta conta como
+     meia volta para a frente, e nunca sai desse intervalo. */
+  return 180 - (((180 - d) % 360) + 360) % 360;
+}
+
+/* Põe a inclinacao num valor qualquer (e o que o giro de dois dedos usa). */
+function albumGirar(album, paginaId, itemId, giro) {
+  return albumTrocarItem(album, paginaId, itemId, function (q, tipo) {
+    var teto = albumGiroMaximo(tipo);
+    return albumCom(q, { giro: albumLimitar(giro, -teto, teto) });
+  });
+}
+
+/* Aumenta ou diminui uma polaroid (passo de 6% da largura da pagina),
+   mantendo o cartao inteiro dentro da pagina. */
+function albumRedimensionarPolaroid(album, paginaId, itemId, sentido) {
+  var achado = null;
+  album.paginas.forEach(function (p) {
+    if (p.id === paginaId) { achado = albumBuscar(p, itemId); }
+  });
+  if (!achado || achado.tipo !== "polaroid") { return album; }
+  var agora = typeof achado.item.tam === "number" ? achado.item.tam : POLAROID_TAMANHO_INICIAL;
+  return albumDefinirTamanho(album, paginaId, itemId,
+    Math.round((agora + sentido * POLAROID_PASSO) * 100) / 100);
 }
 
 /* Enquadra: escolhe que parte da foto aparece no quadrado da moldura.
@@ -271,6 +314,12 @@ if (typeof module !== "undefined" && module.exports) {
     albumAlturaDaPolaroid: albumAlturaDaPolaroid,
     albumLugarDaPolaroid: albumLugarDaPolaroid,
     albumRedimensionarPolaroid: albumRedimensionarPolaroid,
+    albumDefinirTamanho: albumDefinirTamanho,
+    albumGirar: albumGirar,
+    albumAnguloCurto: albumAnguloCurto,
+    albumLimitesDoTamanho: albumLimitesDoTamanho,
+    albumGiroMaximo: albumGiroMaximo,
+    albumAlturaDoItem: albumAlturaDoItem,
     albumEnquadrar: albumEnquadrar,
     ADESIVO_TAMANHO_INICIAL: ADESIVO_TAMANHO_INICIAL,
     ADESIVO_TAMANHO_MINIMO: ADESIVO_TAMANHO_MINIMO,

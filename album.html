@@ -32,26 +32,29 @@
 
   <button type="button" class="botao-simples" id="enquadrar-foto" aria-pressed="false" disabled>Ajustar a foto dentro</button>
 
-  <div class="album-colunas" id="acoes-foto">
-    <div class="album-coluna">
-      <button type="button" class="botao-simples" id="adesivo-menor" disabled>Diminuir</button>
-    </div>
-    <div class="album-coluna">
-      <button type="button" class="botao-simples" id="adesivo-maior" disabled>Aumentar</button>
-    </div>
-  </div>
-
   <div class="album-colunas">
     <div class="album-coluna">
       <div class="abas-paginas" id="abas-paginas" role="group" aria-label="Páginas do álbum"></div>
       <button type="button" class="botao-simples" id="nova-pagina">Nova página</button>
     </div>
     <div class="album-coluna" id="acoes-polaroid">
-      <button type="button" class="botao-simples" id="inclinar-esquerda" disabled>Inclinar à esquerda</button>
-      <button type="button" class="botao-simples" id="inclinar-direita" disabled>Inclinar à direita</button>
-      <button type="button" class="botao-simples" id="endireitar-polaroid" disabled>Endireitar</button>
       <button type="button" class="botao-simples" id="trazer-frente" disabled>Trazer para a frente</button>
       <button type="button" class="botao-simples" id="tirar-polaroid" disabled>Tirar da página</button>
+    </div>
+  </div>
+
+  <p class="explica so-no-dedo">Nesta tela você faz com o dedo: um dedo arrasta, dois dedos na mesma foto aumentam, diminuem e giram. No computador isso vira botão.</p>
+  <button type="button" class="botao-simples so-no-dedo" id="mostrar-botoes" aria-expanded="false" aria-controls="botoes-de-mouse">Prefiro os botões</button>
+
+  <div class="album-colunas" id="botoes-de-mouse">
+    <div class="album-coluna">
+      <button type="button" class="botao-simples" id="adesivo-menor" disabled>Diminuir</button>
+      <button type="button" class="botao-simples" id="inclinar-esquerda" disabled>Inclinar à esquerda</button>
+      <button type="button" class="botao-simples" id="endireitar-polaroid" disabled>Endireitar</button>
+    </div>
+    <div class="album-coluna">
+      <button type="button" class="botao-simples" id="adesivo-maior" disabled>Aumentar</button>
+      <button type="button" class="botao-simples" id="inclinar-direita" disabled>Inclinar à direita</button>
     </div>
   </div>
 

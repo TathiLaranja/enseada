@@ -203,22 +203,63 @@
     return el;
   }
 
-  /* Arrasto por toque, mouse e teclado, igual para polaroid e adesivo. */
+  function medirEntre(a, b) {
+    var dx = b.x - a.x, dy = b.y - a.y;
+    return { dist: Math.sqrt(dx * dx + dy * dy), ang: Math.atan2(dy, dx) * 180 / Math.PI };
+  }
+
+  /* Arrasto por toque, mouse e teclado, igual para polaroid e adesivo.
+     Com dois dedos: pinca muda o tamanho e girar muda a inclinacao, para o
+     celular nao precisar de uma pilha de botoes ocupando a tela. */
   function ligarArrasto(el, id, tipo) {
     var arrastando = null;
+    var ponteiros = {};
+    var gesto = null;
+
+    function doisDedos() {
+      var ids = Object.keys(ponteiros);
+      return ids.length >= 2 ? [ponteiros[ids[0]], ponteiros[ids[1]]] : null;
+    }
 
     el.addEventListener("pointerdown", function (e) {
       if (e.target.tagName === "INPUT") { return; }
       e.preventDefault();
       escolher(id);
-      el.setPointerCapture(e.pointerId);
-      var atual = buscar(id);
-      arrastando = { px: e.clientX, py: e.clientY, x: atual.x, y: atual.y,
-        fx: num(atual.fx), fy: num(atual.fy) };
+      /* Sem o try, um navegador que recuse a captura derruba o toque inteiro
+         e a polaroid para de responder. A captura e conforto, nao requisito. */
+      try { el.setPointerCapture(e.pointerId); } catch (erro) { /* segue sem captura */ }
+      ponteiros[e.pointerId] = { x: e.clientX, y: e.clientY };
+
+      var par = doisDedos();
+      if (par) {
+        /* O segundo dedo encerra o arrasto: ou move, ou redimensiona. */
+        arrastando = null;
+        el.classList.remove("arrastando");
+        var atual = buscar(id);
+        var m = medirEntre(par[0], par[1]);
+        gesto = { dist: m.dist, ang: m.ang, giro: atual.giro || 0,
+          tam: typeof atual.tam === "number" ? atual.tam : POLAROID_TAMANHO_INICIAL };
+        return;
+      }
+
+      var item = buscar(id);
+      arrastando = { px: e.clientX, py: e.clientY, x: item.x, y: item.y,
+        fx: num(item.fx), fy: num(item.fy) };
       el.classList.add("arrastando");
     });
 
     el.addEventListener("pointermove", function (e) {
+      if (ponteiros[e.pointerId]) { ponteiros[e.pointerId] = { x: e.clientX, y: e.clientY }; }
+      var par = gesto ? doisDedos() : null;
+      if (par) {
+        var m = medirEntre(par[0], par[1]);
+        if (gesto.dist > 0) {
+          album = albumDefinirTamanho(album, paginaId, id, gesto.tam * (m.dist / gesto.dist));
+        }
+        album = albumGirar(album, paginaId, id, gesto.giro + albumAnguloCurto(m.ang - gesto.ang));
+        aplicarPosicao(el, buscar(id), tipo);
+        return;
+      }
       if (!arrastando) { return; }
       if (enquadrando && tipo === "polaroid" && id === escolhida) {
         /* A foto acompanha o dedo: andar para a direita mostra o que estava
@@ -237,7 +278,13 @@
       aplicarPosicao(el, buscar(id), tipo);
     });
 
-    function soltar() {
+    function soltar(e) {
+      if (e && typeof e.pointerId !== "undefined") { delete ponteiros[e.pointerId]; }
+      if (gesto && !doisDedos()) {
+        gesto = null;
+        if (!guardar()) { dizerFalha(); }
+        return;
+      }
       if (!arrastando) { return; }
       arrastando = null;
       el.classList.remove("arrastando");
@@ -341,6 +388,15 @@
   }
   btnMenor.addEventListener("click", function () { mudarTamanho(-1); });
   btnMaior.addEventListener("click", function () { mudarTamanho(1); });
+
+  var btnMostrar = document.getElementById("mostrar-botoes");
+  btnMostrar.addEventListener("click", function () {
+    var caixa = document.getElementById("botoes-de-mouse");
+    var abrindo = !caixa.classList.contains("mostrando");
+    caixa.classList.toggle("mostrando", abrindo);
+    btnMostrar.setAttribute("aria-expanded", abrindo ? "true" : "false");
+    btnMostrar.textContent = abrindo ? "Esconder os botões" : "Prefiro os botões";
+  });
 
   btnEnquadrar.addEventListener("click", function () {
     if (!escolhida || !buscar(escolhida)) { return; }

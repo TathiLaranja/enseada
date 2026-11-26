@@ -353,4 +353,82 @@ teste("as primeiras fotos de uma página não caem umas em cima das outras", fun
   }
 });
 
+teste("pinça e botão obedecem o mesmo limite, cada tipo com o seu", function () {
+  let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
+  al = a.albumAdicionarAdesivo(al, "p0", "s1", "sol", 0);
+  al = a.albumDefinirTamanho(al, "p0", "q1", 99);
+  assert.strictEqual(al.paginas[0].polaroids[0].tam, a.POLAROID_TAMANHO_MAXIMO);
+  al = a.albumDefinirTamanho(al, "p0", "q1", 0);
+  assert.strictEqual(al.paginas[0].polaroids[0].tam, a.POLAROID_TAMANHO_MINIMO);
+  al = a.albumDefinirTamanho(al, "p0", "s1", 99);
+  assert.strictEqual(al.paginas[0].adesivos[0].tam, a.ADESIVO_TAMANHO_MAXIMO);
+  /* o adesivo não pode herdar o teto da polaroide */
+  assert.ok(a.ADESIVO_TAMANHO_MAXIMO < a.POLAROID_TAMANHO_MAXIMO);
+  /* um tamanho qualquer, nem no teto nem no piso, passa inteiro */
+  al = a.albumDefinirTamanho(al, "p0", "q1", 0.37);
+  assert.strictEqual(al.paginas[0].polaroids[0].tam, 0.37);
+});
+
+teste("o giro de dois dedos respeita o limite de cada tipo", function () {
+  let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
+  al = a.albumAdicionarAdesivo(al, "p0", "s1", "sol", 0);
+  al = a.albumGirar(al, "p0", "q1", 17);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, 17);
+  al = a.albumGirar(al, "p0", "q1", 400);
+  assert.strictEqual(al.paginas[0].polaroids[0].giro, a.POLAROID_GIRO_MAXIMO);
+  al = a.albumGirar(al, "p0", "s1", 400);
+  assert.strictEqual(al.paginas[0].adesivos[0].giro, a.albumGiroMaximo("adesivo"));
+  assert.ok(a.albumGiroMaximo("adesivo") < a.albumGiroMaximo("polaroid"));
+});
+
+teste("item grande pela pinça não sai da página", function () {
+  let al = a.albumAdicionarPolaroid(a.albumNovo(contador()), "p0", "q1", FOTO, 0);
+  al = a.albumMover(al, "p0", "q1", 1, 1);
+  al = a.albumDefinirTamanho(al, "p0", "q1", a.POLAROID_TAMANHO_MAXIMO);
+  const q = al.paginas[0].polaroids[0];
+  assert.ok(q.x + q.tam <= 1 + 1e-9 && q.y + a.albumAlturaDaPolaroid(q.tam) <= 1 + 1e-9);
+});
+
+teste("na tela de dedo, dois dedos substituem os botões de tamanho e inclinação", function () {
+  const js = fs.readFileSync("js/tela-album.js", "utf8");
+  const css = fs.readFileSync("css/base.css", "utf8");
+  const html = fs.readFileSync("album.html", "utf8");
+  assert.ok(js.indexOf("albumDefinirTamanho(") !== -1 && js.indexOf("albumGirar(") !== -1,
+    "a pinça e o giro têm de chamar os ajustes diretos");
+  assert.ok(js.indexOf("albumAnguloCurto(m.ang - gesto.ang)") !== -1,
+    "o giro de dois dedos tem de passar pelo caminho mais curto");
+  assert.ok(js.indexOf("setPointerCapture") !== -1 && js.indexOf("try {") !== -1,
+    "a captura tem de estar protegida, senão um navegador que recuse derruba o toque");
+  assert.ok(css.indexOf("@media (pointer: coarse)") !== -1, "falta a regra de tela de dedo");
+  assert.ok(/pointer: coarse\)[^}]*\{[\s\S]*?#botoes-de-mouse\s*\{\s*display:\s*none/.test(css),
+    "na tela de dedo os botões têm de sumir");
+  assert.ok(css.indexOf("#botoes-de-mouse.mostrando") !== -1,
+    "quem quiser os botões de volta tem de conseguir");
+  assert.ok(html.indexOf('id="mostrar-botoes"') !== -1 && html.indexOf("so-no-dedo") !== -1);
+  /* o que NÃO pode sumir no celular */
+  ["trazer-frente", "tirar-polaroid", "enquadrar-foto", "adicionar-foto",
+   "compartilhar-pagina", "baixar-pagina"].forEach(function (b) {
+    const i = html.indexOf('id="' + b + '"');
+    assert.ok(i !== -1, "sumiu o botão " + b);
+    assert.ok(html.lastIndexOf('id="botoes-de-mouse"', i) === -1 ||
+      html.indexOf("</div>", html.indexOf('id="botoes-de-mouse"')) < i,
+      b + " não pode estar dentro do bloco que some no celular");
+  });
+});
+
+teste("girar passando pela volta inteira não dá pulo de meia volta", function () {
+  assert.strictEqual(a.albumAnguloCurto(10), 10);
+  assert.strictEqual(a.albumAnguloCurto(-10), -10);
+  /* de 179 para -179 graus são 2 graus para a frente, não 358 para trás */
+  assert.strictEqual(a.albumAnguloCurto(-179 - 179), 2);
+  assert.strictEqual(a.albumAnguloCurto(179 - -179), -2);
+  assert.strictEqual(a.albumAnguloCurto(180), 180);
+  assert.strictEqual(a.albumAnguloCurto(-180), 180);
+  /* nenhuma diferença, por maior que seja, pode sair de -180 a 180 */
+  [-1000, -721, -360, 0, 359, 720, 1080].forEach(function (d) {
+    const r = a.albumAnguloCurto(d);
+    assert.ok(r > -181 && r <= 180, d + " virou " + r);
+  });
+});
+
 fim("álbum");
