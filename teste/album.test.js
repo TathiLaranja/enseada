@@ -449,8 +449,10 @@ teste("a gaveta tem adesivo que chegue, e cada um serve ao armazenamento", funct
   ad.ADESIVOS.forEach(function (d) {
     assert.ok(d.nome && d.nome.trim() !== "", "adesivo sem nome: " + d.id);
     assert.ok(d.svg.indexOf("<svg") === 0 && d.svg.indexOf("</svg>") !== -1, "svg quebrado: " + d.id);
-    /* nada pode vir da rede */
-    assert.ok(!/https?:|xlink:href|<image/.test(d.svg), "adesivo busca coisa de fora: " + d.id);
+    /* nada pode vir da rede. O xmlns é declaração de namespace, não busca. */
+    const semNamespace = d.svg.split('xmlns="http://www.w3.org/2000/svg"').join("");
+    assert.ok(!/https?:|xlink:|<image|src=/.test(semNamespace),
+      "adesivo busca coisa de fora: " + d.id);
     assert.ok(ad.adesivoEndereco(d.id).indexOf("data:image/svg+xml") === 0);
   });
   /* os bichos que faltavam */
