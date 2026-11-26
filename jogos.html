@@ -22,6 +22,7 @@
     <script src="js/anagrama.js"></script>
     <script src="js/forca.js"></script>
     <script src="js/palavrapar.js"></script>
+    <script src="js/som.js"></script>
 </head>
 <body>
     <header class="topo-pagina">
@@ -39,6 +40,7 @@
                 <button type="button" role="tab" aria-selected="false" aria-controls="painel-anagrama" id="aba-anagrama" class="botao-aba">Anagrama</button>
                 <button type="button" role="tab" aria-selected="false" aria-controls="painel-forca" id="aba-forca" class="botao-aba">Forca sem forca</button>
                 <button type="button" role="tab" aria-selected="false" aria-controls="painel-palavrapar" id="aba-palavrapar" class="botao-aba">Memória de palavras</button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="painel-somemoria" id="aba-somemoria" class="botao-aba">Memória sonora</button>
         </nav>
 
         <section class="container-painel-jogos">
@@ -82,6 +84,21 @@
                 <p id="recado-sudoku" role="status"></p>
                 <button type="button" id="dica-sudoku" class="botao-secundario">Pedir uma dica</button>
                 <button type="button" id="reiniciar-sudoku" class="botao-secundario">Novo Sudoku</button>
+            </div>
+
+            <!-- Painel Memória sonora -->
+            <div id="painel-somemoria" role="tabpanel" aria-labelledby="aba-somemoria" class="painel-jogo oculto" hidden>
+                <div class="cabecalho-jogo">
+                    <h2>Memória sonora</h2>
+                    <p class="instrucao-suave">Memória de ouvido: cada carta toca uma nota e você procura as duas iguais. Sem tempo, sem pontos e sem perder. Este é o único jogo do Enseada que depende de ouvir — se você não ouve, a Memória de palavras é o mesmo jogo em texto.</p>
+                </div>
+                <p class="aviso" id="aviso-somemoria">Este jogo toca som. Abaixe o volume do aparelho antes de começar, principalmente de fone. O som só começa quando você tocar no botão abaixo, nunca sozinho.</p>
+                <button type="button" id="comecar-somemoria" class="botao-primario">Começar, com o som ligado</button>
+                <div id="jogo-somemoria" hidden>
+                    <div class="grade-som" id="grade-somemoria" role="group" aria-label="Cartas da memória sonora"></div>
+                    <p id="recado-somemoria" role="status"></p>
+                    <button type="button" id="outra-somemoria" class="botao-secundario">Outro jogo</button>
+                </div>
             </div>
 
             <!-- Painel Memória de palavras -->
@@ -170,6 +187,7 @@
     <script src="js/tela-anagrama.js"></script>
     <script src="js/tela-forca.js"></script>
     <script src="js/tela-palavrapar.js"></script>
+    <script src="js/tela-somemoria.js"></script>
     <script src="js/menu.js"></script>
     <script src="js/registra-sw.js"></script>
 </body>

@@ -30,8 +30,8 @@ promete resultado.
 - **Zero requisição externa.** Nenhuma API, nenhuma chave, nenhum analytics,
   nenhuma fonte de CDN. Fonte vai dentro do projeto.
 - Service worker com **cache primeiro**. Sem bloco de push e sem notificação.
-- Web Audio para o ruído, canvas para o desenho, sudoku gerado em JS —
-  quando essas telas entrarem.
+- Web Audio para o som (já em `js/som.js`), canvas para o desenho, sudoku
+  gerado em JS.
 
 ## Modo baixo estímulo (já na primeira abertura, não é ajuste escondido)
 
@@ -132,15 +132,37 @@ aparelho quando a pessoa toca e escolhe para quem mandar.
 
 ## Jogos para quem não enxerga
 
-Anagrama, Forca sem forca, Memória de palavras e Memória sonora são de texto
-e funcionam inteiros com leitor de tela, mas aparecem para todo mundo: não há
-aba separada "para cego". Som, quando houver, NUNCA carrega informação
-sozinho — sempre com o texto equivalente — e leva aviso de volume. Esses jogos
-somem no Modo Mini, porque dependem de ler e escrever.
+Quatro, todos na tela Jogos, sem aba separada "para cego" — aparecem para
+todo mundo. Somem no Modo Mini, porque dependem de ler e escrever.
+
+| Jogo | Como funciona sem ver |
+| --- | --- |
+| Anagrama | Letras fora de ordem, lidas com vírgula entre elas; resposta digitada |
+| Forca sem forca | Sem boneco, sem contagem de erro e sem perder; cada tecla diz no rótulo se já foi tentada e se está na palavra |
+| Memória de palavras | Pares de palavra e a frase que descreve ela; carta fechada, aberta e casada dizem isso no rótulo |
+| Memória sonora | Pares de notas; é o único que depende de ouvir |
+
+Os três primeiros usam o banco das Palavras Cruzadas. A Memória sonora
+reaproveita as regras da Memória de palavras (`js/palavrapar.js`).
+
+## Som (js/som.js)
+
+O app passou a ter som, e ele obedece a três regras:
+
+1. **Som nunca informa sozinho.** Todo som tem o texto equivalente na tela.
+   A Memória sonora é um jogo de ouvido, como Pequenos Tesouros é de vista;
+   quem não ouve tem a Memória de palavras, que é o mesmo jogo em texto.
+2. **Nunca toca sozinho.** O `AudioContext` só nasce depois de um toque da
+   pessoa, atrás do aviso de volume.
+3. **Volume e duração com teto no código**, não na boa vontade de quem chama:
+   `SOM_VOLUME_MAXIMO` 0,18 e nota de no máximo 2 segundos.
+
+Tudo gerado em Web Audio no próprio aparelho: nenhum arquivo de áudio,
+nenhuma rede.
 
 ## O que ainda falta
 
-- Ruído de fundo em Web Audio, com aviso de volume e limite.
+- Ruído de fundo em Web Audio (o `js/som.js` já existe e tem o teto de volume).
 - Lembretes por arquivo `.ics`, que é o caminho sem servidor. Falta testar
   se importa limpo no iOS e no Android.
 - Ícone: o desenho novo (gota de orvalho na folha) está em assets/icon.png e nos

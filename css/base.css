@@ -1318,3 +1318,31 @@ input[type="text"].polaroid-nota:focus-visible { outline: 2px solid #454640; out
   font-weight: 700;
   cursor: default;
 }
+
+/* Memoria sonora: cartas numeradas, sem figura. */
+.grade-som {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.carta-som {
+  min-height: 64px;
+  padding: 10px 8px;
+  font-family: inherit;
+  font-size: 1.05em;
+  font-weight: 700;
+  border: 2px solid var(--contorno);
+  border-radius: var(--raio);
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.carta-som.aberta { border-width: 4px; }
+.carta-som.casada {
+  background: var(--destaque);
+  color: var(--texto-no-bloco);
+  cursor: default;
+}

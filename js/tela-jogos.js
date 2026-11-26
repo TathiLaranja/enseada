@@ -123,11 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
     var modoMini = typeof criarArmazenamento === "function" &&
       criarArmazenamento(window.localStorage).ler().ajustes.modo === "mini";
     if (modoMini) {
-      ["aba-sudoku", "aba-palavras", "aba-anagrama", "aba-forca", "aba-palavrapar"].forEach(function (id) {
+      ["aba-sudoku", "aba-palavras", "aba-anagrama", "aba-forca", "aba-palavrapar", "aba-somemoria"].forEach(function (id) {
         var el = document.getElementById(id);
         if (el) { el.hidden = true; el.setAttribute("aria-selected", "false"); el.classList.remove("ativa"); }
       });
-      ["painel-sudoku", "painel-palavras", "painel-anagrama", "painel-forca", "painel-palavrapar"].forEach(function (id) {
+      ["painel-sudoku", "painel-palavras", "painel-anagrama", "painel-forca", "painel-palavrapar", "painel-somemoria"].forEach(function (id) {
         var el = document.getElementById(id);
         if (el) { el.hidden = true; el.classList.remove("ativo"); el.classList.add("oculto"); }
       });
