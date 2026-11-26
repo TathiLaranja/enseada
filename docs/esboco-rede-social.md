@@ -9,6 +9,37 @@ outro produto, com outro nome.
 
 ---
 
+## O nome: Remanso
+
+Escolhido em 26/11/2026, depois de conferir vinte nomes no INPI e no
+registro.br.
+
+**Etimologia.** Do latim *remansum*, de *remanēre* — ficar, permanecer. Mesma
+raiz de **permanecer**, de **mansão** (*mansio*, o lugar onde se fica) e de
+**manso** (*mansus*, o que parou de resistir). Ao pé da letra: **remanso é a
+água que ficou.**
+
+**O que é.** Num rio, o remanso se forma atrás de um obstáculo — uma pedra,
+uma curva, um tronco caído. A correnteza passa em volta e ali atrás a água
+gira devagar. É onde o peixe descansa e onde a folha para. Não é água parada:
+é água que escolheu outro ritmo. É o produto inteiro numa palavra.
+
+**Por que ele, e não os outros.** Lume, Alvor, Angra, Ita, Ara, Varanda,
+Quintal e Sereno foram todos conferidos. Lume tem dois pedidos vivos de
+empresa de tecnologia na classe 42. Alvor tem registro em vigor na 42 e na
+45, do mesmo titular. Ara é da Google na 42. Ita tem dois em vigor na 9.
+**Remanso é o único limpo nas três classes que importam: 9, 42 e 45.**
+
+**Domínio.** `remanso.com.br` está tomado, e isso não atrapalha: começa em
+`remanso.cruzar.com.br`, que custa zero, igual ao Enseada.
+
+**Ícone.** A **vitória-régia**: ela só cresce em água parada, ou seja, em
+remanso. É a planta da palavra. A silhueta é um disco com um corte em V, que
+se reconhece em 16 px e que nenhum aplicativo do mundo usa. Sem nervuras: com
+elas, vira rodela de limão.
+
+---
+
 ## O que é
 
 Uma rede onde pessoas neurodivergentes e com deficiência mostram uma às
